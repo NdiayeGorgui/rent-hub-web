@@ -1,65 +1,167 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { fetchItems, getNearbyItems, searchItems } from "@/services/itemService";
+import { getAuctionPublicByItemId } from "@/services/auctionService";
+import { useAuth } from "@/components/auth/AuthContext";
+import { useRouter } from "next/navigation";
+import ItemCard from "@/components/ui/ItemCard";
+import Filters from "@/components/ui/Filters";
 
 export default function Home() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  const [items, setItems] = useState<any[]>([]);
+  const [auctionData, setAuctionData] = useState<any>({});
+  const [loadingItems, setLoadingItems] = useState(true);
+  const [nearbyMode, setNearbyMode] = useState(false);
+  const [radius, setRadius] = useState(10);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    if (!loading && !user) router.push("/login");
+  }, [user, loading]);
+
+  const loadItems = async () => {
+    const data = await fetchItems();
+    setItems(data);
+    loadAuctions(data);
+    setLoadingItems(false);
+  };
+
+  useEffect(() => {
+    if (!loading && user) {
+      loadItems();
+    }
+  }, [user, loading]);
+
+  const loadAuctions = async (items: any[]) => {
+    const map: any = {};
+    for (const item of items) {
+      if (item.type === "AUCTION") {
+        const auction = await getAuctionPublicByItemId(item.id);
+        map[item.id] = auction;
+      }
+    }
+    setAuctionData(map);
+  };
+
+  const handleSearch = async (filters: any) => {
+    const data = await searchItems(filters);
+    setItems(data);
+    loadAuctions(data);
+  };
+
+  const handleNearby = () => {
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      try {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        setUserLocation({ lat, lng });
+        const data = await getNearbyItems(lat, lng, radius);
+        setItems(data);
+        setNearbyMode(true);
+        loadAuctions(data);
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  };
+
+  const changeRadius = async (r: number) => {
+    setRadius(r);
+    if (!userLocation) return;
+    const data = await getNearbyItems(userLocation.lat, userLocation.lng, r);
+    setItems(data);
+    loadAuctions(data);
+  };
+
+  const getTimeLeft = (endDate: string) => {
+    const diff = new Date(endDate).getTime() - Date.now();
+    if (diff <= 0) return "terminée";
+    const m = Math.floor(diff / 60000);
+    const s = Math.floor((diff / 1000) % 60);
+    return `${m}m ${s}s`;
+  };
+
+  if (loading || loadingItems) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="p-6 bg-gray-100 min-h-screen">
+
+      <Filters onSearch={handleSearch} />
+
+      {/* Nearby + Radius */}
+      <div className="flex gap-2 items-center mb-6">
+        <button
+          onClick={nearbyMode ? () => { setNearbyMode(false); loadItems(); } : handleNearby}
+          className={`px-4 py-2 rounded-lg text-white text-sm font-medium transition-colors ${
+            nearbyMode ? "bg-green-700" : "bg-green-500 hover:bg-green-600"
+          }`}
+        >
+          📍 {nearbyMode ? "Mode proximité ON" : "Près de moi"}
+        </button>
+
+        {nearbyMode && (
+          <div className="flex gap-2">
+            {[5, 10, 25, 50].map((r) => (
+              <button
+                key={r}
+                onClick={() => changeRadius(r)}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  radius === r ? "bg-blue-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                {r} km
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Liste items */}
+      {items.length === 0 ? (
+        <div className="text-center py-20 text-gray-400">
+          <p className="text-4xl mb-3">📭</p>
+          <p>Aucun item trouvé</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {items.map((item) => (
+            <div key={item.id}>
+
+              {/* Card cliquable */}
+              <Link href={`/items/${item.id}`}>
+                <div className="bg-white rounded-xl shadow hover:scale-105 hover:shadow-md transition-all overflow-hidden cursor-pointer">
+                  <ItemCard item={item} />
+                  {item.distanceLabel && (
+                    <p className="text-green-600 text-sm font-semibold px-3 pb-2">
+                      📍 à ~{item.distanceLabel}
+                    </p>
+                  )}
+                </div>
+              </Link>
+
+              {/* Auction info */}
+              {item.type === "AUCTION" && auctionData[item.id] && (
+                <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
+                  <span>💰 {auctionData[item.id].currentPrice} $</span>
+                  <span>👀 {auctionData[item.id].views}</span>
+                  <span>⭐ {auctionData[item.id].watchers}</span>
+                  <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>
+                </div>
+              )}
+
+            </div>
+          ))}
         </div>
-      </main>
+      )}
     </div>
   );
 }
