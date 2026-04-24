@@ -112,19 +112,45 @@ export default function CreatePage() {
 
       <input placeholder="Titre" value={title} onChange={e => setTitle(e.target.value)} className="input" />
 
-      <div className="flex gap-2 my-3">
-        <button onClick={() => setType("RENTAL")} className={`btn ${type === "RENTAL" && "bg-blue-500 text-white"}`}>
-          📦 Location
-        </button>
+   <div className="flex bg-gray-100 p-1 rounded-xl w-fit mb-4">
 
-        <button
-          disabled={!isPremium}
-          onClick={() => isPremium && setType("AUCTION")}
-          className={`btn ${type === "AUCTION" && "bg-red-500 text-white"}`}
-        >
-          🔥 Enchère {!isPremium && "(Premium)"}
-        </button>
-      </div>
+  {/* LOCATION */}
+  <button
+    onClick={() => setType("RENTAL")}
+    className={`
+      flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
+      cursor-pointer
+      ${type === "RENTAL"
+        ? "bg-white shadow text-blue-600"
+        : "text-gray-500 hover:bg-white hover:shadow"}
+    `}
+  >
+    📦 Location
+  </button>
+
+  {/* ENCHÈRE */}
+  <button
+    disabled={!isPremium}
+    onClick={() => isPremium && setType("AUCTION")}
+    className={`
+      flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
+      ${!isPremium
+        ? "opacity-50 cursor-not-allowed"
+        : "cursor-pointer"}
+      ${type === "AUCTION"
+        ? "bg-white shadow text-red-500"
+        : "text-gray-500 hover:bg-white hover:shadow"}
+    `}
+  >
+    🔥 Enchère
+    {!isPremium && (
+      <span className="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded ml-1">
+        Premium
+      </span>
+    )}
+  </button>
+
+</div>
 
       <textarea placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} className="input" />
 

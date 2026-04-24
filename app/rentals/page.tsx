@@ -168,7 +168,7 @@ export default function RentalsPage() {
                         {mode === "owner" ? "Locataire" : "Propriétaire"}
                       </p>
                       {mode === "owner" ? (
-                        <Link href={`/user/${renter?.userId}`}
+                        <Link href={`/users/${renter?.userId}`}
                           className="text-blue-600 font-medium text-sm hover:underline">
                           @{renter?.username ?? "..."}
                         </Link>

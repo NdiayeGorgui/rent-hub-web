@@ -5,15 +5,41 @@ type Props = {
 export default function ItemCard({ item }: Props) {
   const baseURL = "http://localhost:8080";
 
+  const getImage = () => {
+    // ✅ cas normal
+    if (item.imageUrls && item.imageUrls.length > 0) {
+      const url = item.imageUrls[0];
+
+      // si déjà URL complète
+      if (url.startsWith("http")) return url;
+
+      return `${baseURL}${url}`;
+    }
+
+    // ✅ fallback si backend renvoie imageUrl
+    if (item.imageUrl) {
+      return item.imageUrl.startsWith("http")
+        ? item.imageUrl
+        : `${baseURL}${item.imageUrl}`;
+    }
+
+    // ✅ fallback final
+    return "/no-image.png";
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden cursor-pointer">
       
-      {item.imageUrls?.length > 0 && (
-        <img
-          src={`${baseURL}${item.imageUrls[0]}`}
-          className="w-full h-48 object-cover"
-        />
-      )}
+      {/* ✅ image toujours affichée */}
+   <div className="w-full h-48 overflow-hidden bg-gray-100">
+  <img
+    src={getImage()}
+    className="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105"
+    onError={(e) => {
+      (e.target as HTMLImageElement).src = "/no-image.png";
+    }}
+  />
+</div>
 
       <div className="p-4">
         <div className="mb-2">

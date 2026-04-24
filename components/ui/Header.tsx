@@ -77,16 +77,16 @@ export default function Header() {
                                 Premium
                             </button>
                         </Link>
-                         {/* ← Ajoute ici */}
-    <Link href="/faq">
-      <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-blue-600 transition-colors">
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-          <path d="M12 17h.01"/>
-        </svg>
-      </button>
-    </Link>
+                        {/* ← Ajoute ici */}
+                        <Link href="/faq">
+                            <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                    <path d="M12 17h.01" />
+                                </svg>
+                            </button>
+                        </Link>
                         <div className="w-px h-5 bg-gray-100 mx-1" />
                         <Link href="/messages/inbox">
                             <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors relative">
@@ -103,19 +103,19 @@ export default function Header() {
                     </>
                 )}
 
-               <Link href="/notifications">
-  <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors relative">
-    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-    </svg>
-    {unreadCount > 0 && (
-      <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white text-[9px] text-white flex items-center justify-center font-medium">
-        {unreadCount > 99 ? "99+" : unreadCount}
-      </span>
-    )}
-  </button>
-</Link>
+                <Link href="/notifications">
+                    <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors relative">
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                        {unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white text-[9px] text-white flex items-center justify-center font-medium">
+                                {unreadCount > 99 ? "99+" : unreadCount}
+                            </span>
+                        )}
+                    </button>
+                </Link>
                 <div className="w-px h-5 bg-gray-100 mx-1" />
 
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-medium text-white ${isAdmin ? "bg-violet-600" : "bg-blue-600"}`}>
@@ -123,7 +123,7 @@ export default function Header() {
                 </div>
 
                 <button
-                    onClick={logout}
+                    onClick={logout}  // ← ça appelle maintenant logout() qui redirige vers /login
                     className="text-[13px] px-3 py-1.5 rounded-lg border border-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors"
                 >
                     Déconnexion

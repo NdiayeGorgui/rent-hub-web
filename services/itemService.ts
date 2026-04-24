@@ -61,6 +61,6 @@ export const getNearbyItems = async (
 
 // 🔥 Modifier un item
 export const updateItem = async (id: number, formData: FormData) => {
-  const res = await API.put(`/items/${id}/with-images`, formData);
+  const res = await API.put(`/items/item/${id}/with-images`, formData);
   return res.data;
 };

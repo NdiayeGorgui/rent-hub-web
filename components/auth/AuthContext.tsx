@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getToken, saveToken, logout as logoutFn } from "@/lib/auth";
 import { getCurrentUser } from "@/services/authService";
+import { useRouter } from "next/navigation";
 
 type AuthContextType = {
   user: any;
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const init = async () => {
@@ -48,6 +50,7 @@ export const AuthProvider = ({ children }: any) => {
   const logout = () => {
     logoutFn();
     setUser(null);
+    router.push("/login");
   };
 
   return (

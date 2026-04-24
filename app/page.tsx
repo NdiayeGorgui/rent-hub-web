@@ -19,23 +19,60 @@ export default function Home() {
   const [nearbyMode, setNearbyMode] = useState(false);
   const [radius, setRadius] = useState(10);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [direction, setDirection] = useState("DESC");
 
   useEffect(() => {
     if (!loading && !user) router.push("/login");
   }, [user, loading]);
 
   const loadItems = async () => {
-    const data = await fetchItems();
+    const data = await searchItems({
+      page: 0,
+      size: 10,
+      sortBy,
+      direction,
+    });
     setItems(data);
     loadAuctions(data);
     setLoadingItems(false);
   };
 
   useEffect(() => {
+    if (user) {
+      loadItems();
+    }
+  }, [sortBy, direction]);
+
+  useEffect(() => {
     if (!loading && user) {
       loadItems();
     }
   }, [user, loading]);
+
+  const resetFilters = async () => {
+    try {
+      setLoadingItems(true);
+
+      // reset tri
+      setSortBy("createdAt");
+      setDirection("DESC");
+
+      // reset mode proximité
+      setNearbyMode(false);
+      setUserLocation(null);
+
+      // reset liste
+      const data = await fetchItems();
+      setItems(data);
+      loadAuctions(data);
+
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingItems(false);
+    }
+  };
 
   const loadAuctions = async (items: any[]) => {
     const map: any = {};
@@ -49,7 +86,11 @@ export default function Home() {
   };
 
   const handleSearch = async (filters: any) => {
-    const data = await searchItems(filters);
+    const data = await searchItems({
+      ...filters,
+      sortBy,
+      direction,
+    });
     setItems(data);
     loadAuctions(data);
   };
@@ -78,13 +119,20 @@ export default function Home() {
     loadAuctions(data);
   };
 
-  const getTimeLeft = (endDate: string) => {
-    const diff = new Date(endDate).getTime() - Date.now();
-    if (diff <= 0) return "terminée";
-    const m = Math.floor(diff / 60000);
-    const s = Math.floor((diff / 1000) % 60);
-    return `${m}m ${s}s`;
-  };
+const getTimeLeft = (endDate: string) => {
+  const diff = new Date(endDate).getTime() - Date.now();
+  if (diff <= 0) return "terminée";
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+  if (days > 0) return `${days}j ${hours}h`; // clean
+  if (hours > 0) return `${hours}h ${minutes}m`; // précis
+  if (minutes > 0) return `${minutes}m`;
+
+  return "< 1 min";
+};
 
   if (loading || loadingItems) return (
     <div className="min-h-screen flex items-center justify-center">
@@ -97,13 +145,54 @@ export default function Home() {
 
       <Filters onSearch={handleSearch} />
 
+      <div className="flex gap-2 mb-4 flex-wrap">
+
+        <button
+          onClick={() => {
+            setSortBy("createdAt");
+            setDirection("DESC");
+            loadItems();
+          }}
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-sm"
+        >
+          🆕 Plus récents
+        </button>
+
+        <button
+          onClick={() => {
+            setSortBy("pricePerDay");
+            setDirection("ASC");
+            loadItems();
+          }}
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-sm"
+        >
+          💰 Prix ↑
+        </button>
+
+        <button
+          onClick={() => {
+            setSortBy("pricePerDay");
+            setDirection("DESC");
+            loadItems();
+          }}
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-sm"
+        >
+          💰 Prix ↓
+        </button>
+        <button
+          onClick={resetFilters}
+          className="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600 text-sm"
+        >
+          🔄 Reset
+        </button>
+      </div>
+
       {/* Nearby + Radius */}
       <div className="flex gap-2 items-center mb-6">
         <button
           onClick={nearbyMode ? () => { setNearbyMode(false); loadItems(); } : handleNearby}
-          className={`px-4 py-2 rounded-lg text-white text-sm font-medium transition-colors ${
-            nearbyMode ? "bg-green-700" : "bg-green-500 hover:bg-green-600"
-          }`}
+          className={`px-4 py-2 rounded-lg text-white text-sm font-medium transition-colors ${nearbyMode ? "bg-green-700" : "bg-green-500 hover:bg-green-600"
+            }`}
         >
           📍 {nearbyMode ? "Mode proximité ON" : "Près de moi"}
         </button>
@@ -114,9 +203,8 @@ export default function Home() {
               <button
                 key={r}
                 onClick={() => changeRadius(r)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  radius === r ? "bg-blue-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"
-                }`}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${radius === r ? "bg-blue-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"
+                  }`}
               >
                 {r} km
               </button>
