@@ -195,7 +195,7 @@ export default function ProfilePage() {
                     </p>
                     <button
                         onClick={() => setPenaltyStep("payment")}
-                        className="w-full py-2.5 bg-red-500 text-white rounded-xl text-sm font-semibold hover:bg-red-600"
+                        className="w-full py-2.5 bg-red-500 text-white rounded-xl text-sm font-semibold hover:bg-red-600 cursor-pointer"
                     >
                         💳 Payer {pendingPenalty.amount} $ maintenant
                     </button>
@@ -305,7 +305,7 @@ export default function ProfilePage() {
                                 {p.paymentType === "AUCTION_PENALTY" && p.status === "PENDING" && (
                                     <button
                                         onClick={() => setPenaltyStep("payment")}
-                                        className="mt-2 px-3 py-1.5 bg-red-500 text-white rounded-lg text-xs font-medium hover:bg-red-600"
+                                        className="mt-2 px-3 py-1.5 bg-red-500 text-white rounded-lg text-xs font-medium hover:bg-red-600 cursor-pointer"
                                     >
                                         💳 Payer maintenant
                                     </button>

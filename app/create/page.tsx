@@ -19,6 +19,7 @@ export default function CreatePage() {
   const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
   const [images, setImages] = useState<File[]>([]);
+  const [creating, setCreating] = useState(false);
 
   const categories = [
     { id: 1, name: "Électronique" },
@@ -50,61 +51,53 @@ export default function CreatePage() {
     setImages([...e.target.files]);
   };
 
-  const handleCreate = async () => {
-    try {
-      if (!title || !description || !categoryId || !city) {
-        alert("Champs obligatoires manquants");
-        return;
-      }
-
-      if (images.length === 0) {
-        alert("Ajoute au moins une image");
-        return;
-      }
-
-      // 📍 géolocalisation
-      const pos = await new Promise<any>((resolve, reject) =>
-        navigator.geolocation.getCurrentPosition(resolve, reject)
-      );
-
-      const latitude = pos.coords.latitude;
-      const longitude = pos.coords.longitude;
-
-      const formData = new FormData();
-
-      const itemData = {
-        title,
-        description,
-        categoryId: Number(categoryId),
-        type,
-        pricePerDay: type === "RENTAL" ? Number(pricePerDay) : null,
-        city,
-        address,
-        latitude,
-        longitude,
-      };
-
-      formData.append("data", JSON.stringify(itemData));
-
-      images.forEach((img) => {
-        formData.append("images", img);
-      });
-
-      const createdItem = await createItem(formData);
-
-      if (type === "AUCTION") {
-        router.push(`/auction-fee/${createdItem.id}`);
-        return;
-      }
-
-      alert("Item créé !");
-      router.push("/");
-
-    } catch (err) {
-      console.error(err);
-      alert("Erreur création");
+const handleCreate = async () => {
+  try {
+    if (!title || !description || !categoryId || !city) {
+      alert("Champs obligatoires manquants");
+      return;
     }
-  };
+    if (images.length === 0) {
+      alert("Ajoute au moins une image");
+      return;
+    }
+
+    setCreating(true); // ← démarre le spinner
+
+    const pos = await new Promise<any>((resolve, reject) =>
+      navigator.geolocation.getCurrentPosition(resolve, reject)
+    );
+
+    const { latitude, longitude } = pos.coords;
+    const formData = new FormData();
+
+    formData.append("data", JSON.stringify({
+      title, description,
+      categoryId: Number(categoryId),
+      type,
+      pricePerDay: type === "RENTAL" ? Number(pricePerDay) : null,
+      city, address, latitude, longitude,
+    }));
+
+    images.forEach(img => formData.append("images", img));
+
+    const createdItem = await createItem(formData);
+
+    if (type === "AUCTION") {
+      router.push(`/auction-fee/${createdItem.id}`);
+      return;
+    }
+
+    alert("Item créé !");
+    router.push("/");
+
+  } catch (err) {
+    console.error(err);
+    alert("Erreur création");
+  } finally {
+    setCreating(false); // ← arrête le spinner
+  }
+};
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow">
@@ -112,13 +105,13 @@ export default function CreatePage() {
 
       <input placeholder="Titre" value={title} onChange={e => setTitle(e.target.value)} className="input" />
 
-   <div className="flex bg-gray-100 p-1 rounded-xl w-fit mb-4">
+<div className="flex bg-gray-100 p-1 rounded-xl w-full mb-4">
 
   {/* LOCATION */}
   <button
     onClick={() => setType("RENTAL")}
     className={`
-      flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
+      flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
       cursor-pointer
       ${type === "RENTAL"
         ? "bg-white shadow text-blue-600"
@@ -133,7 +126,7 @@ export default function CreatePage() {
     disabled={!isPremium}
     onClick={() => isPremium && setType("AUCTION")}
     className={`
-      flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
+      flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
       ${!isPremium
         ? "opacity-50 cursor-not-allowed"
         : "cursor-pointer"}
@@ -209,12 +202,18 @@ export default function CreatePage() {
         )}
       </div>
 
-      <button
-        onClick={handleCreate}
-        className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors mt-6 mb-6"
-      >
-        Publier
-      </button>
+     <button
+  onClick={handleCreate}
+  disabled={creating}
+  className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors mt-6 mb-6 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+>
+  {creating ? (
+    <>
+      <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+      Publication en cours...
+    </>
+  ) : "Publier"}
+</button>
     </div>
   );
 }

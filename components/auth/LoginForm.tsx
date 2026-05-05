@@ -59,7 +59,7 @@ export default function LoginForm() {
 
       <button
         onClick={handleLogin} disabled={loading}
-        className="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60"
+        className="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 cursor-pointer"
       >
         {loading ? "Connexion..." : "Se connecter"}
       </button>
@@ -83,7 +83,7 @@ export default function LoginForm() {
   // ── Forgot ─────────────────────────────────────────
   if (step === "forgot") return (
     <div className="w-full max-w-md space-y-3">
-      <button onClick={() => setStep("login")} className="text-blue-600 text-sm">
+      <button onClick={() => setStep("login")} className="text-blue-600 text-sm cursor-pointer">
         ← Retour
       </button>
 
@@ -99,7 +99,7 @@ export default function LoginForm() {
 
       <button
         onClick={handleForgot} disabled={loading}
-        className="w-full py-3 bg-green-600 text-white rounded-xl text-sm font-semibold hover:bg-green-700 transition-colors disabled:opacity-60"
+        className="w-full py-3 bg-green-600 text-white rounded-xl text-sm font-semibold hover:bg-green-700 transition-colors disabled:opacity-60 cursor-pointer"
       >
         {loading ? "Envoi..." : "Envoyer le token"}
       </button>

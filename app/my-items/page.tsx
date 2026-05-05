@@ -35,20 +35,29 @@ export default function MyItemsPage() {
           Vous n'avez encore publié aucun objet.
         </p>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {items.map((item) => (
             <div
               key={item.id}
               onClick={() => router.push(`/my-items/${item.id}`)}
               className="bg-white rounded-xl shadow p-4 cursor-pointer hover:shadow-md transition"
             >
-              {item.imageUrls?.length > 0 && (
-                <img
-                 src={`http://localhost:8080${item.imageUrls[0]}`}
-                  alt={item.title}
-                  className="w-full h-48 object-cover rounded-lg mb-3"
-                />
-              )}
+             <div className="flex flex-col gap-3 mb-3">
+  {item.imageUrls?.length > 0 ? (
+    <div
+      className="w-full bg-gray-100 rounded-xl"
+      style={{ aspectRatio: "4/3" }}
+    >
+      <img
+        src={`http://localhost:8080${item.imageUrls[0]}`}
+        alt={item.title}
+        className="w-full h-full object-contain rounded-xl"
+      />
+    </div>
+  ) : (
+    <p className="text-gray-400">Aucune image</p>
+  )}
+</div>
 
               <h2 className="font-bold text-lg">{item.title}</h2>
               <p className="text-gray-500 text-sm">{item.city}</p>

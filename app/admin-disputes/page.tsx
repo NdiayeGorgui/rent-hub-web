@@ -83,8 +83,8 @@ export default function AdminDisputesPage() {
               onClick={() => { setActiveTab(key as any); setSelectedDispute(null); }}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
                 activeTab === key
-                  ? "bg-violet-600 text-white shadow-sm"
-                  : "bg-white text-gray-500 border border-gray-200 hover:border-violet-300 hover:text-violet-600"
+                  ? "bg-violet-600 text-white shadow-sm cursor-pointer"
+                  : "bg-white text-gray-500 border border-gray-200 hover:border-violet-300 hover:text-violet-600 cursor-pointer"
               }`}
             >
               <span>{icon}</span> {label}
@@ -150,7 +150,7 @@ export default function AdminDisputesPage() {
                   {openDisputes.map((d) => (
                     <button key={d.id}
                       onClick={() => { setSelectedDispute(d); setDecision(null); setAction(null); setAdminComment(""); }}
-                      className="text-left bg-white rounded-xl border border-gray-200 px-5 py-4 hover:border-violet-400 hover:shadow-sm transition-all"
+                      className="text-left bg-white rounded-xl border border-gray-200 px-5 py-4 hover:border-violet-400 hover:shadow-sm transition-all cursor-pointer"
                     >
                       <p className="font-semibold text-gray-900">{itemsMap[d.itemId]?.title ?? "Chargement..."}</p>
                       <p className="text-sm text-gray-400 mt-0.5">
@@ -189,7 +189,7 @@ export default function AdminDisputesPage() {
                 <div className="flex gap-3">
                   <button
                     onClick={() => { setDecision("RESOLVED"); setAction(null); }}
-                    className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${
+                    className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all cursor-pointer ${
                       decision === "RESOLVED"
                         ? "bg-green-500 text-white border-green-500"
                         : "bg-white text-gray-500 border-gray-200 hover:border-green-400"
@@ -199,7 +199,7 @@ export default function AdminDisputesPage() {
                   </button>
                   <button
                     onClick={() => { setDecision("REJECTED"); setAction(null); }}
-                    className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${
+                    className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all cursor-pointer ${
                       decision === "REJECTED"
                         ? "bg-red-500 text-white border-red-500"
                         : "bg-white text-gray-500 border-gray-200 hover:border-red-400"
@@ -222,7 +222,7 @@ export default function AdminDisputesPage() {
                       ...(isAuctionDispute ? [{ key: "REFUND_AUCTION_FEE", label: "💸 Rembourser le owner + pénalité winner" }] : []),
                     ].map(({ key, label }) => (
                       <button key={key} onClick={() => setAction(key)}
-                        className={`text-left px-4 py-3 rounded-xl text-sm font-medium border-2 transition-all ${
+                        className={`text-left px-4 py-3 rounded-xl text-sm font-medium border-2 transition-all cursor-pointer ${
                           action === key
                             ? "bg-violet-50 border-violet-500 text-violet-700"
                             : "bg-white border-gray-200 text-gray-600 hover:border-violet-300"
@@ -258,12 +258,12 @@ export default function AdminDisputesPage() {
 
               <div className="flex gap-3">
                 <button onClick={handleResolve} disabled={!isValid}
-                  className="flex-1 py-3 bg-violet-600 text-white rounded-xl text-sm font-semibold hover:bg-violet-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="flex-1 py-3 bg-violet-600 text-white rounded-xl text-sm font-semibold hover:bg-violet-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                 >
                   ✔ Valider la décision
                 </button>
                 <button onClick={() => setSelectedDispute(null)}
-                  className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200"
+                  className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200 cursor-pointer"
                 >
                   Changer
                 </button>

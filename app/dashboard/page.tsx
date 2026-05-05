@@ -74,7 +74,7 @@ export default function DashboardPage() {
     {
       title: "Revenus & Notation",
       cards: [
-        { title: "Revenus totaux",      value: `${stats.totalRevenue} $`,                      icon: "💰", color: "#10b981" },
+        { title: "Revenus totaux",      value: `${stats.totalRevenue?.toFixed(2)} $`,                      icon: "💰", color: "#10b981" },
         { title: "Note moyenne",        value: stats.averagePlatformRating?.toFixed(2),         icon: "⭐", color: "#facc15" },
       ]
     },

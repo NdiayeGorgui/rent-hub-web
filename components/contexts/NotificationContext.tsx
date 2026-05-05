@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { getMyNotifications } from "@/services/notificationService";
+import { useAuth } from "@/components/auth/AuthContext";
 
 type NotificationContextType = {
   unreadCount: number;
@@ -15,6 +16,7 @@ export const NotificationContext = createContext<NotificationContextType>({
 
 export const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
   const [unreadCount, setUnreadCount] = useState(0);
+  const { user } = useAuth(); // ← ajoute ça
 
   const loadUnreadCount = async () => {
     try {
@@ -27,10 +29,11 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
   };
 
   useEffect(() => {
+    if (!user) return; // ← ne charge pas si pas connecté
     loadUnreadCount();
     const interval = setInterval(loadUnreadCount, 60000);
     return () => clearInterval(interval);
-  }, []);
+  }, [user]); // ← relance quand user change
 
   return (
     <NotificationContext.Provider value={{ unreadCount, loadUnreadCount }}>

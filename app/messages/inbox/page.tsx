@@ -77,7 +77,7 @@ useEffect(() => {
               <button
                 key={conv.id}
                 onClick={() => openChat(conv)}
-                className={`w-full text-left px-5 py-4 hover:bg-gray-50 transition-colors flex items-center justify-between gap-3 ${
+                className={`w-full text-left px-5 py-4 hover:bg-gray-50 transition-colors flex items-center justify-between gap-3 cursor-pointer ${
                   index !== 0 ? "border-t border-gray-50" : ""
                 }`}
               >

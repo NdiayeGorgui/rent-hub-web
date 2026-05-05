@@ -43,7 +43,7 @@ export const searchItems = async (filters: any) => {
     params: cleanFilters,
   });
 
-  return res.data.content;
+  return res.data;
 };
 
 // 📍 Nearby (🔥 IMPORTANT)

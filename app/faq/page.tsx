@@ -40,7 +40,7 @@ function FaqItem({ item }: { item: any }) {
             <button
               onClick={() => handleFeedback(true)}
               disabled={feedback !== null}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
                 feedback === "up"
                   ? "bg-green-100 text-green-700"
                   : "bg-gray-100 text-gray-500 hover:bg-green-50 hover:text-green-600"
@@ -55,7 +55,7 @@ function FaqItem({ item }: { item: any }) {
             <button
               onClick={() => handleFeedback(false)}
               disabled={feedback !== null}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
                 feedback === "down"
                   ? "bg-red-100 text-red-700"
                   : "bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-600"

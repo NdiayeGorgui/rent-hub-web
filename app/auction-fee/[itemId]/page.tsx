@@ -44,7 +44,7 @@ export default function AuctionFeePage() {
 
           <button
             onClick={() => setStep("payment")}
-            className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+            className="mt-4 bg-red-500 text-white px-4 py-2 rounded cursor-pointer "
           >
             Continuer
           </button>
@@ -53,7 +53,7 @@ export default function AuctionFeePage() {
 
       {step === "payment" && (
         <>
-          <button onClick={() => setStep("home")} className="text-blue-500 mb-3">
+          <button onClick={() => setStep("home")} className="text-blue-500 mb-3 cursor-pointer">
             ← Retour
           </button>
 
@@ -61,7 +61,7 @@ export default function AuctionFeePage() {
 
           <button
             onClick={handleConfirmPayment}
-            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
+            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded cursor-pointer"
           >
             {loading ? "Paiement..." : "Confirmer paiement"}
           </button>

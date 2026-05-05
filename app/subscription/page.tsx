@@ -109,7 +109,7 @@ export default function SubscriptionPage() {
               <button
                 onClick={handleCancel}
                 disabled={loading}
-                className="w-full py-2.5 rounded-xl border border-red-200 text-red-600 text-sm font-medium hover:bg-red-50 transition-colors mt-2"
+                className="w-full py-2.5 rounded-xl border border-red-200 text-red-600 text-sm font-medium hover:bg-red-50 transition-colors mt-2 cursor-pointer"
               >
                 {loading ? "Traitement..." : "Annuler l'abonnement"}
               </button>
@@ -154,7 +154,7 @@ export default function SubscriptionPage() {
 
               <button
                 onClick={() => setStep("payment")}
-                className="w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors"
+                className="w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors cursor-pointer"
               >
                 S'abonner maintenant
               </button>
@@ -180,7 +180,7 @@ export default function SubscriptionPage() {
               <button
                 onClick={handleConfirmPayment}
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60"
+                className="w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 cursor-pointer"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

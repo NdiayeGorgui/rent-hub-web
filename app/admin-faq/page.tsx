@@ -80,13 +80,13 @@ export default function AdminFaqPage() {
             />
             <div className="flex gap-3">
               <button onClick={handleSave} disabled={saving}
-                className="flex-1 py-3 bg-violet-600 text-white rounded-xl text-sm font-semibold hover:bg-violet-700 transition-colors disabled:opacity-60"
+                className="flex-1 py-3 bg-violet-600 text-white rounded-xl text-sm font-semibold hover:bg-violet-700 transition-colors disabled:opacity-60 cursor-pointer"
               >
                 {saving ? "Enregistrement..." : form.id ? "✏️ Modifier" : "➕ Ajouter"}
               </button>
               {form.id && (
                 <button onClick={() => setForm({ id: null, theme: "", question: "", answer: "" })}
-                  className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200"
+                  className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200 cursor-pointer"
                 >
                   Annuler
                 </button>
@@ -116,12 +116,12 @@ export default function AdminFaqPage() {
                       </div>
                       <div className="flex gap-2 flex-shrink-0">
                         <button onClick={() => handleEdit(faq)}
-                          className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center hover:bg-amber-100 transition-colors text-sm"
+                          className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center hover:bg-amber-100 transition-colors text-sm cursor-pointer"
                         >
                           ✏️
                         </button>
                         <button onClick={() => handleDelete(faq.id)}
-                          className="w-8 h-8 rounded-lg bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-100 transition-colors text-sm"
+                          className="w-8 h-8 rounded-lg bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-100 transition-colors text-sm cursor-pointer"
                         >
                           🗑️
                         </button>

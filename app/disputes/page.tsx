@@ -135,8 +135,8 @@ export default function DisputesPage() {
             <button key={key} onClick={() => setActiveTab(key as any)}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
                 activeTab === key
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600"
+                  ? "bg-blue-600 text-white shadow-sm cursor-pointer"
+                  : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
               }`}
             >
               <span>{icon}</span> {label}
@@ -214,8 +214,8 @@ export default function DisputesPage() {
                   }}
                   className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
                     disputeType === key
-                      ? "bg-blue-600 text-white shadow-sm"
-                      : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600"
+                      ? "bg-blue-600 text-white shadow-sm cursor-pointer"
+                      : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
                   }`}
                 >
                   <span>{icon}</span> {label}
@@ -238,7 +238,7 @@ export default function DisputesPage() {
                     <div className="flex flex-col gap-3">
                       {rentals.map((r) => (
                         <button key={r.id} onClick={() => setSelectedRental(r)}
-                          className="text-left bg-white rounded-xl border border-gray-200 px-5 py-4 hover:border-blue-400 hover:shadow-sm transition-all">
+                          className="text-left bg-white rounded-xl border border-gray-200 px-5 py-4 hover:border-blue-400 hover:shadow-sm transition-all cursor-pointer">
                           <p className="font-semibold text-gray-900">{itemsMap[r.itemId]?.title ?? "Chargement..."}</p>
                           <p className="text-sm text-gray-400 mt-0.5">Location #{r.id}</p>
                         </button>
@@ -271,11 +271,11 @@ export default function DisputesPage() {
                     </div>
                     <div className="flex gap-3 pt-2">
                       <button onClick={handleCreate}
-                        className="flex-1 py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">
+                        className="flex-1 py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors cursor-pointer">
                         Envoyer le litige
                       </button>
                       <button onClick={() => setSelectedRental(null)}
-                        className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors">
+                        className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors cursor-pointer">
                         Changer
                       </button>
                     </div>
@@ -297,8 +297,8 @@ export default function DisputesPage() {
                       onClick={() => { setAuctionRole(key as any); setSelectedAuction(null); setReason(""); setDescription(""); }}
                       className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
                         auctionRole === key
-                          ? "bg-blue-600 text-white shadow-sm"
-                          : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600"
+                          ? "bg-blue-600 text-white shadow-sm cursor-pointer"
+                          : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
                       }`}
                     >
                       <span>{icon}</span> {label}
@@ -321,7 +321,7 @@ export default function DisputesPage() {
                       <div className="flex flex-col gap-3">
                         {currentAuctions.map((a) => (
                           <button key={a.id} onClick={() => setSelectedAuction(a)}
-                            className="text-left bg-white rounded-xl border border-gray-200 px-5 py-4 hover:border-blue-400 hover:shadow-sm transition-all">
+                            className="text-left bg-white rounded-xl border border-gray-200 px-5 py-4 hover:border-blue-400 hover:shadow-sm transition-all cursor-pointer">
                             <p className="font-semibold text-gray-900">{itemsMap[a.itemId]?.title ?? "Chargement..."}</p>
                             <p className="text-sm text-gray-400 mt-0.5">Enchère #{a.id} — {a.currentPrice} $</p>
                             <p className="text-sm text-red-400 mt-1">
@@ -357,11 +357,11 @@ export default function DisputesPage() {
                       </div>
                       <div className="flex gap-3 pt-2">
                         <button onClick={handleCreateAuctionDispute}
-                          className="flex-1 py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">
+                          className="flex-1 py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors cursor-pointer">
                           Envoyer le litige
                         </button>
                         <button onClick={() => setSelectedAuction(null)}
-                          className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors">
+                          className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors cursor-pointer">
                           Changer
                         </button>
                       </div>

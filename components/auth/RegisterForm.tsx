@@ -54,7 +54,7 @@ export default function RegisterForm() {
       <button
         onClick={handleRegister}
         disabled={loading}
-        className="w-full py-3 bg-green-600 text-white rounded-xl text-sm font-semibold hover:bg-green-700 transition-colors disabled:opacity-60"
+        className="w-full py-3 bg-green-600 text-white rounded-xl text-sm font-semibold hover:bg-green-700 transition-colors disabled:opacity-60 cursor-pointer"
       >
         {loading ? "Inscription..." : "S'inscrire"}
       </button>

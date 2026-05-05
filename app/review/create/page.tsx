@@ -45,7 +45,7 @@ export default function CreateReviewPage() {
               <button
                 key={star}
                 onClick={() => setRating(star)}
-                className="text-3xl transition-transform hover:scale-110"
+                className="text-3xl transition-transform hover:scale-110 cursor-pointer"
               >
                 <span className={star <= rating ? "text-yellow-400" : "text-gray-200"}>
                   ★
@@ -71,7 +71,7 @@ export default function CreateReviewPage() {
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60"
+          className="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 cursor-pointer"
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">
@@ -83,7 +83,7 @@ export default function CreateReviewPage() {
 
         <button
           onClick={() => router.back()}
-          className="w-full mt-3 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+          className="w-full mt-3 text-sm text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
         >
           Annuler
         </button>

@@ -134,7 +134,7 @@ export default function AdminUsersPage() {
               <div className="flex items-center gap-3 flex-shrink-0">
                 {user.subscription === "PREMIUM" && (
                   <button onClick={() => handleStrike(user)}
-                    className="px-3 py-1.5 bg-amber-100 text-amber-700 rounded-lg text-xs font-semibold hover:bg-amber-200 transition-colors"
+                    className="px-3 py-1.5 bg-amber-100 text-amber-700 rounded-lg text-xs font-semibold hover:bg-amber-200 transition-colors cursor-pointer"
                   >
                     ⚠ Strike
                   </button>

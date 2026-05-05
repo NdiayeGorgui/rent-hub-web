@@ -31,10 +31,10 @@ export default function ItemCard({ item }: Props) {
     <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden cursor-pointer">
       
       {/* ✅ image toujours affichée */}
-   <div className="w-full h-48 overflow-hidden bg-gray-100">
+  <div className="w-full bg-gray-100" style={{ aspectRatio: "4/3" }}>
   <img
     src={getImage()}
-    className="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105"
+    className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
     onError={(e) => {
       (e.target as HTMLImageElement).src = "/no-image.png";
     }}

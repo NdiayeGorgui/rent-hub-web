@@ -53,6 +53,7 @@ export default function Header() {
                         <Link href="/my-items" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/my-items")}`}>Mes items</Link>
                         <Link href="/create" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/create")}`}>Poster</Link>
                         <Link href="/rentals" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/rentals")}`}>Locations</Link>
+                        <Link href="/auctions" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/auctions")}`}>Enchères</Link>
                         <Link href="/disputes" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/disputes")}`}>Litiges</Link>
                         <Link href="/profile" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/profile")}`}>Profil</Link>
                     </>
@@ -71,15 +72,15 @@ export default function Header() {
             <div className="flex items-center gap-2">
                 {!isAdmin && (
                     <>
-                        <Link href="/subscription">
-                            <button className="flex items-center gap-1.5 text-[13px] font-medium px-3 py-1.5 rounded-lg bg-yellow-50 text-yellow-800 border border-yellow-200 hover:bg-yellow-100 transition-colors">
+                        {/* <Link href="/subscription">
+                            <button className="flex items-center gap-1.5 text-[13px] font-medium px-3 py-1.5 rounded-lg bg-yellow-50 text-yellow-800 border border-yellow-200 hover:bg-yellow-100 transition-colors cursor-pointer">
                                 <svg className="w-3.5 h-3.5 fill-yellow-600" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
                                 Premium
                             </button>
-                        </Link>
+                        </Link> */}
                         {/* ← Ajoute ici */}
                         <Link href="/faq">
-                            <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+                            <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-blue-600 transition-colors cursor-pointer">
                                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <circle cx="12" cy="12" r="10" />
                                     <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
@@ -89,7 +90,7 @@ export default function Header() {
                         </Link>
                         <div className="w-px h-5 bg-gray-100 mx-1" />
                         <Link href="/messages/inbox">
-                            <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors relative">
+                            <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors relative cursor-pointer">
                                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                                 </svg>
@@ -104,7 +105,7 @@ export default function Header() {
                 )}
 
                 <Link href="/notifications">
-                    <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors relative">
+                    <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors relative cursor-pointer">
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
@@ -123,8 +124,8 @@ export default function Header() {
                 </div>
 
                 <button
-                    onClick={logout}  // ← ça appelle maintenant logout() qui redirige vers /login
-                    className="text-[13px] px-3 py-1.5 rounded-lg border border-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors"
+                    onClick={logout}
+                    className="text-[13px] px-3 py-1.5 rounded-lg border border-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors cursor-pointer"
                 >
                     Déconnexion
                 </button>

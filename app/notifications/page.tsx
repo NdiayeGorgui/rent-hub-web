@@ -96,7 +96,7 @@ export default function NotificationsPage() {
           {unread.length > 0 && (
             <button
               onClick={handleMarkAll}
-              className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors cursor-pointer"
             >
               ✓ Tout marquer comme lu
             </button>
@@ -125,7 +125,7 @@ export default function NotificationsPage() {
                       <button
                         key={notif.id}
                         onClick={() => handleMarkAsRead(notif.id)}
-                        className="text-left bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4 hover:bg-blue-100 transition-colors relative group"
+                        className="text-left bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4 hover:bg-blue-100 transition-colors relative group cursor-pointer"
                       >
                         <div className="flex items-start gap-3">
                           <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-lg shadow-sm flex-shrink-0">

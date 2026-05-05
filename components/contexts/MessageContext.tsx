@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { getUnreadMessagesCount } from "@/services/messageService";
+import { useAuth } from "@/components/auth/AuthContext";
 
 type MessageContextType = {
   unreadMessages: number;
@@ -15,6 +16,7 @@ export const MessageContext = createContext<MessageContextType>({
 
 export const MessageProvider = ({ children }: { children: React.ReactNode }) => {
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const { user } = useAuth(); // ← ajoute ça
 
   const loadUnreadMessages = async () => {
     try {
@@ -26,10 +28,11 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
   };
 
   useEffect(() => {
+    if (!user) return; // ← ne charge pas si pas connecté
     loadUnreadMessages();
     const interval = setInterval(loadUnreadMessages, 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [user]); // ← relance quand user change
 
   return (
     <MessageContext.Provider value={{ unreadMessages, loadUnreadMessages }}>
