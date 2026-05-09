@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/components/auth/AuthContext";
+import { useAuth } from "@/components/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { fetchPremiumStatus } from "@/services/subscriptionService";
 import { fetchPublicStats, PublicStats } from "@/services/statService";

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchMyItems } from "@/services/itemService";
 
+
 export default function MyItemsPage() {
   const router = useRouter();
   const [items, setItems] = useState<any[]>([]);
@@ -42,22 +43,22 @@ export default function MyItemsPage() {
               onClick={() => router.push(`/my-items/${item.id}`)}
               className="bg-white rounded-xl shadow p-4 cursor-pointer hover:shadow-md transition"
             >
-             <div className="flex flex-col gap-3 mb-3">
-  {item.imageUrls?.length > 0 ? (
-    <div
-      className="w-full bg-gray-100 rounded-xl"
-      style={{ aspectRatio: "4/3" }}
-    >
-      <img
-        src={`http://localhost:8080${item.imageUrls[0]}`}
-        alt={item.title}
-        className="w-full h-full object-contain rounded-xl"
-      />
-    </div>
-  ) : (
-    <p className="text-gray-400">Aucune image</p>
-  )}
-</div>
+              <div className="flex flex-col gap-3 mb-3">
+                {item.imageUrls?.length > 0 ? (
+                  <div
+                    className="w-full bg-gray-100 rounded-xl"
+                    style={{ aspectRatio: "4/3" }}
+                  >
+                    <img
+                      src={`http://localhost:8080${item.imageUrls[0]}`}
+                      alt={item.title}
+                      className="w-full h-full object-contain rounded-xl"
+                    />
+                  </div>
+                ) : (
+                  <p className="text-gray-400">Aucune image</p>
+                )}
+              </div>
 
               <h2 className="font-bold text-lg">{item.title}</h2>
               <p className="text-gray-500 text-sm">{item.city}</p>
@@ -70,27 +71,25 @@ export default function MyItemsPage() {
 
               <div className="flex gap-2 mt-3">
                 <span
-                  className={`text-xs font-bold px-2 py-1 rounded text-white ${
-                    item.type === "AUCTION" ? "bg-red-500" : "bg-blue-600"
-                  }`}
+                  className={`text-xs font-bold px-2 py-1 rounded text-white ${item.type === "AUCTION" ? "bg-red-500" : "bg-blue-600"
+                    }`}
                 >
                   {item.type === "AUCTION" ? "🔥 ENCHÈRE" : "📦 LOCATION"}
                 </span>
 
                 <span
-                  className={`text-xs font-bold px-2 py-1 rounded text-white ${
-                    item.status === "CANCELLED_AUCTION"
+                  className={`text-xs font-bold px-2 py-1 rounded text-white ${item.status === "CANCELLED_AUCTION"
                       ? "bg-yellow-400"
                       : item.active
-                      ? "bg-green-600"
-                      : "bg-red-600"
-                  }`}
+                        ? "bg-green-600"
+                        : "bg-red-600"
+                    }`}
                 >
                   {item.status === "CANCELLED_AUCTION"
                     ? "Annulée"
                     : item.active
-                    ? "Actif"
-                    : "Désactivé"}
+                      ? "Actif"
+                      : "Désactivé"}
                 </span>
               </div>
             </div>

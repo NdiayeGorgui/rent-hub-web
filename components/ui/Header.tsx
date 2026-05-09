@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/components/auth/AuthContext";
+import { useAuth } from "@/components/contexts/AuthContext";
 import { usePathname } from "next/navigation";
 import { useMessages } from "../contexts/MessageContext";
 import { useNotifications } from "../contexts/NotificationContext";

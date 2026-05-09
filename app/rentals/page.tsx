@@ -245,10 +245,11 @@ export default function RentalsPage() {
                                                 onClick={() => router.push(`/review/create?rentalId=${rental.id}`)}
                                                 className="flex items-center gap-2 px-4 py-2 bg-amber-400 text-amber-900 rounded-lg text-sm font-semibold hover:bg-amber-500 transition-colors cursor-pointer"
                                             >
-                                                ⭐ Laisser un avis
+                                                ⭐ {mode === "owner"
+                                                    ? "Laisser un avis sur le locataire"
+                                                    : "Laisser un avis sur le produit"}
                                             </button>
                                         )}
-
                                         {/* ✅ Actions owner */}
                                         {mode === "owner" && rental.status === "CREATED" && (
                                             <>
@@ -275,7 +276,7 @@ export default function RentalsPage() {
                                         )}
 
                                     </div>
-                                  
+
 
                                 </div>
                             );

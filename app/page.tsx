@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { fetchItems, getNearbyItems, searchItems } from "@/services/itemService";
 import { getAuctionPublicByItemId } from "@/services/auctionService";
-import { useAuth } from "@/components/auth/AuthContext";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/contexts/AuthContext";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import ItemCard from "@/components/ui/ItemCard";
 import Filters from "@/components/ui/Filters";
+
+
 
 export default function Home() {
 
@@ -35,6 +37,23 @@ export default function Home() {
   };
 
   const { user, loading } = useAuth();
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  // ── Initialise depuis l'URL au montage ────────────────
+  const [page, setPage] = useState(() => Number(searchParams.get("page") ?? 0));
+  const [sortBy, setSortBy] = useState(searchParams.get("sortBy") ?? "createdAt");
+  const [direction, setDirection] = useState(searchParams.get("direction") ?? "DESC");
+  const [activeFilters, setActiveFilters] = useState<any>(() => {
+    const saved = searchParams.get("filters");
+    return saved ? JSON.parse(decodeURIComponent(saved)) : {};
+  });
+  const [activeFiltersCount, setActiveFiltersCount] = useState(() => {
+    const saved = searchParams.get("filters");
+    return saved ? Object.keys(JSON.parse(decodeURIComponent(saved))).length : 0;
+  });
+
   const router = useRouter();
 
   const [items, setItems] = useState<any[]>([]);
@@ -43,60 +62,77 @@ export default function Home() {
   const [nearbyMode, setNearbyMode] = useState(false);
   const [radius, setRadius] = useState(10);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [sortBy, setSortBy] = useState("createdAt");
-  const [direction, setDirection] = useState("DESC");
-  const [page, setPage] = useState(0);
+
   const [totalPages, setTotalPages] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
-  const [activeFiltersCount, setActiveFiltersCount] = useState(0);
-  const [activeFilters, setActiveFilters] = useState<any>({});
+
+
   const [loadingNearby, setLoadingNearby] = useState(false);
+
+  // ── Sync URL ──────────────────────────────────────────
+  const updateUrl = useCallback((p: number, sb: string, dir: string, filters: any) => {
+    const params = new URLSearchParams();
+    if (p > 0) params.set("page", String(p));
+    if (sb !== "createdAt") params.set("sortBy", sb);
+    if (dir !== "DESC") params.set("direction", dir);
+    if (Object.keys(filters).length > 0) {
+      params.set("filters", encodeURIComponent(JSON.stringify(filters)));
+    }
+    const query = params.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  }, [pathname, router]);
+
+  // ── Restaure scroll au retour ─────────────────────────
+useEffect(() => {
+  const savedScroll = sessionStorage.getItem("home_scroll");
+  if (savedScroll) {
+    // Attend que les items soient rendus
+    const timer = setTimeout(() => {
+      window.scrollTo({ top: Number(savedScroll), behavior: "instant" });
+    }, 100); // ← augmente à 300ms
+    return () => clearTimeout(timer);
+  }
+}, []);
 
   useEffect(() => {
     if (!loading && !user) router.push("/login");
   }, [user, loading]);
 
-  const loadItems = async (currentPage = page) => {
+  const loadItems = async (currentPage = page, currentSortBy = sortBy, currentDirection = direction, currentFilters = activeFilters) => {
     setLoadingItems(true);
+    try {
+      const res = await searchItems({
+        ...currentFilters,
+        page: currentPage,
+        size: 12,
+        sortBy: currentSortBy,
+        direction: currentDirection,
+      });
 
-    const res = await searchItems({
-      page: currentPage,
-      size: 12,
-      sortBy,
-      direction,
-    });
-    console.log("content length:", res.content?.length);
-    console.log("totalPages:", res.totalPages);
-    console.log("totalElements:", res.totalElements);
-    console.log(res);
-
-    if (res.content) {
-      // ✅ backend paginé
-      setItems(res.content);
-      setTotalPages(res.totalPages);
-      loadAuctions(res.content);
-    } else {
-      // ⚠️ fallback si backend NON paginé
-      setItems(res);
-
-      // fake pagination
-      setTotalPages(res.length === 12 ? page + 2 : page + 1);
-
-      loadAuctions(res);
+      if (res.content) {
+        setItems(res.content);
+        setTotalPages(res.totalPages);
+        loadAuctions(res.content);
+      } else {
+        setItems(res);
+        setTotalPages(1);
+        loadAuctions(res);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingItems(false);
     }
-
-    setLoadingItems(false);
   };
 
   useEffect(() => {
-    if (user) {
-      loadItems(page);
-    }
+    if (user) loadItems(page, sortBy, direction, activeFilters);
   }, [page, sortBy, direction]);
 
   useEffect(() => {
     if (!loading && user) {
-      loadItems();
+      // Restaure les filtres depuis l'URL si présents
+      loadItems(page, sortBy, direction, activeFilters);
     }
   }, [user, loading]);
 
@@ -127,47 +163,17 @@ export default function Home() {
   };
 
   const resetFilters = async () => {
-    try {
-      setLoadingItems(true);
-
-      // reset UI filtres
-      setActiveFilters({});
-      setActiveFiltersCount(0);
-
-      // reset tri
-      setSortBy("createdAt");
-      setDirection("DESC");
-
-      // reset pagination
-      setPage(0);
-      setTotalPages(1);
-
-      // reset proximité
-      setNearbyMode(false);
-      setUserLocation(null);
-
-      // 🔥 IMPORTANT : recharger via searchItems (pas fetchItems)
-      const res = await searchItems({
-        page: 0,
-        size: 12,
-        sortBy: "createdAt",
-        direction: "DESC",
-      });
-
-      if (res.content) {
-        setItems(res.content);
-        setTotalPages(res.totalPages);
-        loadAuctions(res.content);
-      } else {
-        setItems(res);
-        loadAuctions(res);
-      }
-
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoadingItems(false);
-    }
+    setActiveFilters({});
+    setActiveFiltersCount(0);
+    setSortBy("createdAt");
+    setDirection("DESC");
+    setPage(0);
+    setTotalPages(1);
+    setNearbyMode(false);
+    setUserLocation(null);
+    sessionStorage.removeItem("home_scroll");
+    router.replace(pathname, { scroll: false }); // ← URL propre
+    await loadItems(0, "createdAt", "DESC", {});
   };
   const loadAuctions = async (items: any[]) => {
     const map: any = {};
@@ -183,18 +189,11 @@ export default function Home() {
   const removeFilter = async (key: string) => {
     const updated = { ...activeFilters };
     delete updated[key];
-
     setActiveFilters(updated);
     setActiveFiltersCount(Object.keys(updated).length);
-
-    const res = await searchItems({
-      ...updated,
-      page: 0,
-      size: 12,
-      sortBy,
-      direction,
-    });
-
+    setPage(0);
+    updateUrl(0, sortBy, direction, updated); // ← sync URL
+    const res = await searchItems({ ...updated, page: 0, size: 12, sortBy, direction });
     if (res.content) {
       setItems(res.content);
       setTotalPages(res.totalPages);
@@ -203,45 +202,21 @@ export default function Home() {
       setItems(res);
       loadAuctions(res);
     }
-
-    setPage(0);
   };
-
   const handleSearch = async (filters: any) => {
     const cleanedFilters = Object.fromEntries(
-      Object.entries(filters).filter(
-        ([key, v]) =>
-          !["sortBy", "direction", "page", "size"].includes(key) &&
-          v !== null &&
-          v !== "" &&
-          v !== undefined &&
-          !(Array.isArray(v) && v.length === 0)
+      Object.entries(filters).filter(([key, v]) =>
+        !["sortBy", "direction", "page", "size"].includes(key) &&
+        v !== null && v !== "" && v !== undefined
       )
     );
-
     setActiveFilters(cleanedFilters);
     setActiveFiltersCount(Object.keys(cleanedFilters).length);
-
-    const res = await searchItems({
-      ...filters,
-      page: 0,
-      size: 12,
-      sortBy,
-      direction,
-    });
-
-    if (res.content) {
-      setItems(res.content);
-      setTotalPages(res.totalPages);
-      loadAuctions(res.content);
-    } else {
-      setItems(res);
-      loadAuctions(res);
-    }
-
     setPage(0);
-    setShowFilters(false);
     setNearbyMode(false);
+    setShowFilters(false);
+    updateUrl(0, sortBy, direction, cleanedFilters); // ← sync URL
+    await loadItems(0, sortBy, direction, cleanedFilters);
   };
 
   const handleNearby = () => {
@@ -385,7 +360,7 @@ export default function Home() {
           }`}
       >
         <div className="bg-white rounded-xl shadow p-4 mb-6">
-          <Filters onSearch={handleSearch} />
+          <Filters onSearch={handleSearch} sortBy={sortBy} direction={direction} />
         </div>
       </div>
 
@@ -395,7 +370,7 @@ export default function Home() {
           onClick={nearbyMode ? exitNearby : handleNearby}
           disabled={loadingNearby}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-medium transition-colors ${nearbyMode ? "bg-green-700" : "bg-green-500 hover:bg-green-600"
-            } disabled:opacity-60`}
+            } disabled:opacity-60 cursor-pointer`}
         >
           {loadingNearby ? (
             <>
@@ -413,7 +388,7 @@ export default function Home() {
               <button
                 key={r}
                 onClick={() => changeRadius(r)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${radius === r
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${radius === r
                   ? "bg-blue-600 text-white"
                   : "bg-white text-gray-600 hover:bg-gray-50"
                   }`}
@@ -439,16 +414,20 @@ export default function Home() {
             {items.map((item) => (
               <div key={item.id}>
 
-                <Link href={`/items/${item.id}`}>
-                  <div className="bg-white rounded-xl shadow hover:scale-105 hover:shadow-md transition-all overflow-hidden cursor-pointer">
-                    <ItemCard item={item} />
-                    {item.distanceLabel && (
-                      <p className="text-green-600 text-sm font-semibold px-3 pb-2">
-                        📍 à ~{item.distanceLabel}
-                      </p>
-                    )}
-                  </div>
-                </Link>
+               <div
+  className="bg-white rounded-xl shadow hover:scale-105 hover:shadow-md transition-all overflow-hidden cursor-pointer"
+  onClick={() => {
+    sessionStorage.setItem("home_scroll", String(window.scrollY));
+    router.push(`/items/${item.id}`);
+  }}
+>
+  <ItemCard item={item} />
+  {item.distanceLabel && (
+    <p className="text-green-600 text-sm font-semibold px-3 pb-2">
+      📍 à ~{item.distanceLabel}
+    </p>
+  )}
+</div>
 
                 {item.type === "AUCTION" && auctionData[item.id] && (
                   <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
@@ -467,33 +446,40 @@ export default function Home() {
             <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
 
               <button
-                onClick={() => setPage((p) => Math.max(p - 1, 0))}
+                onClick={() => {
+                  const p = Math.max(page - 1, 0);
+                  setPage(p);
+                  updateUrl(p, sortBy, direction, activeFilters);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 disabled={page === 0}
                 className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
-              >
-                ←
-              </button>
+              >←</button>
 
               {[...Array(totalPages)].map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setPage(i)}
-                  className={`px-3 py-1 rounded ${page === i ? "bg-blue-600 text-white" : "bg-white border"
-                    }`}
+                  onClick={() => {
+                    setPage(i);
+                    updateUrl(i, sortBy, direction, activeFilters);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className={`px-3 py-1 rounded cursor-pointer ${page === i ? "bg-blue-600 text-white" : "bg-white border"}`}
                 >
                   {i + 1}
                 </button>
               ))}
 
               <button
-                onClick={() =>
-                  setPage((p) => Math.min(p + 1, totalPages - 1))
-                }
+                onClick={() => {
+                  const p = Math.min(page + 1, totalPages - 1);
+                  setPage(p);
+                  updateUrl(p, sortBy, direction, activeFilters);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 disabled={page === totalPages - 1}
                 className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
-              >
-                →
-              </button>
+              >→</button>
 
             </div>
           )}

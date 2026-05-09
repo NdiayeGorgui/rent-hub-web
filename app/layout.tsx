@@ -2,7 +2,7 @@
 
 import Header from "@/components/ui/Header";
 import "./globals.css";
-import { AuthProvider, useAuth } from "@/components/auth/AuthContext";
+import { AuthProvider, useAuth } from "@/components/contexts/AuthContext";
 import { MessageProvider } from "@/components/contexts/MessageContext";
 import { NotificationProvider } from "@/components/contexts/NotificationContext";
 import { SidebarLeft, SidebarRight } from "@/components/ui/Sidebar";

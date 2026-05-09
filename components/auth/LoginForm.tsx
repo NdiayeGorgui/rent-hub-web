@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { loginUser, forgotPassword } from "@/services/authService";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/components/auth/AuthContext";
+import { useAuth } from "@/components/contexts/AuthContext";
 
 type Step = "login" | "forgot" | "forgot_sent";
 
@@ -30,18 +30,27 @@ export default function LoginForm() {
     }
   };
 
-  const handleForgot = async () => {
-    if (!forgotEmail) { alert("Entrez votre email"); return; }
-    try {
-      setLoading(true);
-      await forgotPassword(forgotEmail);
-      setStep("forgot_sent");
-    } catch {
-      alert("Une erreur est survenue");
-    } finally {
-      setLoading(false);
-    }
-  };
+const handleForgot = async () => {
+  if (!forgotEmail) {
+    alert("Entrez votre email");
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    await forgotPassword(forgotEmail);
+
+    alert("Un token a été envoyé à votre email");
+
+    router.push("/reset-password");
+
+  } catch {
+    alert("Une erreur est survenue");
+  } finally {
+    setLoading(false);
+  }
+};
 
   // ── Login ──────────────────────────────────────────
   if (step === "login") return (

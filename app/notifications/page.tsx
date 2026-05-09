@@ -11,18 +11,29 @@ import { formatNotificationDate } from "@/lib/formatDate";
 
 const getTypeConfig = (type: string) => {
   switch (type) {
-    case "RENTAL_REQUEST":    return { icon: "📦", label: "Demande de location" };
-    case "RENTAL_APPROVED":   return { icon: "✅", label: "Location approuvée" };
-    case "RENTAL_CANCELLED":  return { icon: "❌", label: "Location annulée" };
-    case "NEW_BID":           return { icon: "🔥", label: "Nouvelle enchère" };
-    case "AUCTION_WON":       return { icon: "🏆", label: "Enchère gagnée" };
-    case "AUCTION_ENDED":     return { icon: "⏰", label: "Enchère terminée" };
-    case "NEW_MESSAGE":       return { icon: "💬", label: "Nouveau message" };
-    case "NEW_REVIEW":        return { icon: "⭐", label: "Nouvel avis" };
-    case "PAYMENT_SUCCESS":   return { icon: "💳", label: "Paiement réussi" };
-    case "DISPUTE_OPENED":    return { icon: "⚖️", label: "Litige ouvert" };
-    case "DISPUTE_RESOLVED":  return { icon: "✅", label: "Litige résolu" };
-    default:                  return { icon: "🔔", label: type };
+    case "CREATED": return { icon: "📦", label: "Demande de location" };
+    case "APPROVED": return { icon: "✅", label: "Location approuvée" };
+    case "STARTED": return { icon: "⏰", label: "Location démarrée" };
+    case "CANCELLED": return { icon: "❌", label: "Location annulée" };
+    case "ENDED": return { icon: "⏰", label: "Location terminée" };
+    case "NEW_BID": return { icon: "🔥", label: "Nouvelle enchère" };
+    case "AUCTION_WON": return { icon: "🏆", label: "Enchère gagnée" };
+    case "AUCTION_FINISHED": return { icon: "⏰", label: "Enchère terminée" };
+    case "AUCTION_RESERVE_NOT_MET": return { icon: "🔥", label: "Prix de réserve non atteint" };
+    case "AUCTION_REFUNDED": return { icon: "💳", label: "Remboursement enchère" };
+    case "AUCTION_PENALTY": return { icon: "💳", label: "Pénalité" };
+    case "NEW_MESSAGE": return { icon: "💬", label: "Nouveau message" };
+    case "NEW_REVIEW": return { icon: "⭐", label: "Nouvel avis" };
+    case "PAYMENT_SUCCESS": return { icon: "💳", label: "Paiement réussi" };
+    case "DISPUTE_OPENED": return { icon: "⚖️", label: "Litige ouvert" };
+    case "DISPUTE_RESOLVED": return { icon: "✅", label: "Litige résolu" };
+    case "ACCOUNT_REACTIVATED": return { icon: "✅", label: "Compte réactivé" };
+    case "AUCTION_STRIKE": return { icon: "⚠️", label: "Avertissement" };
+    case "REVIEW": return { icon: "⭐", label: "Avis" };
+    case "REVIEW_USER": return { icon: "⭐", label: "Avis utilisateur" };
+    case "REVIEW_ITEM": return { icon: "⭐", label: "Avis article" };
+    case "SUBSCRIPTION_RENEWED": return { icon: "🔄", label: "Renouvellement abonnement" };
+    default: return { icon: "🔔", label: type };
   }
 };
 

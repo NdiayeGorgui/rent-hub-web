@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function Filters({ onSearch }: any) {
+export default function Filters({ onSearch, sortBy: currentSort, direction: currentDir }: any) {
     const [keyword, setKeyword] = useState("");
     const [city, setCity] = useState("");
     const [minPrice, setMinPrice] = useState("");
@@ -152,8 +152,8 @@ export default function Filters({ onSearch }: any) {
             <div className="flex items-center gap-2 overflow-x-auto">
 
                 <button
-                    onClick={() => applySort("createdAt", "DESC")}
-                    className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-sm cursor-pointer"
+                    className={`px-3 py-1 rounded text-sm cursor-pointer ${currentSort === "createdAt" ? "bg-blue-600 text-white" : "bg-gray-200 hover:bg-gray-300"
+                        }`}
                 >
                     🆕 Plus récents
                 </button>
@@ -180,7 +180,7 @@ export default function Filters({ onSearch }: any) {
                         onClick={handleSearch}
                         className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer whitespace-nowrap  cursor-pointer"
                     >
-                      🔍 Rechercher
+                        🔍 Rechercher
                     </button>
 
                     {/* RESET */}

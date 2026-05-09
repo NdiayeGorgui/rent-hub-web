@@ -82,7 +82,7 @@ export default function AdminUsersPage() {
 
         <div className="relative mb-6">
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
           </svg>
           <input
             placeholder="Rechercher par nom, email, subscription..."
@@ -109,22 +109,25 @@ export default function AdminUsersPage() {
                     {user.city && <><span className="text-gray-200">·</span><span>📍 {user.city}</span></>}
                   </div>
                   <div className="flex gap-2 mt-2 flex-wrap items-center">
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                      user.enabled ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                    }`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${user.enabled ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                      }`}>
                       {user.enabled ? "Actif" : "Suspendu"}
                     </span>
                     {user.roles.includes("ROLE_ADMIN") && (
                       <span className="text-xs bg-gray-900 text-white px-2 py-0.5 rounded-full font-medium">ADMIN</span>
                     )}
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                      user.subscription === "PREMIUM" ? "bg-yellow-100 text-yellow-700" : "bg-gray-100 text-gray-500"
-                    }`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${user.subscription === "PREMIUM" ? "bg-yellow-100 text-yellow-700" : "bg-gray-100 text-gray-500"
+                      }`}>
                       {user.subscription}
                     </span>
                     {user.auctionStrikes !== undefined && user.auctionStrikes > 0 && (
                       <span className="text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full font-medium">
                         ⚠ {user.auctionStrikes}/3 strikes
+                      </span>
+                    )}
+                    {user.auctionRestricted && (
+                      <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium">
+                        ⛔ Interdit enchères
                       </span>
                     )}
                   </div>

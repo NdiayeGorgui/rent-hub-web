@@ -13,6 +13,7 @@ export default function AdminDisputesPage() {
   const [itemsMap, setItemsMap] = useState<Record<number, any>>({});
   const [action, setAction] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [resolveLoading, setResolveLoading] = useState(false);
 
   useEffect(() => { loadDisputes(); }, []);
 
@@ -33,25 +34,53 @@ export default function AdminDisputesPage() {
   };
 
   const handleResolve = async () => {
-    if (!selectedDispute || !decision) { alert("Veuillez choisir une décision"); return; }
-    if (!adminComment.trim()) { alert("Veuillez écrire un commentaire"); return; }
-    if (decision === "RESOLVED" && !action) { alert("Veuillez choisir une action"); return; }
+    if (!selectedDispute || !decision) {
+      alert("Veuillez choisir une décision");
+      return;
+    }
+    if (!adminComment.trim()) {
+      alert("Veuillez écrire un commentaire");
+      return;
+    }
+    if (decision === "RESOLVED" && !action) {
+      alert("Veuillez choisir une action");
+      return;
+    }
+
     try {
-      await resolveDisputeAdmin(selectedDispute.id, decision, adminComment, action ?? "NONE");
+      setResolveLoading(true);
+
+      await resolveDisputeAdmin(
+        selectedDispute.id,
+        decision,
+        adminComment,
+        action ?? "NONE"
+      );
+
       alert("Litige traité !");
-      setSelectedDispute(null); setAdminComment(""); setDecision(null); setAction(null);
+
+      setSelectedDispute(null);
+      setAdminComment("");
+      setDecision(null);
+      setAction(null);
       setActiveTab("list");
-      loadDisputes();
-    } catch { alert("Impossible de résoudre le litige"); }
+
+      await loadDisputes();
+
+    } catch {
+      alert("Impossible de résoudre le litige");
+    } finally {
+      setResolveLoading(false);
+    }
   };
 
   const getStatusConfig = (status: string) => {
     switch (status) {
-      case "OPEN":      return { label: "Ouvert",      cls: "bg-orange-50 text-orange-700 border border-orange-200" };
+      case "OPEN": return { label: "Ouvert", cls: "bg-orange-50 text-orange-700 border border-orange-200" };
       case "IN_REVIEW": return { label: "En révision", cls: "bg-blue-50 text-blue-700 border border-blue-200" };
-      case "RESOLVED":  return { label: "Résolu",      cls: "bg-green-50 text-green-700 border border-green-200" };
-      case "REJECTED":  return { label: "Rejeté",      cls: "bg-red-50 text-red-700 border border-red-200" };
-      default:          return { label: status,         cls: "bg-gray-100 text-gray-500" };
+      case "RESOLVED": return { label: "Résolu", cls: "bg-green-50 text-green-700 border border-green-200" };
+      case "REJECTED": return { label: "Rejeté", cls: "bg-red-50 text-red-700 border border-red-200" };
+      default: return { label: status, cls: "bg-gray-100 text-gray-500" };
     }
   };
 
@@ -76,16 +105,15 @@ export default function AdminDisputesPage() {
 
         <div className="flex gap-3 mb-8">
           {[
-            { key: "list",    label: "Tous les litiges", icon: "⚖️" },
-            { key: "resolve", label: "Résoudre",         icon: "✅" },
+            { key: "list", label: "Tous les litiges", icon: "⚖️" },
+            { key: "resolve", label: "Résoudre", icon: "✅" },
           ].map(({ key, label, icon }) => (
             <button key={key}
               onClick={() => { setActiveTab(key as any); setSelectedDispute(null); }}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
-                activeTab === key
-                  ? "bg-violet-600 text-white shadow-sm cursor-pointer"
-                  : "bg-white text-gray-500 border border-gray-200 hover:border-violet-300 hover:text-violet-600 cursor-pointer"
-              }`}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${activeTab === key
+                ? "bg-violet-600 text-white shadow-sm cursor-pointer"
+                : "bg-white text-gray-500 border border-gray-200 hover:border-violet-300 hover:text-violet-600 cursor-pointer"
+                }`}
             >
               <span>{icon}</span> {label}
             </button>
@@ -189,21 +217,19 @@ export default function AdminDisputesPage() {
                 <div className="flex gap-3">
                   <button
                     onClick={() => { setDecision("RESOLVED"); setAction(null); }}
-                    className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all cursor-pointer ${
-                      decision === "RESOLVED"
-                        ? "bg-green-500 text-white border-green-500"
-                        : "bg-white text-gray-500 border-gray-200 hover:border-green-400"
-                    }`}
+                    className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all cursor-pointer ${decision === "RESOLVED"
+                      ? "bg-green-500 text-white border-green-500"
+                      : "bg-white text-gray-500 border-gray-200 hover:border-green-400"
+                      }`}
                   >
                     ✅ Approuver
                   </button>
                   <button
                     onClick={() => { setDecision("REJECTED"); setAction(null); }}
-                    className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all cursor-pointer ${
-                      decision === "REJECTED"
-                        ? "bg-red-500 text-white border-red-500"
-                        : "bg-white text-gray-500 border-gray-200 hover:border-red-400"
-                    }`}
+                    className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all cursor-pointer ${decision === "REJECTED"
+                      ? "bg-red-500 text-white border-red-500"
+                      : "bg-white text-gray-500 border-gray-200 hover:border-red-400"
+                      }`}
                   >
                     ❌ Rejeter
                   </button>
@@ -216,17 +242,16 @@ export default function AdminDisputesPage() {
                   <p className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Action</p>
                   <div className="flex flex-col gap-2">
                     {[
-                      { key: "NONE",             label: "Aucune action" },
-                      { key: "SUSPEND_USER",      label: "🔴 Suspendre l'utilisateur" },
-                      { key: "DEACTIVATE_ITEM",   label: "🚫 Désactiver l'item" },
+                      { key: "NONE", label: "Aucune action" },
+                      { key: "SUSPEND_USER", label: "🔴 Suspendre l'utilisateur" },
+                      { key: "DEACTIVATE_ITEM", label: "🚫 Désactiver l'item" },
                       ...(isAuctionDispute ? [{ key: "REFUND_AUCTION_FEE", label: "💸 Rembourser le owner + pénalité winner" }] : []),
                     ].map(({ key, label }) => (
                       <button key={key} onClick={() => setAction(key)}
-                        className={`text-left px-4 py-3 rounded-xl text-sm font-medium border-2 transition-all cursor-pointer ${
-                          action === key
-                            ? "bg-violet-50 border-violet-500 text-violet-700"
-                            : "bg-white border-gray-200 text-gray-600 hover:border-violet-300"
-                        }`}
+                        className={`text-left px-4 py-3 rounded-xl text-sm font-medium border-2 transition-all cursor-pointer ${action === key
+                          ? "bg-violet-50 border-violet-500 text-violet-700"
+                          : "bg-white border-gray-200 text-gray-600 hover:border-violet-300"
+                          }`}
                       >
                         {label}
                       </button>
@@ -257,10 +282,16 @@ export default function AdminDisputesPage() {
               </div>
 
               <div className="flex gap-3">
-                <button onClick={handleResolve} disabled={!isValid}
-                  className="flex-1 py-3 bg-violet-600 text-white rounded-xl text-sm font-semibold hover:bg-violet-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                <button
+                  onClick={handleResolve}
+                  disabled={!isValid || resolveLoading}
+                  className="flex-1 py-3 bg-violet-600 text-white rounded-xl text-sm font-semibold hover:bg-violet-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  ✔ Valider la décision
+                  {resolveLoading ? (
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : "✔"}
+
+                  {resolveLoading ? "Traitement..." : "Valider la décision"}
                 </button>
                 <button onClick={() => setSelectedDispute(null)}
                   className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200 cursor-pointer"

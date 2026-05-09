@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { fetchMyProfile } from "@/services/profileService";
 import { fetchItemDetails } from "@/services/itemService";
-import { getAuctionByItemId } from "@/services/auctionService";
+import { getAuctionAllByItemId, getAuctionByItemId } from "@/services/auctionService";
 import { fetchMyRentals } from "@/services/rentalService";
 import { getMyPayments, payPenalty } from "@/services/paymentService";
 import { handleWebPayment } from "@/services/stripeWeb";
@@ -28,6 +28,7 @@ export default function ProfilePage() {
             const data = await fetchMyProfile();
             setProfile(data);
 
+
             const myPayments = await getMyPayments();
             setPayments(myPayments);
             const penalty = myPayments.find(
@@ -42,7 +43,7 @@ export default function ProfilePage() {
                         d.id = item.id;
                         if (d.type === "AUCTION") {
                             try {
-                                const a = await getAuctionByItemId(item.id);
+                                const a = await getAuctionAllByItemId(item.id);
                                 d.currentPrice = a?.currentPrice ?? null;
                                 d.auctionEndDate = a?.endDate ?? null;
                             } catch { }
@@ -61,9 +62,13 @@ export default function ProfilePage() {
                 const details = await Promise.all(
                     confirmedRentals.map(async (rental: any) => {
                         const d = await fetchItemDetails(rental.itemId);
+
                         d.id = rental.itemId;
+                        d.rentalId = rental.id;
+
                         d.startDate = rental.startDate;
                         d.endDate = rental.endDate;
+
                         if (d.type === "AUCTION") {
                             try {
                                 const a = await getAuctionByItemId(d.id);
@@ -71,6 +76,7 @@ export default function ProfilePage() {
                                 d.auctionEndDate = a?.endDate ?? null;
                             } catch { }
                         }
+
                         return d;
                     })
                 );
@@ -207,7 +213,7 @@ export default function ProfilePage() {
                 <h2 className="font-bold text-gray-900 mb-3">Réputation</h2>
                 <div className="grid grid-cols-3 gap-3 text-center">
                     <div className="bg-gray-50 rounded-xl p-3">
-                        <p className="text-xl font-bold text-blue-600">{profile.averageRating?.toFixed(1) ?? 0}</p>
+                        <p className="text-xl font-bold text-blue-600">{Number(profile.averageRating || 0).toFixed(2)}</p>
                         <p className="text-xs text-gray-400 mt-0.5">Note moyenne</p>
                     </div>
                     <div className="bg-gray-50 rounded-xl p-3">
@@ -244,7 +250,7 @@ export default function ProfilePage() {
                                             ? `🔥 ${item.currentPrice ?? "—"} $`
                                             : `${item.pricePerDay} $/j`}
                                     </p>
-                                    <p className="text-xs text-gray-400">⭐ {item.averageRating ?? 0}</p>
+                                    <p className="text-xs text-gray-400">⭐ {Number(item.averageRating || 0).toFixed(2)}</p>
                                 </div>
                             </div>
                         ))}
@@ -260,7 +266,7 @@ export default function ProfilePage() {
                 ) : (
                     <div className="flex flex-col gap-2">
                         {rentedItems.map((item) => (
-                            <div key={item.id} className="flex items-center justify-between border-b border-gray-50 pb-2 last:border-0">
+                            <div key={`${item.id}-${item.rentalId}`} className="flex items-center justify-between border-b border-gray-50 pb-2 last:border-0">
                                 <div>
                                     <p className="text-sm font-medium text-gray-800">#{item.id} — {item.title}</p>
                                     <p className="text-xs text-gray-400">
@@ -275,7 +281,7 @@ export default function ProfilePage() {
                                             ? `🔥 ${item.currentPrice ?? "—"} $`
                                             : `${item.pricePerDay} $/j`}
                                     </p>
-                                    <p className="text-xs text-gray-400">⭐ {item.averageRating ?? 0}</p>
+                                    <p className="text-xs text-gray-400">⭐ {Number(item.averageRating || 0).toFixed(2)}</p>
                                 </div>
                             </div>
                         ))}

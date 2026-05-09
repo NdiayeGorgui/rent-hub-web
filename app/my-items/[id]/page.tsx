@@ -19,6 +19,7 @@ import {
 } from "@/services/auctionService";
 import { getCurrentUser } from "@/services/authService";
 import {
+    getAllReviewsForUser,
     getReviewsByItem,
     getReviewsByUser,
     getReviewsCountByItem,
@@ -52,8 +53,8 @@ export default function ItemDetailPage() {
     const [timeLeft, setTimeLeft] = useState("");
 
     const isAuctionFinished =
-    item?.type === "AUCTION" &&
-    (item?.status === "CANCELLED_AUCTION" || item?.active === false);
+        item?.type === "AUCTION" &&
+        (item?.status === "CANCELLED_AUCTION" || item?.active === false);
 
     // Reviews
     const [reviews, setReviews] = useState<any[]>([]);
@@ -79,6 +80,7 @@ export default function ItemDetailPage() {
     const [statsVisible, setStatsVisible] = useState(false);
     const [step, setStep] = useState<"view" | "payment">("view");
     const [deactivateLoading, setDeactivateLoading] = useState(false);
+    const [activeImageIndex, setActiveImageIndex] = useState(0);
 
     // Edit fields
     const [editTitle, setEditTitle] = useState("");
@@ -91,13 +93,12 @@ export default function ItemDetailPage() {
     const [editImagePreviews, setEditImagePreviews] = useState<string[]>([]);
     const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
 
+    const [showAllUserReviews, setShowAllUserReviews] = useState(false);
+    const [showAllItemReviews, setShowAllItemReviews] = useState(false);
+
 
     const BASE_URL = "http://localhost:8080";
 
-    const isAuctionEnded =
-        item?.type === "AUCTION" &&
-        item?.active === false &&
-        item?.status !== "CANCELLED_AUCTION";
 
     const isAuctionClosed =
         item?.type === "AUCTION" &&
@@ -135,7 +136,7 @@ export default function ItemDetailPage() {
                     getReviewsByItem(Number(id)),
                     getReviewsCountByItem(Number(id)),
                     data.publisher?.userId
-                        ? getReviewsByUser(data.publisher.userId)
+                        ? getAllReviewsForUser(data.publisher.userId)
                         : Promise.resolve([]),
                 ]);
                 setReviews(reviewsData);
@@ -341,7 +342,7 @@ export default function ItemDetailPage() {
             {isOwner && (
                 <div className="flex flex-wrap gap-3 mb-6">
 
-                    {!isAuctionFinished  && (
+                    {!isAuctionFinished && (
                         <button onClick={() => setEditMode(!editMode)}
                             className="flex items-center gap-2 bg-white shadow px-4 py-2 rounded-xl font-semibold hover:bg-gray-50 cursor-pointer">
                             ✏️ Modifier
@@ -353,9 +354,9 @@ export default function ItemDetailPage() {
                             className="flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-xl font-semibold hover:bg-red-200 cursor-pointer">
                             ❌ Annuler l'enchère
                         </button>
-                    ) : item.type === "RENTAL" && !isAuctionFinished  ? (
+                    ) : item.type === "RENTAL" && !isAuctionFinished ? (
                         <button onClick={handleDeactivate} disabled={deactivateLoading}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold ${item.active ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
+                            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold cursor-pointer ${item.active ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
                             {item.active ? "🚫 Désactiver" : "✅ Activer"}
                         </button>
                     ) : null}
@@ -472,19 +473,107 @@ export default function ItemDetailPage() {
 
             {/* ── Images ── */}
             <h1 className="text-2xl font-bold mb-4">{item.title}</h1>
-           {/* ── Images ── */}
-<div className="flex flex-col gap-3 mb-4">
-  {item.imageUrls?.length > 0
-    ? item.imageUrls.map((url: string, i: number) => (
-        <div key={i} className="w-full bg-gray-100 rounded-xl" style={{ aspectRatio: "4/3" }}>
-          <img
-            src={`${BASE_URL}${url}`}
-            className="w-full h-full object-contain rounded-xl"
-          />
-        </div>
-      ))
-    : <p className="text-gray-400">Aucune image</p>}
-</div>
+            {/* ── Images ── */}
+            <div className="w-full h-full object-contain transition-all duration-300">
+                {item.imageUrls?.length > 0 ? (
+                    <div className="relative">
+
+                        {/* Image principale */}
+                        <div
+                            className="w-full bg-gray-100 rounded-xl overflow-hidden"
+                            style={{ aspectRatio: "4/3" }}
+                        >
+                            <img
+                                src={`${BASE_URL}${item.imageUrls[activeImageIndex]}`}
+                                className="w-full h-full object-contain transition-opacity duration-300"
+                                alt={`image ${activeImageIndex + 1}`}
+                            />
+                        </div>
+
+                        {/* Flèche gauche */}
+                        {item.imageUrls.length > 1 && (
+                            <button
+                                onClick={() => setActiveImageIndex(prev => Math.max(prev - 1, 0))}
+                                disabled={activeImageIndex === 0}
+                                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white bg-opacity-80 shadow flex items-center justify-center disabled:opacity-30 hover:bg-opacity-100 transition-all"
+                            >
+                                <svg
+                                    className="w-4 h-4 text-gray-700"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.5"
+                                >
+                                    <path d="M15 18l-6-6 6-6" />
+                                </svg>
+                            </button>
+                        )}
+
+                        {/* Flèche droite */}
+                        {item.imageUrls.length > 1 && (
+                            <button
+                                onClick={() =>
+                                    setActiveImageIndex(prev =>
+                                        Math.min(prev + 1, item.imageUrls.length - 1)
+                                    )
+                                }
+                                disabled={activeImageIndex === item.imageUrls.length - 1}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white bg-opacity-80 shadow flex items-center justify-center disabled:opacity-30 hover:bg-opacity-100 transition-all"
+                            >
+                                <svg
+                                    className="w-4 h-4 text-gray-700"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.5"
+                                >
+                                    <path d="M9 18l6-6-6-6" />
+                                </svg>
+                            </button>
+                        )}
+
+                        {/* Dots */}
+                        {item.imageUrls.length > 1 && (
+                            <div className="flex justify-center gap-2 mt-3">
+                                {item.imageUrls.map((_: string, i: number) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setActiveImageIndex(i)}
+                                        className={`h-1.5 rounded-full transition-all ${i === activeImageIndex
+                                            ? "w-5 bg-blue-600"
+                                            : "w-1.5 bg-gray-300"
+                                            }`}
+                                    />
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Miniatures */}
+                        {item.imageUrls.length > 1 && (
+                            <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
+                                {item.imageUrls.map((url: string, i: number) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setActiveImageIndex(i)}
+                                        className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 ${i === activeImageIndex
+                                            ? "border-blue-600"
+                                            : "border-transparent opacity-60 hover:opacity-100"
+                                            }`}
+                                    >
+                                        <img
+                                            src={`${BASE_URL}${url}`}
+                                            className="w-full h-full object-contain bg-gray-100"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                    </div>
+                ) : (
+                    <p className="text-gray-400">Aucune image</p>
+                )}
+            </div>
 
             {item.type === "RENTAL" && (
                 <p className="text-xl font-semibold text-blue-600 mb-2">{item.pricePerDay} $ / jour</p>
@@ -527,7 +616,7 @@ export default function ItemDetailPage() {
                     {userReviews.length === 0 ? (
                         <p className="text-gray-400 text-sm">Aucun avis pour le moment</p>
                     ) : (
-                        userReviews.slice(0, 3).map((r) => (
+                        (showAllUserReviews ? userReviews : userReviews.slice(0, 3)).map((r) => (
                             <div key={r.id} className="border-t pt-2 mt-2 text-sm">
                                 <p>⭐ {r.rating}</p>
                                 <p className="text-gray-700">{r.comment}</p>
@@ -536,6 +625,14 @@ export default function ItemDetailPage() {
                                 </p>
                             </div>
                         ))
+                    )}
+                    {userReviews.length > 3 && (
+                        <button
+                            onClick={() => setShowAllUserReviews(!showAllUserReviews)}
+                            className="mt-3 text-sm text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
+                        >
+                            {showAllUserReviews ? "Voir moins" : "Voir plus"}
+                        </button>
                     )}
                 </div>
 
@@ -548,7 +645,7 @@ export default function ItemDetailPage() {
                     {reviews.length === 0 ? (
                         <p className="text-gray-400 text-sm">Aucun avis pour le moment</p>
                     ) : (
-                        reviews.slice(0, 3).map((r) => (
+                        (showAllItemReviews ? reviews : reviews.slice(0, 3)).map((r) => (
                             <div key={r.id} className="border-t pt-2 mt-2 text-sm">
                                 <p>⭐ {r.rating}</p>
                                 <p className="text-gray-700">{r.comment}</p>
@@ -558,6 +655,14 @@ export default function ItemDetailPage() {
                             </div>
 
                         ))
+                    )}
+                    {reviews.length > 3 && (
+                        <button
+                            onClick={() => setShowAllItemReviews(!showAllItemReviews)}
+                            className="mt-3 text-sm text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
+                        >
+                            {showAllItemReviews ? "Voir moins" : "Voir plus"}
+                        </button>
                     )}
                     {/* ───────────── Note moyenne ───────────── */}
                     <div className="mt-3 text-sm">
@@ -571,10 +676,10 @@ export default function ItemDetailPage() {
                 </div>
             </div>
 
-           
+
 
             {/* ── Bid (non-owner, premium, enchère ouverte) ── */}
-            {item.type === "AUCTION" && !isOwner && !isAuctionFinished  && currentUser?.premium && (
+            {item.type === "AUCTION" && !isOwner && !isAuctionFinished && currentUser?.premium && (
                 <div className="bg-white rounded-xl shadow p-4 mb-4">
                     <h3 className="font-bold mb-3">💰 Placer une enchère</h3>
                     <p className="text-sm mb-2">
@@ -612,7 +717,7 @@ export default function ItemDetailPage() {
             )}
 
             {/* ── Publier enchère (owner, pas encore d'enchère) ── */}
-            {item.type === "AUCTION" && isOwner && !auction && !isAuctionFinished  && (
+            {item.type === "AUCTION" && isOwner && !auction && !isAuctionFinished && (
                 <div className="bg-white rounded-xl shadow p-4 mb-4">
                     <h3 className="font-bold mb-3">🔥 Publier l'enchère</h3>
                     <div className="flex flex-col gap-2">

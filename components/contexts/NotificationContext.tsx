@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { getMyNotifications } from "@/services/notificationService";
-import { useAuth } from "@/components/auth/AuthContext";
+import { useAuth } from "@/components/contexts/AuthContext";
 
 type NotificationContextType = {
   unreadCount: number;

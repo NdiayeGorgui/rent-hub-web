@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getUserProfile } from "@/services/profileService";
+import { getAuctionAllByItemId, getAuctionByItemId, getAuctionPublicByItemId } from "@/services/auctionService";
 
 export default function UserProfilePage() {
   const { id } = useParams();
@@ -13,6 +14,33 @@ export default function UserProfilePage() {
     const load = async () => {
       try {
         const data = await getUserProfile(String(id));
+
+        // 🔥 enrichir les auctions avec currentPrice
+        if (data.publishedItems?.length) {
+          data.publishedItems = await Promise.all(
+            data.publishedItems.map(async (item: any) => {
+              if (item.type === "AUCTION") {
+                try {
+                 const auction = await getAuctionAllByItemId(item.id);
+
+                  return {
+                    ...item,
+                    currentPrice: auction?.currentPrice ?? null,
+                    endDate: auction?.endDate ?? null,
+                  };
+                } catch {
+                  return {
+                    ...item,
+                    currentPrice: null,
+                  };
+                }
+              }
+
+              return item;
+            })
+          );
+        }
+
         setUser(data);
       } catch (err) {
         console.log(err);
@@ -28,6 +56,7 @@ export default function UserProfilePage() {
       <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
     </div>
   );
+
 
   if (!user) return (
     <div className="min-h-screen flex items-center justify-center text-gray-400">
@@ -75,23 +104,44 @@ export default function UserProfilePage() {
         <h2 className="font-bold text-gray-900 mb-4">📦 Articles publiés</h2>
         {user.publishedItems?.length > 0 ? (
           <div className="flex flex-col gap-3">
-            {user.publishedItems.map((item: any) => (
-              <div key={item.id} className="border-b border-gray-50 pb-3 last:border-0 last:pb-0">
-                <p className="font-medium text-gray-800">
-                  {item.title}
-                  {item.pricePerDay && (
-                    <span className="text-blue-600 ml-2">{item.pricePerDay} $/jour</span>
-                  )}
-                </p>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  📅 Publié le {new Date(item.createdAt).toLocaleDateString("fr-CA")}
-                </p>
-              </div>
-            ))}
+            {user.publishedItems.map((item: any, index: number) => {
+              console.log("ITEM =", item);
+
+              return (
+                <div
+                  key={`${item.id}-${index}`}
+                  className="border-b border-gray-50 pb-3 last:border-0 last:pb-0"
+                >
+                  <div className="flex items-center justify-between">
+                    <p className="font-medium text-gray-800">{item.title}</p>
+
+                    <p className="text-sm font-semibold text-blue-600">
+                      {item.type === "AUCTION"
+                        ? `🔥 ${item.currentPrice ?? "—"} $`
+                        : item.pricePerDay
+                          ? `${item.pricePerDay} $/jour`
+                          : ""}
+                    </p>
+                  </div>
+
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    {item.type === "AUCTION"
+                      ? `🔥 Enchère · fin ${item.endDate
+                        ? new Date(item.endDate).toLocaleDateString("fr-CA")
+                        : "—"
+                      }`
+                      : `📅 Publié le ${new Date(item.createdAt).toLocaleDateString(
+                        "fr-CA"
+                      )}`}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <p className="text-gray-400 text-sm">Aucun article publié</p>
         )}
+
       </div>
 
       {/* Historique location */}
@@ -99,8 +149,8 @@ export default function UserProfilePage() {
         <h2 className="font-bold text-gray-900 mb-4">🔁 Historique de location</h2>
         {user.rentedItems?.length > 0 ? (
           <div className="flex flex-col gap-3">
-            {user.rentedItems.map((item: any) => (
-              <div key={item.id} className="border-b border-gray-50 pb-3 last:border-0 last:pb-0">
+            {user.rentedItems.map((item: any, index: number) => (
+              <div key={`${item.id}-${index}`} className="border-b border-gray-50 pb-3 last:border-0 last:pb-0">
                 <p className="font-medium text-gray-800">
                   {item.title}
                   {item.pricePerDay && (

@@ -25,6 +25,8 @@ export default function DisputesPage() {
   const [auctionRole, setAuctionRole] = useState<"winner" | "owner">("winner");
   const [loading, setLoading] = useState(false);
 
+  const [submitLoading, setSubmitLoading] = useState(false);
+
   useEffect(() => {
     if (activeTab === "list") loadDisputes();
     if (activeTab === "create") loadRentals();
@@ -59,8 +61,8 @@ export default function DisputesPage() {
       setRentals(availableRentals);
 
       let won: any[] = [], owned: any[] = [];
-      try { won = (await getMyWonAuctions()).filter((a: any) => !disputedAuctionIds.includes(a.id)); } catch {}
-      try { owned = (await getMyClosedAuctionsAsOwner()).filter((a: any) => !disputedAuctionIds.includes(a.id)); } catch {}
+      try { won = (await getMyWonAuctions()).filter((a: any) => !disputedAuctionIds.includes(a.id)); } catch { }
+      try { owned = (await getMyClosedAuctionsAsOwner()).filter((a: any) => !disputedAuctionIds.includes(a.id)); } catch { }
       setWonAuctions(won);
       setOwnerAuctions(owned);
 
@@ -81,18 +83,38 @@ export default function DisputesPage() {
   };
 
   const handleCreate = async () => {
-    if (!selectedRental || !reason) { alert("Veuillez choisir une location et une raison"); return; }
+    if (!selectedRental || !reason) {
+      alert("Veuillez choisir une location et une raison");
+      return;
+    }
+
     try {
-      await createDispute({ rentalId: selectedRental.id, reason, description });
+      setSubmitLoading(true);
+
+      await createDispute({
+        rentalId: selectedRental.id,
+        reason,
+        description
+      });
+
       alert("Litige créé ✅");
-      setSelectedRental(null); setReason(""); setDescription("");
+
+      setSelectedRental(null);
+      setReason("");
+      setDescription("");
       setActiveTab("list");
-    } catch { alert("Impossible de créer le litige"); }
+
+    } catch {
+      alert("Impossible de créer le litige");
+    } finally {
+      setSubmitLoading(false);
+    }
   };
 
   const handleCreateAuctionDispute = async () => {
     if (!selectedAuction || !reason) { alert("La raison est obligatoire"); return; }
     try {
+      setSubmitLoading(true);
       await createAuctionDispute({
         auctionId: selectedAuction.id,
         reportedUserId: auctionRole === "winner" ? selectedAuction.ownerId : selectedAuction.winnerId,
@@ -102,15 +124,18 @@ export default function DisputesPage() {
       setSelectedAuction(null); setReason(""); setDescription("");
       setActiveTab("list");
     } catch { alert("Impossible de créer le litige"); }
+    finally {
+      setSubmitLoading(false);
+    }
   };
 
   const getStatusConfig = (status: string) => {
     switch (status) {
-      case "OPEN":      return { label: "Ouvert",      cls: "bg-orange-50 text-orange-700 border border-orange-200" };
+      case "OPEN": return { label: "Ouvert", cls: "bg-orange-50 text-orange-700 border border-orange-200" };
       case "IN_REVIEW": return { label: "En révision", cls: "bg-blue-50 text-blue-700 border border-blue-200" };
-      case "RESOLVED":  return { label: "Résolu",      cls: "bg-green-50 text-green-700 border border-green-200" };
-      case "REJECTED":  return { label: "Rejeté",      cls: "bg-red-50 text-red-700 border border-red-200" };
-      default:          return { label: status,         cls: "bg-gray-100 text-gray-500 border border-gray-200" };
+      case "RESOLVED": return { label: "Résolu", cls: "bg-green-50 text-green-700 border border-green-200" };
+      case "REJECTED": return { label: "Rejeté", cls: "bg-red-50 text-red-700 border border-red-200" };
+      default: return { label: status, cls: "bg-gray-100 text-gray-500 border border-gray-200" };
     }
   };
 
@@ -129,15 +154,14 @@ export default function DisputesPage() {
         {/* Toggle principal */}
         <div className="flex gap-3 mb-8">
           {[
-            { key: "list",   label: "Mes litiges",     icon: "⚖️" },
+            { key: "list", label: "Mes litiges", icon: "⚖️" },
             { key: "create", label: "Créer un litige", icon: "➕" },
           ].map(({ key, label, icon }) => (
             <button key={key} onClick={() => setActiveTab(key as any)}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
-                activeTab === key
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${activeTab === key
                   ? "bg-blue-600 text-white shadow-sm cursor-pointer"
                   : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
-              }`}
+                }`}
             >
               <span>{icon}</span> {label}
             </button>
@@ -203,8 +227,8 @@ export default function DisputesPage() {
             {/* Toggle type */}
             <div className="flex gap-3 mb-6">
               {[
-                { key: "rental",  label: "Location", icon: "📦" },
-                { key: "auction", label: "Enchère",  icon: "🔥" },
+                { key: "rental", label: "Location", icon: "📦" },
+                { key: "auction", label: "Enchère", icon: "🔥" },
               ].map(({ key, label, icon }) => (
                 <button key={key}
                   onClick={() => {
@@ -212,11 +236,10 @@ export default function DisputesPage() {
                     setSelectedRental(null); setSelectedAuction(null);
                     setReason(""); setDescription("");
                   }}
-                  className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
-                    disputeType === key
+                  className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${disputeType === key
                       ? "bg-blue-600 text-white shadow-sm cursor-pointer"
                       : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
-                  }`}
+                    }`}
                 >
                   <span>{icon}</span> {label}
                 </button>
@@ -270,9 +293,15 @@ export default function DisputesPage() {
                         className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
                     <div className="flex gap-3 pt-2">
-                      <button onClick={handleCreate}
-                        className="flex-1 py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors cursor-pointer">
-                        Envoyer le litige
+                      <button
+                        onClick={handleCreate}
+                        disabled={submitLoading}
+                        className="flex-1 py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      >
+                        {submitLoading ? (
+                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        ) : "📤"}
+                        {submitLoading ? "Envoi..." : "Envoyer le litige"}
                       </button>
                       <button onClick={() => setSelectedRental(null)}
                         className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors cursor-pointer">
@@ -291,15 +320,14 @@ export default function DisputesPage() {
                 <div className="flex gap-3 mb-6">
                   {[
                     { key: "winner", label: "J'ai gagné une enchère", icon: "🏆" },
-                    { key: "owner",  label: "Je suis le vendeur",     icon: "📦" },
+                    { key: "owner", label: "Je suis le vendeur", icon: "📦" },
                   ].map(({ key, label, icon }) => (
                     <button key={key}
                       onClick={() => { setAuctionRole(key as any); setSelectedAuction(null); setReason(""); setDescription(""); }}
-                      className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
-                        auctionRole === key
+                      className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${auctionRole === key
                           ? "bg-blue-600 text-white shadow-sm cursor-pointer"
                           : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
-                      }`}
+                        }`}
                     >
                       <span>{icon}</span> {label}
                     </button>
@@ -356,9 +384,15 @@ export default function DisputesPage() {
                           className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" />
                       </div>
                       <div className="flex gap-3 pt-2">
-                        <button onClick={handleCreateAuctionDispute}
-                          className="flex-1 py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors cursor-pointer">
-                          Envoyer le litige
+                        <button
+                          onClick={handleCreateAuctionDispute}
+                          disabled={submitLoading}
+                          className="flex-1 py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                          {submitLoading ? (
+                            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          ) : "📤"}
+                          {submitLoading ? "Envoi..." : "Envoyer le litige"}
                         </button>
                         <button onClick={() => setSelectedAuction(null)}
                           className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors cursor-pointer">

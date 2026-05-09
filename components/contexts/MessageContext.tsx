@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { getUnreadMessagesCount } from "@/services/messageService";
-import { useAuth } from "@/components/auth/AuthContext";
+import { useAuth } from "@/components/contexts/AuthContext";
 
 type MessageContextType = {
   unreadMessages: number;
