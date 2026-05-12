@@ -108,6 +108,70 @@ export default function ProfilePage() {
         }
     };
 
+    const getPaymentTypeConfig = (type: string) => {
+        switch (type) {
+            case "SUBSCRIPTION":
+                return {
+                    icon: "⭐",
+                    label: "Abonnement Premium"
+                };
+
+            case "AUCTION_FEE":
+                return {
+                    icon: "🔥",
+                    label: "Frais d'enchère"
+                };
+
+            case "AUCTION_REFUND":
+                return {
+                    icon: "💳",
+                    label: "Remboursement enchère"
+                };
+
+                 case "AUCTION_CANCELLATION_FEE":
+                return {
+                    icon: "💳",
+                    label: "Frais d'annulation enchère"
+                };
+
+            case "SUBSCRIPTION_RENEWAL":
+                return {
+                    icon: "🔄",
+                    label: "Renouvellement abonnement"
+                };
+
+            case "AUCTION_PENALTY":
+                return {
+                    icon: "⚠️",
+                    label: "Pénalité enchère"
+                };
+
+            default:
+                return {
+                    icon: "💳",
+                    label: type
+                };
+        }
+    };
+
+    const getPaymentStatusLabel = (status: string) => {
+        switch (status) {
+            case "SUCCESS":
+                return "Payé";
+
+            case "PENDING":
+                return "En attente";
+
+            case "FAILED":
+                return "Échoué";
+
+            case "EXPIRED":
+                return "Expiré";
+
+            default:
+                return status;
+        }
+    };
     const getPaymentStatusStyle = (status: string) => {
         switch (status) {
             case "SUCCESS": return "text-green-600";
@@ -300,14 +364,17 @@ export default function ProfilePage() {
                             <div key={p.id} className="border-b border-gray-50 pb-3 last:border-0">
                                 <div className="flex items-center justify-between">
                                     <p className="text-sm font-medium text-gray-800">
-                                        {p.paymentType === "AUCTION_PENALTY" ? "⚠️ Pénalité enchère" : `Paiement #${p.id}`}
+                                        {getPaymentTypeConfig(p.paymentType).icon}{" "}
+                                        {getPaymentTypeConfig(p.paymentType).label}
                                     </p>
                                     <span className={`text-xs font-bold ${getPaymentStatusStyle(p.status)}`}>
-                                        {p.status}
+                                        {getPaymentStatusLabel(p.status)}
                                     </span>
                                 </div>
                                 <p className="text-blue-600 font-semibold text-sm">{p.amount} $</p>
-                                <p className="text-xs text-gray-400">{p.paymentType} — {formatDate(p.createdAt)}</p>
+                                <p className="text-xs text-gray-400">
+                                    {getPaymentTypeConfig(p.paymentType).label} — {formatDate(p.createdAt)}
+                                </p>
                                 {p.paymentType === "AUCTION_PENALTY" && p.status === "PENDING" && (
                                     <button
                                         onClick={() => setPenaltyStep("payment")}

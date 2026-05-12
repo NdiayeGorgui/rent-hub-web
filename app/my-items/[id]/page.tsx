@@ -56,6 +56,10 @@ export default function ItemDetailPage() {
         item?.type === "AUCTION" &&
         (item?.status === "CANCELLED_AUCTION" || item?.active === false);
 
+     const isAuctionClosed =
+        item?.type === "AUCTION" &&
+        (item?.status === "CANCELLED_AUCTION" || item?.active === false);
+
     // Reviews
     const [reviews, setReviews] = useState<any[]>([]);
     const [reviewsCount, setReviewsCount] = useState(0);
@@ -100,9 +104,7 @@ export default function ItemDetailPage() {
     const BASE_URL = "http://localhost:8080";
 
 
-    const isAuctionClosed =
-        item?.type === "AUCTION" &&
-        (item?.status === "CANCELLED_AUCTION" || item?.active === false);
+   
 
     // ─── Load ────────────────────────────────────────────────
     useEffect(() => {

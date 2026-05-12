@@ -19,6 +19,7 @@ const getTypeConfig = (type: string) => {
     case "NEW_BID": return { icon: "🔥", label: "Nouvelle enchère" };
     case "AUCTION_WON": return { icon: "🏆", label: "Enchère gagnée" };
     case "AUCTION_FINISHED": return { icon: "⏰", label: "Enchère terminée" };
+    case "AUCTION_CANCELLED": return { icon: "❌", label: "Enchère annulée" };
     case "AUCTION_RESERVE_NOT_MET": return { icon: "🔥", label: "Prix de réserve non atteint" };
     case "AUCTION_REFUNDED": return { icon: "💳", label: "Remboursement enchère" };
     case "AUCTION_PENALTY": return { icon: "💳", label: "Pénalité" };
