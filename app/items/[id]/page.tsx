@@ -451,16 +451,49 @@ export default function ItemDetailPage() {
                     <div className="flex flex-col gap-2">
                         <div>
                             <label className="text-xs text-gray-400 mb-1 block">Date début</label>
-                            <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
-                                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            <input
+                                type="date"
+                                value={startDate}
+                                min={new Date().toISOString().split("T")[0]} // ← aujourd'hui minimum
+                                onChange={e => {
+                                    setStartDate(e.target.value);
+                                    // Reset end date si elle devient invalide
+                                    if (endDate && endDate <= e.target.value) {
+                                        setEndDate("");
+                                    }
+                                }}
+                                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
                         </div>
                         <div>
                             <label className="text-xs text-gray-400 mb-1 block">Date fin</label>
-                            <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}
-                                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            <input
+                                type="date"
+                                value={endDate}
+                                min={
+                                    startDate
+                                        ? (() => {
+                                            // Lendemain de la date de début
+                                            const d = new Date(startDate);
+                                            d.setDate(d.getDate() + 1);
+                                            return d.toISOString().split("T")[0];
+                                        })()
+                                        : (() => {
+                                            // Minimum demain si pas de date de début
+                                            const d = new Date();
+                                            d.setDate(d.getDate() + 1);
+                                            return d.toISOString().split("T")[0];
+                                        })()
+                                }
+                                onChange={e => setEndDate(e.target.value)}
+                                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
                         </div>
-                        <button onClick={handleRent} disabled={rentLoading}
-                            className="w-full py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 disabled:opacity-60 cursor-pointer mt-1">
+                        <button
+                            onClick={handleRent}
+                            disabled={rentLoading || !startDate || !endDate}
+                            className="w-full py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 disabled:opacity-60 cursor-pointer mt-1"
+                        >
                             {rentLoading ? "Envoi..." : "Louer maintenant"}
                         </button>
                     </div>

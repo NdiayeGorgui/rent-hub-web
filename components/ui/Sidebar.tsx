@@ -24,7 +24,7 @@ export function SidebarLeft() {
                         </svg>
                     </div>
                     <div>
-                        <p className="font-semibold text-sm text-gray-900">RentHub</p>
+                        <p className="font-semibold text-sm text-gray-900">Gonifty</p>
                         <p className="text-xs text-gray-400">Louez. Enchérissez. Gagnez.</p>
                     </div>
                 </div>
