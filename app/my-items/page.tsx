@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchMyItems } from "@/services/itemService";
+import { BASE_URL } from "@/lib/baseURL";
 
 
 export default function MyItemsPage() {
@@ -49,8 +50,8 @@ export default function MyItemsPage() {
                     className="w-full bg-gray-100 rounded-xl"
                     style={{ aspectRatio: "4/3" }}
                   >
-                    <img
-                      src={`http://localhost:8080${item.imageUrls[0]}`}
+                   <img
+                      src={`${BASE_URL}${item.imageUrls[0]}`}
                       alt={item.title}
                       className="w-full h-full object-contain rounded-xl"
                     />

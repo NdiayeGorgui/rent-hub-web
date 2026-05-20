@@ -1,7 +1,10 @@
+import { BASE_URL } from "@/lib/baseURL";
+
 type Props = {
   item: any;
 };
-import { BASE_URL } from "@/lib/baseURL";
+
+
 export default function ItemCard({ item }: Props) {
   
 
@@ -11,7 +14,7 @@ export default function ItemCard({ item }: Props) {
       const url = item.imageUrls[0];
 
       // si déjà URL complète
-      if (url.startsWith("http")) return url;
+      if (url.startsWith("https")) return url;
 
       return `${BASE_URL}${url}`;
     }
