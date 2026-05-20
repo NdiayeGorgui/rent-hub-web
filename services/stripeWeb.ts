@@ -1,7 +1,7 @@
 import { loadStripe } from "@stripe/stripe-js";
 
 
-const stripePromise = loadStripe("pk_test_51T4saEL13XKhsSvAVRTgYoPiSsR9otLFgBzR9OfgobHqZbjKN7YyugeJRRVkSP2frn0HzvXpD5mzj2Zqmepeh3xq00Vh1cDmSW");
+const stripePromise = loadStripe("pk_test_51TXjIjQaWL0C4PvN4RI3bc64LFKfzevr70JI1LAUaSykVSFcSfzvJKccMg8azKrfDwf2Am2J0pqmBG6Wz9AAZyL400KCjjQiZs");
 
 export const handleWebPayment = async (clientSecret: string) => {
   const stripe = await stripePromise;
