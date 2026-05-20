@@ -1,9 +1,9 @@
 type Props = {
   item: any;
 };
-
+import { BASE_URL } from "@/lib/baseURL";
 export default function ItemCard({ item }: Props) {
-  const baseURL = "http://localhost:8080";
+  
 
   const getImage = () => {
     // ✅ cas normal
@@ -13,14 +13,14 @@ export default function ItemCard({ item }: Props) {
       // si déjà URL complète
       if (url.startsWith("http")) return url;
 
-      return `${baseURL}${url}`;
+      return `${BASE_URL}${url}`;
     }
 
     // ✅ fallback si backend renvoie imageUrl
     if (item.imageUrl) {
       return item.imageUrl.startsWith("http")
         ? item.imageUrl
-        : `${baseURL}${item.imageUrl}`;
+        : `${BASE_URL}${item.imageUrl}`;
     }
 
     // ✅ fallback final
