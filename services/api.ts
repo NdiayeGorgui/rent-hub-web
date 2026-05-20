@@ -7,8 +7,12 @@ const getToken = () => {
   return null;
 };
 
-export const API = axios.create({
+/* export const API = axios.create({
   baseURL: "http://localhost:8080/api",
+}); */
+
+export const API = axios.create({
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
 });
 
 API.interceptors.request.use((config) => {

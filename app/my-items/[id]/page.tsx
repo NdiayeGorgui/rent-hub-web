@@ -27,6 +27,7 @@ import {
 import { cancelAuctionPayment } from "@/services/paymentService";
 import { handleWebPayment } from "@/services/stripeWeb";
 import Link from "next/link";
+import { BASE_URL } from "@/lib/baseURL";
 
 const categories = [
     { id: 1, name: "Électronique" },
@@ -101,7 +102,7 @@ export default function ItemDetailPage() {
     const [showAllItemReviews, setShowAllItemReviews] = useState(false);
 
 
-    const BASE_URL = "http://localhost:8080";
+   
 
 
    
