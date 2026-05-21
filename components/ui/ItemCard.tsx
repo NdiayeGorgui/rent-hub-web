@@ -27,7 +27,7 @@ export default function ItemCard({ item }: Props) {
     }
 
     // ✅ fallback final
-    return "/no-image.png";
+    return `${BASE_URL}/uploads/no-image.png`;
   };
 
   return (
