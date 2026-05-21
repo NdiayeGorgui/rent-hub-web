@@ -102,12 +102,14 @@ useEffect(() => {
     setLoadingItems(true);
     try {
       const res = await searchItems({
+        
         ...currentFilters,
         page: currentPage,
         size: 12,
         sortBy: currentSortBy,
         direction: currentDirection,
       });
+      console.log("ITEMS:", res.content?.[0]?.imageUrls);
 
       if (res.content) {
         setItems(res.content);
@@ -231,6 +233,7 @@ useEffect(() => {
           setUserLocation({ lat, lng });
 
           const data = await getNearbyItems(lat, lng, radius);
+          console.log("NEARBY:", data[0]?.imageUrls);
 
           setItems(data);
           setNearbyMode(true);

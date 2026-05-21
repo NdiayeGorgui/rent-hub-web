@@ -14,7 +14,7 @@ export default function ItemCard({ item }: Props) {
       const url = item.imageUrls[0];
 
       // si déjà URL complète
-      if (url.startsWith("https")) return url;
+      if (url.startsWith("http")) return url;
 
       return `${BASE_URL}${url}`;
     }
