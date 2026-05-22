@@ -3,15 +3,7 @@
 import { useState } from "react";
 import { registerUser } from "@/services/authService";
 import { useRouter } from "next/navigation";
-
-const fields = [
-  { key: "username", label: "Nom d'utilisateur", type: "text" },
-  { key: "email", label: "Email", type: "email" },
-  { key: "password", label: "Mot de passe", type: "password" },
-  { key: "fullName", label: "Nom complet", type: "text" },
-  { key: "phone", label: "Téléphone", type: "tel" },
-  { key: "city", label: "Ville", type: "text" },
-];
+import PasswordInput from "@/components/ui/PasswordInput";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -38,18 +30,47 @@ export default function RegisterForm() {
     }
   };
 
+  const inputClass = "w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white";
+
   return (
     <div className="w-full max-w-md space-y-3">
-      {fields.map(({ key, label, type }) => (
-        <input
-          key={key}
-          type={type}
-          placeholder={label}
-          value={(form as any)[key]}
-          onChange={e => setForm({ ...form, [key]: e.target.value })}
-          className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-        />
-      ))}
+
+      <input type="text" placeholder="Nom d'utilisateur"
+        value={form.username}
+        onChange={e => setForm({ ...form, username: e.target.value })}
+        className={inputClass}
+      />
+
+      <input type="email" placeholder="Email"
+        value={form.email}
+        onChange={e => setForm({ ...form, email: e.target.value })}
+        className={inputClass}
+      />
+
+      {/* ← PasswordInput ici */}
+      <PasswordInput
+        placeholder="Mot de passe"
+        value={form.password}
+        onChange={e => setForm({ ...form, password: e.target.value })}
+      />
+
+      <input type="text" placeholder="Nom complet"
+        value={form.fullName}
+        onChange={e => setForm({ ...form, fullName: e.target.value })}
+        className={inputClass}
+      />
+
+      <input type="tel" placeholder="Téléphone"
+        value={form.phone}
+        onChange={e => setForm({ ...form, phone: e.target.value })}
+        className={inputClass}
+      />
+
+      <input type="text" placeholder="Ville"
+        value={form.city}
+        onChange={e => setForm({ ...form, city: e.target.value })}
+        className={inputClass}
+      />
 
       <button
         onClick={handleRegister}
@@ -63,6 +84,7 @@ export default function RegisterForm() {
         onClick={() => router.push("/login")}>
         Déjà un compte ? Se connecter
       </p>
+
     </div>
   );
 }

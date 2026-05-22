@@ -4,6 +4,7 @@ import { useState } from "react";
 import { loginUser, forgotPassword } from "@/services/authService";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/contexts/AuthContext";
+import PasswordInput from "../ui/PasswordInput";
 
 type Step = "login" | "forgot" | "forgot_sent";
 
@@ -60,10 +61,10 @@ const handleForgot = async () => {
         onChange={e => setEmail(e.target.value)}
         className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <input
-        type="password" placeholder="Mot de passe" value={password}
+      <PasswordInput
+        placeholder="Mot de passe"
+        value={password}
         onChange={e => setPassword(e.target.value)}
-        className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
 
       <button
