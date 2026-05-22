@@ -13,11 +13,15 @@ export default function ResetPasswordForm() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [tokenFromUrl, setTokenFromUrl] = useState(false);
 
   // ← Récupère le token depuis l'URL automatiquement
   useEffect(() => {
     const tokenFromUrl = searchParams.get("token");
-    if (tokenFromUrl) setToken(tokenFromUrl);
+    if (tokenFromUrl) {
+      setToken(tokenFromUrl);
+      setTokenFromUrl(true); // ← seulement si vient de l'URL
+    }
   }, [searchParams]);
 
   const handleReset = async () => {
@@ -49,16 +53,13 @@ export default function ResetPasswordForm() {
     <div className="space-y-4">
 
       {/* Token — masqué si vient de l'URL, visible sinon */}
-      {token ? (
+      {tokenFromUrl ? (
         <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-sm text-green-700">
           ✅ Token récupéré automatiquement depuis le lien
         </div>
       ) : (
-        <input
-          type="text"
-          placeholder="Token reçu par email"
-          value={token}
-          onChange={(e) => setToken(e.target.value)}
+        <input type="text" placeholder="Token reçu par email"
+          value={token} onChange={e => setToken(e.target.value)}
           className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       )}
