@@ -11,6 +11,7 @@ import {
 } from "@/services/messageService";
 import { getCurrentUser } from "@/services/authService";
 import { MessageContext } from "@/components/contexts/MessageContext";
+import { BASE_URL } from "@/lib/baseURL";
 
 
 export default function ChatPage() {
@@ -196,7 +197,7 @@ export default function ChatPage() {
                                 {/* Image */}
                                 {msg.imageUrl && (
                                     <img
-                                        src={`http://localhost:8080${msg.imageUrl}`}
+                                         src={`${BASE_URL}${msg.imageUrl}`}
                                         alt="image"
                                         className="rounded-lg mb-2 max-w-full"
                                         style={{ maxHeight: 250, objectFit: "contain" }}
