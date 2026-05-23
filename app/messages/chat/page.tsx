@@ -24,6 +24,7 @@ export default function ChatPage() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [sending, setSending] = useState(false);
+    const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
 
     const otherUsername = receiverUsername ?? "Utilisateur";
     const item = itemId && itemId !== "" && itemId !== "null" && itemId !== "undefined"
@@ -43,8 +44,18 @@ export default function ChatPage() {
     const { loadUnreadMessages } = useContext(MessageContext);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
+    const isAtBottomRef = useRef(true);
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
+
     // ✅ Sync refs
     useEffect(() => { convIdRef.current = convId; }, [convId]);
+    useEffect(() => {
+        if (isAtBottomRef.current) {
+            bottomRef.current?.scrollIntoView({
+                behavior: "smooth",
+            });
+        }
+    }, [messages]);
 
     const loadMessages = async () => {
         if (!convIdRef.current) return;
@@ -96,16 +107,14 @@ export default function ChatPage() {
     }, []); // ✅ un seul setInterval, utilise les refs
 
     // ── Scroll bas ───────────────────────────────────────
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
+
 
     // ── Envoi ────────────────────────────────────────────
     const handleSend = async () => {
         if (!content.trim() && !selectedFile) return;
 
         try {
-             setSending(true);
+            setSending(true);
             // 🟢 CAS 1 : PAS de conversation → création classique (texte uniquement)
             if (!convIdRef.current) {
                 const msg = await sendMessage({
@@ -153,9 +162,9 @@ export default function ChatPage() {
 
         } catch (err) {
             console.log("❌ Send error:", err);
-        }finally {
-        setSending(false); // ✅ STOP LOADING
-    }
+        } finally {
+            setSending(false); // ✅ STOP LOADING
+        }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -177,8 +186,21 @@ export default function ChatPage() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-3 bg-gray-50">
+            <div
+                ref={messagesContainerRef}
+                onScroll={(e) => {
+                    const el = e.currentTarget;
+
+                    const distanceFromBottom =
+                        el.scrollHeight - el.scrollTop - el.clientHeight;
+
+                    isAtBottomRef.current = distanceFromBottom < 50;
+                }}
+                className="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-3 bg-gray-50"
+            >
+
                 {messages.length === 0 && (
+
                     <div className="text-center text-gray-400 text-sm mt-10">
                         Commencez la conversation 👋
                     </div>
@@ -188,8 +210,8 @@ export default function ChatPage() {
                     return (
                         <div key={msg.id} className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
                             <div className={`max-w-[70%] px-4 py-2.5 rounded-2xl text-sm ${isMe
-                                    ? "bg-blue-600 text-white rounded-br-sm"
-                                    : "bg-white text-gray-900 border border-gray-100 rounded-bl-sm"
+                                ? "bg-blue-600 text-white rounded-br-sm"
+                                : "bg-white text-gray-900 border border-gray-100 rounded-bl-sm"
                                 }`}>
                                 <p className={`text-xs font-medium mb-1 ${isMe ? "text-blue-200" : "text-gray-400"}`}>
                                     {isMe ? "Vous" : otherUsername}
@@ -197,10 +219,11 @@ export default function ChatPage() {
                                 {/* Image */}
                                 {msg.imageUrl && (
                                     <img
-                                         src={`${BASE_URL}${msg.imageUrl}`}
+                                        src={`${BASE_URL}${msg.imageUrl}`}
                                         alt="image"
-                                        className="rounded-lg mb-2 max-w-full"
+                                        className="rounded-lg mb-2 max-w-full cursor-pointer hover:opacity-90 transition-opacity"
                                         style={{ maxHeight: 250, objectFit: "contain" }}
+                                        onClick={() => setFullscreenImage(`${BASE_URL}${msg.imageUrl}`)}
                                     />
                                 )}
 
@@ -211,6 +234,7 @@ export default function ChatPage() {
                     );
                 })}
                 <div ref={bottomRef} />
+
             </div>
 
             {/* Input */}
@@ -230,8 +254,8 @@ export default function ChatPage() {
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${selectedFile
-                            ? "bg-green-500 text-white"
-                            : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                        ? "bg-green-500 text-white"
+                        : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                         }`}
                     title="Joindre un fichier"
                 >
@@ -275,21 +299,47 @@ export default function ChatPage() {
                     className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <button
-  type="button"
-  onClick={handleSend}
-  disabled={(!content.trim() && !selectedFile) || sending}
-  className={`bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-colors flex-shrink-0 ${
-    (!content.trim() && !selectedFile) || sending
-      ? "opacity-50 cursor-not-allowed"
-      : "hover:bg-blue-700 cursor-pointer"
-  }`}
->
-  {sending ? (
-    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
-  ) : "Envoyer"}
-</button>
+                    type="button"
+                    onClick={handleSend}
+                    disabled={(!content.trim() && !selectedFile) || sending}
+                    className={`bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-colors flex-shrink-0 ${(!content.trim() && !selectedFile) || sending
+                            ? "opacity-50 cursor-not-allowed"
+                            : "hover:bg-blue-700 cursor-pointer"
+                        }`}
+                >
+                    {sending ? (
+                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
+                    ) : "Envoyer"}
+                </button>
             </div>
+            {/* Fullscreen image viewer */}
+            {fullscreenImage && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center z-50"
+                    onClick={() => setFullscreenImage(null)}
+                >
+                    {/* Fermer */}
+                    <button
+                        onClick={() => setFullscreenImage(null)}
+                        className="absolute top-6 right-6 text-white text-4xl font-bold hover:opacity-70 transition-opacity z-10"
+                    >
+                        ×
+                    </button>
 
+                    {/* Image */}
+                    <img
+                        src={fullscreenImage}
+                        alt="fullscreen"
+                        className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
+                        onClick={(e) => e.stopPropagation()} // ← évite de fermer en cliquant sur l'image
+                    />
+
+                    {/* Indication fermeture */}
+                    <p className="absolute bottom-6 text-white text-xs opacity-50">
+                        Cliquez en dehors pour fermer
+                    </p>
+                </div>
+            )}
         </div>
     );
 }
