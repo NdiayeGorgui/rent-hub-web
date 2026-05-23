@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "ca.gonifty.renthub",
+      "sha256_cert_fingerprints": [
+        "00:14:8E:4B:BD:D1:A3:1A:B1:DC:A3:58:81:4D:77:09:30:A3:97:2F:45:10:5E:45:4A:A4:74:58:8C:73:7C:D4"
+      ]
+    }
+  }
+]
