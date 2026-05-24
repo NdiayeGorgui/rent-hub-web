@@ -79,10 +79,13 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-sm mb-4 text-gray-300">Plateforme</h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="/" className="hover:text-white transition-colors">Accueil</a></li>
+              <li><a href="/rentals" className="hover:text-white transition-colors">Accueil</a></li>
+              <li><a href="/auctions" className="hover:text-white transition-colors">Locations</a></li>
               <li><a href="/auctions" className="hover:text-white transition-colors">Enchères</a></li>
-              <li><a href="/subscription" className="hover:text-white transition-colors">Premium</a></li>
+              <li><a href="/disputes" className="hover:text-white transition-colors">Litiges</a></li>
               <li><a href="/faq" className="hover:text-white transition-colors">Centre d'aide</a></li>
+              <li><a href="/apropos" className="hover:text-white transition-colors">À propos de Gonifty</a></li>
+              <li><a href="/contact" className="hover:text-white transition-colors">Contact</a></li>
             </ul>
           </div>
 
@@ -92,8 +95,8 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-gray-400">
               <li><a href="/login" className="hover:text-white transition-colors">Connexion</a></li>
               <li><a href="/register" className="hover:text-white transition-colors">Inscription</a></li>
+              <li><a href="/subscription" className="hover:text-white transition-colors">Premium</a></li>
               <li><a href="/profile" className="hover:text-white transition-colors">Mon profil</a></li>
-              <li><a href="/disputes" className="hover:text-white transition-colors">Litiges</a></li>
             </ul>
           </div>
 
