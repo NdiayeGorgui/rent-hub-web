@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {  getAllFaqs, sendFaqFeedback } from "@/services/faqService";
+import { getAllFaqs, sendFaqFeedback } from "@/services/faqService";
 
 
 function FaqItem({ item }: { item: any }) {
@@ -28,7 +28,7 @@ function FaqItem({ item }: { item: any }) {
         <span className="font-semibold text-gray-900 pr-4">{item.question}</span>
         <span className={`flex-shrink-0 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 transition-transform ${isOpen ? "rotate-180" : ""}`}>
           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M6 9l6 6 6-6"/>
+            <path d="M6 9l6 6 6-6" />
           </svg>
         </span>
       </button>
@@ -42,30 +42,28 @@ function FaqItem({ item }: { item: any }) {
             <button
               onClick={() => handleFeedback(true)}
               disabled={feedback !== null}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
-                feedback === "up"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${feedback === "up"
                   ? "bg-green-100 text-green-700"
                   : "bg-gray-100 text-gray-500 hover:bg-green-50 hover:text-green-600"
-              } disabled:cursor-default`}
+                } disabled:cursor-default`}
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
-                <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" />
+                <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
               </svg>
               Oui
             </button>
             <button
               onClick={() => handleFeedback(false)}
               disabled={feedback !== null}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
-                feedback === "down"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${feedback === "down"
                   ? "bg-red-100 text-red-700"
                   : "bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-600"
-              } disabled:cursor-default`}
+                } disabled:cursor-default`}
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/>
-                <path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/>
+                <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z" />
+                <path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17" />
               </svg>
               Non
             </button>
@@ -85,8 +83,8 @@ export default function FaqPage() {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-    const [selectedTheme, setSelectedTheme] = useState("Tous");
-const themes = ["Tous", "Paiement", "Location", "Enchères", "Compte", "Sécurité"];
+  const [selectedTheme, setSelectedTheme] = useState("Tous");
+  const themes = ["Tous", "Paiement", "Location", "Enchères", "Compte", "Sécurité"];
 
   useEffect(() => {
     const load = async () => {
@@ -102,13 +100,13 @@ const themes = ["Tous", "Paiement", "Location", "Enchères", "Compte", "Sécurit
     load();
   }, []);
 
-const filtered = items.filter(item => {
-  const matchSearch =
-    item.question.toLowerCase().includes(search.toLowerCase()) ||
-    item.answer.toLowerCase().includes(search.toLowerCase());
-  const matchTheme = selectedTheme === "Tous" || item.theme === selectedTheme;
-  return matchSearch && matchTheme;
-});
+  const filtered = items.filter(item => {
+    const matchSearch =
+      item.question.toLowerCase().includes(search.toLowerCase()) ||
+      item.answer.toLowerCase().includes(search.toLowerCase());
+    const matchTheme = selectedTheme === "Tous" || item.theme === selectedTheme;
+    return matchSearch && matchTheme;
+  });
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
@@ -124,7 +122,7 @@ const filtered = items.filter(item => {
         <div className="mb-8 text-center">
           <div className="w-14 h-14 rounded-2xl bg-blue-600 flex items-center justify-center mx-auto mb-4">
             <svg className="w-7 h-7 fill-white" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
             </svg>
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Centre d'aide</h1>
@@ -134,7 +132,7 @@ const filtered = items.filter(item => {
         {/* Search */}
         <div className="relative mb-8">
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
           </svg>
           <input
             type="text"
@@ -145,22 +143,21 @@ const filtered = items.filter(item => {
           />
         </div>
 
-{/* Chips thèmes — entre search et liste */}
-<div className="flex flex-wrap gap-2 mb-6">
-  {themes.map(theme => (
-    <button
-      key={theme}
-      onClick={() => setSelectedTheme(theme)}
-      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
-        selectedTheme === theme
-          ? "bg-blue-600 text-white"
-          : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600"
-      }`}
-    >
-      {theme}
-    </button>
-  ))}
-</div>
+        {/* Chips thèmes — entre search et liste */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          {themes.map(theme => (
+            <button
+              key={theme}
+              onClick={() => setSelectedTheme(theme)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${selectedTheme === theme
+                  ? "bg-blue-600 text-white"
+                  : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600"
+                }`}
+            >
+              {theme}
+            </button>
+          ))}
+        </div>
         {/* Liste */}
         {filtered.length === 0 ? (
           <div className="text-center py-16">

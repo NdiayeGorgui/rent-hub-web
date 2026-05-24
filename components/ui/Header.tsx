@@ -1,135 +1,323 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useAuth } from "@/components/contexts/AuthContext";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useMessages } from "../contexts/MessageContext";
 import { useNotifications } from "../contexts/NotificationContext";
 
 export default function Header() {
-    const { user, logout } = useAuth();
-    const pathname = usePathname();
-    const isAdmin = user?.roles?.includes("ROLE_ADMIN");
-    const { unreadMessages } = useMessages();
-    const { unreadCount } = useNotifications();
+  const { user, logout } = useAuth();
+  const pathname = usePathname();
+  const router = useRouter();
+  const isAdmin = user?.roles?.includes("ROLE_ADMIN");
+  const { unreadMessages } = useMessages();
+  const { unreadCount } = useNotifications();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    const initials = user?.fullName
-        ?.split(" ")
-        .map((n: string) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2) ?? "?";
+  const initials = user?.fullName
+    ?.split(" ")
+    .map((n: string) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2) ?? "?";
 
-    const isActive = (href: string) =>
-        pathname === href ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900";
+  const isActive = (href: string) =>
+    pathname === href
+      ? "bg-blue-50 text-blue-600 font-medium"
+      : "text-gray-500 hover:bg-gray-100 hover:text-gray-900";
 
-    return (
-        <header className="bg-white border-b border-gray-100 px-6 flex items-center justify-between h-[60px] sticky top-0 z-50">
+  const isActiveMobile = (href: string) =>
+    pathname === href ? "text-blue-600" : "text-gray-400";
 
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isAdmin ? "bg-violet-600" : "bg-blue-600"}`}>
-                    {isAdmin ? (
-                        <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" /></svg>
-                    ) : (
-                        <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" /></svg>
-                    )}
-                </div>
-                <span className="text-[17px] font-medium text-gray-900">
-                    Rent<span className={isAdmin ? "text-violet-600" : "text-blue-600"}>Hub</span>
-                </span>
-                {isAdmin && (
-                    <span className="text-[11px] bg-violet-50 text-violet-700 px-2 py-0.5 rounded font-medium ml-1">
-                        Admin
-                    </span>
-                )}
-            </Link>
+  const handleLogout = async () => {
+    await logout();
+    router.push("/login");
+    setMenuOpen(false);
+  };
 
-            {/* Nav */}
-            <nav className="flex items-center gap-0.5">
-                {!isAdmin ? (
-                    <>
-                        <Link href="/" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/")}`}>Accueil</Link>
-                        <Link href="/my-items" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/my-items")}`}>Mes items</Link>
-                        <Link href="/create" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/create")}`}>Poster</Link>
-                        <Link href="/rentals" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/rentals")}`}>Locations</Link>
-                        <Link href="/auctions" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/auctions")}`}>Enchères</Link>
-                        <Link href="/disputes" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/disputes")}`}>Litiges</Link>
-                        <Link href="/profile" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/profile")}`}>Profil</Link>
-                    </>
-                ) : (
-                    <>
-                        <Link href="/items" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/items")}`}>Produits</Link>
-                        <Link href="/users" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/users")}`}>Utilisateurs</Link>
-                        <Link href="/admin-disputes" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/admin-disputes")}`}>Litiges</Link>
-                        <Link href="/admin-faq" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/admin-faq")}`}>FAQ</Link>
-                        <Link href="/dashboard" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/dashboard")}`}>Dashboard</Link>
-                    </>
-                )}
-            </nav>
+  return (
+    <>
+      <header className="bg-white border-b border-gray-100 px-4 md:px-6 flex items-center justify-between h-[60px] sticky top-0 z-50">
 
-            {/* Actions droite */}
-            <div className="flex items-center gap-2">
-                {!isAdmin && (
-                    <>
-                        {/* <Link href="/subscription">
-                            <button className="flex items-center gap-1.5 text-[13px] font-medium px-3 py-1.5 rounded-lg bg-yellow-50 text-yellow-800 border border-yellow-200 hover:bg-yellow-100 transition-colors cursor-pointer">
-                                <svg className="w-3.5 h-3.5 fill-yellow-600" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                                Premium
-                            </button>
-                        </Link> */}
-                        {/* ← Ajoute ici */}
-                        <Link href="/faq">
-                            <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-blue-600 transition-colors cursor-pointer">
-                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                                    <path d="M12 17h.01" />
-                                </svg>
-                            </button>
-                        </Link>
-                        <div className="w-px h-5 bg-gray-100 mx-1" />
-                        <Link href="/messages/inbox">
-                            <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors relative cursor-pointer">
-                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                                </svg>
-                                {unreadMessages > 0 && (
-                                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white text-[9px] text-white flex items-center justify-center font-medium">
-                                        {unreadMessages > 99 ? "99+" : unreadMessages}
-                                    </span>
-                                )}
-                            </button>
-                        </Link>
-                    </>
-                )}
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isAdmin ? "bg-violet-600" : "bg-blue-600"}`}>
+            {isAdmin ? (
+              <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+              </svg>
+            )}
+          </div>
+          <span className="text-[17px] font-medium text-gray-900">
+            Rent<span className={isAdmin ? "text-violet-600" : "text-blue-600"}>Hub</span>
+          </span>
+          {isAdmin && (
+            <span className="text-[11px] bg-violet-50 text-violet-700 px-2 py-0.5 rounded font-medium ml-1">
+              Admin
+            </span>
+          )}
+        </Link>
 
-                <Link href="/notifications">
-                    <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors relative cursor-pointer">
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                        </svg>
-                        {unreadCount > 0 && (
-                            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white text-[9px] text-white flex items-center justify-center font-medium">
-                                {unreadCount > 99 ? "99+" : unreadCount}
-                            </span>
-                        )}
-                    </button>
-                </Link>
-                <div className="w-px h-5 bg-gray-100 mx-1" />
+        {/* Nav desktop — masqué sur mobile */}
+        <nav className="hidden md:flex items-center gap-0.5">
+          {!isAdmin ? (
+            <>
+              <Link href="/" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/")}`}>Accueil</Link>
+              <Link href="/my-items" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/my-items")}`}>Mes items</Link>
+              <Link href="/create" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/create")}`}>Poster</Link>
+              <Link href="/rentals" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/rentals")}`}>Locations</Link>
+              <Link href="/auctions" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/auctions")}`}>Enchères</Link>
+              <Link href="/disputes" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/disputes")}`}>Litiges</Link>
+              <Link href="/profile" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/profile")}`}>Profil</Link>
+            </>
+          ) : (
+            <>
+              <Link href="/items" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/items")}`}>Produits</Link>
+              <Link href="/users" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/users")}`}>Utilisateurs</Link>
+              <Link href="/admin-disputes" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/admin-disputes")}`}>Litiges</Link>
+              <Link href="/admin-faq" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/admin-faq")}`}>FAQ</Link>
+              <Link href="/dashboard" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/dashboard")}`}>Dashboard</Link>
+            </>
+          )}
+        </nav>
 
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-medium text-white ${isAdmin ? "bg-violet-600" : "bg-blue-600"}`}>
-                    {initials}
-                </div>
-
-                <button
-                    onClick={logout}
-                    className="text-[13px] px-3 py-1.5 rounded-lg border border-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors cursor-pointer"
-                >
-                    Déconnexion
+        {/* Actions droite desktop */}
+        <div className="hidden md:flex items-center gap-2">
+          {!isAdmin && (
+            <>
+              <Link href="/faq">
+                <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-blue-600 transition-colors cursor-pointer">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                    <path d="M12 17h.01" />
+                  </svg>
                 </button>
+              </Link>
+              <div className="w-px h-5 bg-gray-100 mx-1" />
+              <Link href="/messages/inbox">
+                <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors relative cursor-pointer">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                  </svg>
+                  {unreadMessages > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white text-[9px] text-white flex items-center justify-center font-medium">
+                      {unreadMessages > 99 ? "99+" : unreadMessages}
+                    </span>
+                  )}
+                </button>
+              </Link>
+            </>
+          )}
+          <Link href="/notifications">
+            <button className="w-9 h-9 rounded-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors relative cursor-pointer">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white text-[9px] text-white flex items-center justify-center font-medium">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
+            </button>
+          </Link>
+          <div className="w-px h-5 bg-gray-100 mx-1" />
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-medium text-white ${isAdmin ? "bg-violet-600" : "bg-blue-600"}`}>
+            {initials}
+          </div>
+          <button
+            onClick={handleLogout}
+            className="text-[13px] px-3 py-1.5 rounded-lg border border-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors cursor-pointer"
+          >
+            Déconnexion
+          </button>
+        </div>
+
+        {/* Actions droite mobile */}
+        <div className="flex md:hidden items-center gap-2">
+          {/* Notifs */}
+          <Link href="/notifications">
+            <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+              {unreadCount > 0 && (
+                <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-medium">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </button>
+          </Link>
+
+          {/* Hamburger */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="w-9 h-9 flex items-center justify-center text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            {menuOpen ? (
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+      </header>
+
+      {/* Bottom nav mobile — 5 icônes principales */}
+      {!isAdmin && (
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-40 flex items-center justify-around px-2 py-2 safe-area-pb">
+          {/* Accueil */}
+          <Link href="/" className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${isActiveMobile("/")}`}>
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+            <span className="text-[10px] font-medium">Accueil</span>
+          </Link>
+
+          {/* Mes items */}
+          <Link href="/my-items" className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${isActiveMobile("/my-items")}`}>
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+            </svg>
+            <span className="text-[10px] font-medium">Mes items</span>
+          </Link>
+
+          {/* Poster */}
+          <Link href="/create" className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl">
+            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center -mt-5 shadow-lg">
+              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
             </div>
-        </header>
-    );
+            <span className="text-[10px] font-medium text-gray-400">Poster</span>
+          </Link>
+
+          {/* Messages */}
+          <Link href="/messages/inbox" className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors relative ${isActiveMobile("/messages/inbox")}`}>
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            {unreadMessages > 0 && (
+              <span className="absolute top-0 right-1 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-medium">
+                {unreadMessages > 9 ? "9+" : unreadMessages}
+              </span>
+            )}
+            <span className="text-[10px] font-medium">Chat</span>
+          </Link>
+
+          {/* Menu hamburger mobile */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-gray-400"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+            <span className="text-[10px] font-medium">Menu</span>
+          </button>
+        </nav>
+      )}
+
+      {/* Overlay menu mobile */}
+      {menuOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
+            onClick={() => setMenuOpen(false)}
+          />
+
+          {/* Drawer */}
+          <div className="md:hidden fixed bottom-16 right-0 w-64 bg-white rounded-tl-2xl shadow-xl z-50 overflow-hidden">
+            <div className="p-4 border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white ${isAdmin ? "bg-violet-600" : "bg-blue-600"}`}>
+                  {initials}
+                </div>
+                <div>
+                  <p className="font-semibold text-sm text-gray-900">{user?.fullName}</p>
+                  <p className="text-xs text-gray-400">@{user?.username}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="py-2">
+              {!isAdmin ? (
+                <>
+                  {[
+                    { href: "/rentals", label: "📋 Locations" },
+                    { href: "/auctions", label: "🔥 Enchères" },
+                    { href: "/disputes", label: "⚖️ Litiges" },
+                    { href: "/profile", label: "👤 Profil" },
+                    { href: "/faq", label: "❓ Centre d'aide" },
+                    { href: "/subscription", label: "⭐ Premium" },
+                  ].map(({ href, label }) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      onClick={() => setMenuOpen(false)}
+                      className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}
+                    >
+                      {label}
+                    </Link>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {[
+                    { href: "/items", label: "📦 Produits" },
+                    { href: "/users", label: "👥 Utilisateurs" },
+                    { href: "/admin-disputes", label: "⚖️ Litiges" },
+                    { href: "/admin-faq", label: "❓ FAQ" },
+                    { href: "/dashboard", label: "📊 Dashboard" },
+                  ].map(({ href, label }) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      onClick={() => setMenuOpen(false)}
+                      className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}
+                    >
+                      {label}
+                    </Link>
+                  ))}
+                </>
+              )}
+
+              <div className="border-t border-gray-100 mt-2 pt-2">
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  🚪 Déconnexion
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Spacer pour le bottom nav mobile */}
+      {!isAdmin && <div className="md:hidden h-16" />}
+    </>
+  );
 }

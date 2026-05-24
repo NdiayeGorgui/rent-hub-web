@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from "@/components/contexts/AuthContext";
 import { MessageProvider } from "@/components/contexts/MessageContext";
 import { NotificationProvider } from "@/components/contexts/NotificationContext";
 import { SidebarLeft, SidebarRight } from "@/components/ui/Sidebar";
+import Footer from "@/components/ui/Footer";
 
 function LayoutContent({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -20,6 +21,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
         <main className="flex-1 min-w-0">{children}</main>
         <SidebarRight />
       </div>
+      <Footer /> 
     </div>
   );
 }
