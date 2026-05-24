@@ -8,6 +8,8 @@ function FaqItem({ item }: { item: any }) {
   const [isOpen, setIsOpen] = useState(false);
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
 
+
+
   const handleFeedback = async (helpful: boolean) => {
     try {
       await sendFaqFeedback(item.id, helpful);
@@ -83,6 +85,8 @@ export default function FaqPage() {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+    const [selectedTheme, setSelectedTheme] = useState("Tous");
+const themes = ["Tous", "Paiement", "Location", "Enchères", "Compte", "Sécurité"];
 
   useEffect(() => {
     const load = async () => {
@@ -98,11 +102,13 @@ export default function FaqPage() {
     load();
   }, []);
 
-  const filtered = items.filter(
-    (item) =>
-      item.question.toLowerCase().includes(search.toLowerCase()) ||
-      item.answer.toLowerCase().includes(search.toLowerCase())
-  );
+const filtered = items.filter(item => {
+  const matchSearch =
+    item.question.toLowerCase().includes(search.toLowerCase()) ||
+    item.answer.toLowerCase().includes(search.toLowerCase());
+  const matchTheme = selectedTheme === "Tous" || item.theme === selectedTheme;
+  return matchSearch && matchTheme;
+});
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
@@ -139,6 +145,22 @@ export default function FaqPage() {
           />
         </div>
 
+{/* Chips thèmes — entre search et liste */}
+<div className="flex flex-wrap gap-2 mb-6">
+  {themes.map(theme => (
+    <button
+      key={theme}
+      onClick={() => setSelectedTheme(theme)}
+      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+        selectedTheme === theme
+          ? "bg-blue-600 text-white"
+          : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600"
+      }`}
+    >
+      {theme}
+    </button>
+  ))}
+</div>
         {/* Liste */}
         {filtered.length === 0 ? (
           <div className="text-center py-16">
