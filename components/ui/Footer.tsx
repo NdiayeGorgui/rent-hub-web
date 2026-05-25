@@ -76,18 +76,16 @@ export default function Footer() {
                         </p>
 
                         <ul className="space-y-2 text-sm text-gray-400">
+                             <li>
+                                <a href="/apropos" className="hover:text-white transition-colors">
+                                    À propos de Gonifty
+                                </a>
+                            </li>
                             <li>
                                 <a href="/faq" className="hover:text-white transition-colors">
                                     Centre d'aide
                                 </a>
                             </li>
-
-                            <li>
-                                <a href="/apropos" className="hover:text-white transition-colors">
-                                    À propos de Gonifty
-                                </a>
-                            </li>
-
                             <li>
                                 <a href="/contact" className="hover:text-white transition-colors">
                                     Contact
