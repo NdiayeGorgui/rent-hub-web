@@ -81,14 +81,15 @@ export default function Footer() {
                                     À propos de Gonifty
                                 </a>
                             </li>
-                            <li>
-                                <a href="/faq" className="hover:text-white transition-colors">
-                                    Centre d'aide
+            
+                             <li>
+                                <a href="/publicite" className="hover:text-white transition-colors">
+                                    Régie publicitaire
                                 </a>
                             </li>
                             <li>
                                 <a href="/contact" className="hover:text-white transition-colors">
-                                    Contact
+                                    Contactez nous
                                 </a>
                             </li>
                         </ul>
@@ -98,10 +99,11 @@ export default function Footer() {
                     <div>
                         <h4 className="font-semibold text-sm mb-4 text-gray-300">Plateforme</h4>
                         <ul className="space-y-2 text-sm text-gray-400">
-                            <li><a href="/" className="hover:text-white transition-colors">Accueil</a></li>
-                            <li><a href="/rentals" className="hover:text-white transition-colors">Locations</a></li>
-                            <li><a href="/auctions" className="hover:text-white transition-colors">Enchères</a></li>
-                            <li><a href="/disputes" className="hover:text-white transition-colors">Litiges</a></li>
+                            <li><a href="/loueur" className="hover:text-white transition-colors">Devenir loueur</a></li>
+                            <li><a href="/vendeur" className="hover:text-white transition-colors">Devenir vendeur (Enchères)</a></li>
+                            <li><a href="/avis" className="hover:text-white transition-colors">Nos avis</a></li>
+                            <li><a href="/faq" className="hover:text-white transition-colors">Centre d'aide</a></li>
+
                         </ul>
                     </div>
 
@@ -109,10 +111,10 @@ export default function Footer() {
                     <div>
                         <h4 className="font-semibold text-sm mb-4 text-gray-300">Compte</h4>
                         <ul className="space-y-2 text-sm text-gray-400">
+                            <li><a href="/" className="hover:text-white transition-colors">Accueil</a></li>
                             <li><a href="/login" className="hover:text-white transition-colors">Connexion</a></li>
                             <li><a href="/register" className="hover:text-white transition-colors">Inscription</a></li>
                             <li><a href="/subscription" className="hover:text-white transition-colors">Premium</a></li>
-                            <li><a href="/profile" className="hover:text-white transition-colors">Mon profil</a></li>
                         </ul>
                     </div>
 
@@ -120,9 +122,9 @@ export default function Footer() {
                     <div>
                         <h4 className="font-semibold text-sm mb-4 text-gray-300">Légal</h4>
                         <ul className="space-y-2 text-sm text-gray-400">
-                            <li><a href="#" className="hover:text-white transition-colors">Conditions d'utilisation</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors">Politique de confidentialité</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors">Cookies</a></li>
+                            <li><a href="/conditions-utilisation" className="hover:text-white transition-colors">Conditions d'utilisation</a></li>
+                            <li><a href="/politique-confidentialite" className="hover:text-white transition-colors">Politique de confidentialité</a></li>
+                            <li><a href="/coukies" className="hover:text-white transition-colors">Cookies</a></li>
                         </ul>
                     </div>
 
