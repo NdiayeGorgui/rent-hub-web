@@ -298,7 +298,7 @@ export default function Header() {
                                         { href: "/users", label: "👥 Utilisateurs" },
                                         { href: "/admin-disputes", label: "⚖️ Litiges" },
                                         { href: "/admin-faq", label: "❓ FAQ" },
-                                        { href: "/admin-newsletter", label: "❓ News letter" },
+                                        { href: "/admin-newsletter", label: "✉️ News letter" },
                                         { href: "/dashboard", label: "📊 Dashboard" },
                                     ].map(({ href, label }) => (
                                         <Link
