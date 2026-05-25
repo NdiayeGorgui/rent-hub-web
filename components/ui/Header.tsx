@@ -74,6 +74,9 @@ export default function Header() {
                             <Link href="/rentals" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/rentals")}`}>Locations</Link>
                             <Link href="/auctions" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/auctions")}`}>Enchères</Link>
                             <Link href="/disputes" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/disputes")}`}>Litiges</Link>
+                            <Link href="/admin-newsletter" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/admin-newsletter")}`}>
+                                Newsletter
+                            </Link>
                             <Link href="/profile" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/profile")}`}>Profil</Link>
                         </>
                     ) : (
