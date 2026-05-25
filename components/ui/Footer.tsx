@@ -124,7 +124,7 @@ export default function Footer() {
                         <ul className="space-y-2 text-sm text-gray-400">
                             <li><a href="/conditions-utilisation" className="hover:text-white transition-colors">Conditions d'utilisation</a></li>
                             <li><a href="/politique-confidentialite" className="hover:text-white transition-colors">Politique de confidentialité</a></li>
-                            <li><a href="/coukies" className="hover:text-white transition-colors">Cookies</a></li>
+                            <li><a href="/cookies" className="hover:text-white transition-colors">Cookies</a></li>
                         </ul>
                     </div>
 
