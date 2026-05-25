@@ -98,7 +98,7 @@ export default function Footer() {
                     <div>
                         <h4 className="font-semibold text-sm mb-4 text-gray-300">Plateforme</h4>
                         <ul className="space-y-2 text-sm text-gray-400">
-                            <li><a href="/rentals" className="hover:text-white transition-colors">Accueil</a></li>
+                            <li><a href="/" className="hover:text-white transition-colors">Accueil</a></li>
                             <li><a href="/rentals" className="hover:text-white transition-colors">Locations</a></li>
                             <li><a href="/auctions" className="hover:text-white transition-colors">Enchères</a></li>
                             <li><a href="/disputes" className="hover:text-white transition-colors">Litiges</a></li>
