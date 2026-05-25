@@ -102,6 +102,7 @@ export default function Footer() {
                             <li><a href="/loueur" className="hover:text-white transition-colors">Devenir loueur</a></li>
                             <li><a href="/vendeur" className="hover:text-white transition-colors">Devenir vendeur (Enchères)</a></li>
                             <li><a href="/avis" className="hover:text-white transition-colors">Nos avis</a></li>
+                            <li><a href="/news-letter" className="hover:text-white transition-colors">Infolettre</a></li>
                             <li><a href="/faq" className="hover:text-white transition-colors">Centre d'aide</a></li>
 
                         </ul>

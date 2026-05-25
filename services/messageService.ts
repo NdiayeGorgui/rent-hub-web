@@ -53,3 +53,12 @@ export const sendContact = async (data: {
   const res = await API.post("/messages/contact", data);
   return res.data;
 };
+
+export const subscribeNewsletter = (email: string) =>
+  API.post("/newsletter/subscribe", { email });
+
+export const getSubscribers = () =>
+  API.get("/newsletter/subscribers");
+
+export const sendNewsletter = (subject: string, body: string) =>
+  API.post("/newsletter/send", { subject, body });
