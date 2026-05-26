@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Filters({
   onSearch,
   sortBy: currentSort,
-  direction: currentDir,
 }: any) {
 
   const [keyword, setKeyword] = useState("");
@@ -18,9 +17,7 @@ export default function Filters({
   const [direction, setDirection] = useState("DESC");
   const [minRating, setMinRating] = useState("");
 
-  // MOBILE
   const [isMobile, setIsMobile] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
 
@@ -84,11 +81,6 @@ export default function Filters({
       page: 0,
       size: 12,
     });
-
-    // Fermer auto mobile
-    if (isMobile) {
-      setShowFilters(false);
-    }
   };
 
   const handleReset = () => {
@@ -110,33 +102,9 @@ export default function Filters({
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 mb-6 overflow-hidden">
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
 
-      {/* HEADER MOBILE */}
-      {isMobile && (
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          className="w-full flex items-center justify-between px-4 py-4 bg-white border-b border-gray-100"
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-lg">🔍</span>
-            <span className="font-semibold text-gray-800">
-              Filtres & Recherche
-            </span>
-          </div>
-
-          <span className="text-xl">
-            {showFilters ? "▲" : "▼"}
-          </span>
-        </button>
-      )}
-
-      {/* CONTENU */}
-      <div
-        className={`p-4 space-y-4 ${
-          isMobile && !showFilters ? "hidden" : "block"
-        }`}
-      >
+      <div className="p-4 space-y-4">
 
         {/* Recherche */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -183,7 +151,7 @@ export default function Filters({
 
         </div>
 
-        {/* Select */}
+        {/* Selects */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 
           <select
@@ -198,6 +166,7 @@ export default function Filters({
                 {cat.name}
               </option>
             ))}
+
           </select>
 
           <select
@@ -242,8 +211,18 @@ export default function Filters({
 
         </div>
 
-        {/* ACTIONS */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+      </div>
+
+      {/* ACTIONS */}
+      <div
+        className={`border-t border-gray-100 p-4 bg-white ${
+          isMobile
+            ? "sticky bottom-0 z-20"
+            : ""
+        }`}
+      >
+
+        <div className="flex flex-col sm:flex-row gap-3">
 
           <button
             onClick={handleSearch}
@@ -254,7 +233,7 @@ export default function Filters({
 
           <button
             onClick={handleReset}
-            className="sm:w-auto bg-red-500 hover:bg-red-600 text-white px-5 py-3 rounded-xl text-sm font-semibold transition-colors"
+            className="bg-red-500 hover:bg-red-600 text-white px-5 py-3 rounded-xl text-sm font-semibold transition-colors"
           >
             🔄 Effacer
           </button>
@@ -262,6 +241,7 @@ export default function Filters({
         </div>
 
       </div>
+
     </div>
   );
 }
