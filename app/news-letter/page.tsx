@@ -65,74 +65,60 @@ export default function NewsletterPage() {
                         Recevez chaque semaine les meilleures annonces, conseils de location et actualités de la communauté Gonifty.
                     </p>
 
-                    {success ? (
-                        <div className="bg-white rounded-2xl px-6 py-5 max-w-md mx-auto shadow-lg border border-green-200">
-                            <div className="text-4xl mb-2">🎉</div>
 
-                            <h3 className="font-bold text-lg mb-1 text-green-700">
-                                Vous êtes inscrit !
-                            </h3>
+                    {error && <p className="text-red-300 text-sm mt-3">{error}</p>}
 
-                            <p className="text-gray-700 text-sm">
-                                Bienvenue dans la communauté Gonifty.
-                                Vérifiez votre boîte mail.
-                            </p>
-                        </div>
-                    ) : (
-                        <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                    <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
 
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={async (e) => {
-                                    const value = e.target.value;
-                                    setEmail(value);
-                                    await checkStatus(value);
-                                }}
-                                onKeyDown={e => e.key === "Enter" && handleSubscribe()}
-                                placeholder="votre@email.com"
-                                className={`flex-1 px-5 py-3.5 rounded-xl text-gray-900 text-sm focus:outline-none focus:ring-2 ${isSubscribed
-                                        ? "border-green-500 focus:ring-green-400"
-                                        : "focus:ring-white"
-                                    }`}
-                            />
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={async (e) => {
+                                const value = e.target.value;
+                                setEmail(value);
+                                await checkStatus(value);
+                            }}
+                            onKeyDown={e => e.key === "Enter" && handleSubscribe()}
+                            placeholder="votre@email.com"
+                            className={`flex-1 px-5 py-3.5 rounded-xl text-gray-900 text-sm focus:outline-none focus:ring-2 ${isSubscribed ? "border-green-500 focus:ring-green-400" : "focus:ring-white"
+                                }`}
+                        />
 
-                            <button
-                                onClick={async () => {
-                                    setLoading(true);
-                                    setError("");
+                        <button
+                            onClick={async () => {
+                                setLoading(true);
+                                setError("");
 
-                                    try {
-                                        if (isSubscribed) {
-                                            await API.get(`/newsletter/unsubscribe?email=${email}`);
-                                            setIsSubscribed(false);
-                                            setSuccess(false);
-                                        } else {
-                                            await API.post("/newsletter/subscribe", { email });
-                                            setIsSubscribed(true);
-                                            setSuccess(true);
-                                        }
-                                    } catch {
-                                        setError("Une erreur est survenue. Veuillez réessayer.");
-                                    } finally {
-                                        setLoading(false);
+                                try {
+                                    if (isSubscribed) {
+                                        await API.get(`/newsletter/unsubscribe?email=${email}`);
+                                        setIsSubscribed(false);
+                                        setSuccess(false);
+                                    } else {
+                                        await API.post("/newsletter/subscribe", { email });
+                                        setIsSubscribed(true);
+                                        setSuccess(true);
                                     }
-                                }}
-                                disabled={loading || !email.includes("@")}
-                                className={`px-6 py-3.5 rounded-xl font-semibold text-sm transition-colors whitespace-nowrap ${isSubscribed
-                                        ? "bg-red-500 text-white hover:bg-red-600"
-                                        : "bg-white text-blue-600 hover:bg-blue-50"
-                                    }`}
-                            >
-                                {loading
-                                    ? "..."
-                                    : isSubscribed
-                                        ? "Se désabonner"
-                                        : "S'abonner"}
-                            </button>
+                                } catch {
+                                    setError("Une erreur est survenue. Veuillez réessayer.");
+                                } finally {
+                                    setLoading(false);
+                                }
+                            }}
+                            disabled={loading || !email.includes("@")}
+                            className={`px-6 py-3.5 rounded-xl font-semibold text-sm transition-colors whitespace-nowrap ${isSubscribed
+                                ? "bg-red-500 text-white hover:bg-red-600"
+                                : "bg-white text-blue-600 hover:bg-blue-50"
+                                }`}
+                        >
+                            {loading
+                                ? "..."
+                                : isSubscribed
+                                    ? "Se désabonner"
+                                    : "S'abonner"}
+                        </button>
 
-                        </div>
-                    )}
+                    </div>
 
 
                     {error && (
@@ -241,8 +227,8 @@ export default function NewsletterPage() {
                                 }}
                                 disabled={loading || !email.includes("@")}
                                 className={`px-5 py-3 rounded-xl font-semibold text-sm transition-colors disabled:opacity-60 cursor-pointer ${isSubscribed
-                                    ? "bg-red-500 text-white hover:bg-red-600"
-                                    : "bg-white text-blue-600 hover:bg-blue-50"
+                                        ? "bg-red-500 text-white hover:bg-red-600"
+                                        : "bg-white text-blue-600 hover:bg-blue-50"
                                     }`}
                             >
                                 {loading
