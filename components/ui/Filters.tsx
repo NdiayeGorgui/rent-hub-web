@@ -3,245 +3,243 @@
 import { useState, useEffect } from "react";
 
 export default function Filters({
-  onSearch,
-  sortBy: currentSort,
+    onSearch,
+    sortBy: currentSort,
 }: any) {
 
-  const [keyword, setKeyword] = useState("");
-  const [city, setCity] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [type, setType] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [sortBy, setSortBy] = useState("createdAt");
-  const [direction, setDirection] = useState("DESC");
-  const [minRating, setMinRating] = useState("");
+    const [keyword, setKeyword] = useState("");
+    const [city, setCity] = useState("");
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
+    const [type, setType] = useState("");
+    const [categoryId, setCategoryId] = useState("");
+    const [sortBy, setSortBy] = useState("createdAt");
+    const [direction, setDirection] = useState("DESC");
+    const [minRating, setMinRating] = useState("");
 
-  const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
+    useEffect(() => {
 
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkMobile();
+
+        window.addEventListener("resize", checkMobile);
+
+        return () => window.removeEventListener("resize", checkMobile);
+
+    }, []);
+
+    const categories = [
+        { id: 1, name: "Électronique" },
+        { id: 2, name: "Électroménager" },
+        { id: 3, name: "Événements" },
+        { id: 4, name: "Véhicules" },
+        { id: 5, name: "Bébé & Enfants" },
+        { id: 6, name: "Sport & Loisirs" },
+        { id: 7, name: "Maison & Meubles" },
+        { id: 8, name: "Mode & Vêtements" },
+        { id: 9, name: "Outils & Bricolage" },
+        { id: 10, name: "Autres" },
+    ];
+
+    const applySort = (sort: string, dir: string) => {
+
+        setSortBy(sort);
+        setDirection(dir);
+
+        onSearch({
+            keyword,
+            city,
+            minPrice,
+            maxPrice,
+            minRating: minRating ? Number(minRating) : undefined,
+            type,
+            categoryId: categoryId ? Number(categoryId) : undefined,
+            sortBy: sort,
+            direction: dir,
+            page: 0,
+            size: 12,
+        });
     };
 
-    checkMobile();
+    const handleSearch = () => {
 
-    window.addEventListener("resize", checkMobile);
+        onSearch({
+            keyword,
+            city,
+            minPrice,
+            maxPrice,
+            minRating: minRating ? Number(minRating) : undefined,
+            type,
+            categoryId: categoryId ? Number(categoryId) : undefined,
+            sortBy,
+            direction,
+            page: 0,
+            size: 12,
+        });
+    };
 
-    return () => window.removeEventListener("resize", checkMobile);
+    const handleReset = () => {
 
-  }, []);
+        setKeyword("");
+        setCity("");
+        setMinPrice("");
+        setMaxPrice("");
+        setMinRating("");
+        setType("");
+        setCategoryId("");
+        setSortBy("createdAt");
+        setDirection("DESC");
 
-  const categories = [
-    { id: 1, name: "Électronique" },
-    { id: 2, name: "Électroménager" },
-    { id: 3, name: "Événements" },
-    { id: 4, name: "Véhicules" },
-    { id: 5, name: "Bébé & Enfants" },
-    { id: 6, name: "Sport & Loisirs" },
-    { id: 7, name: "Maison & Meubles" },
-    { id: 8, name: "Mode & Vêtements" },
-    { id: 9, name: "Outils & Bricolage" },
-    { id: 10, name: "Autres" },
-  ];
+        onSearch({
+            page: 0,
+            size: 12,
+        });
+    };
 
-  const applySort = (sort: string, dir: string) => {
+    return (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6 overflow-visible">
 
-    setSortBy(sort);
-    setDirection(dir);
+            <div className="p-4 space-y-4">
 
-    onSearch({
-      keyword,
-      city,
-      minPrice,
-      maxPrice,
-      minRating: minRating ? Number(minRating) : undefined,
-      type,
-      categoryId: categoryId ? Number(categoryId) : undefined,
-      sortBy: sort,
-      direction: dir,
-      page: 0,
-      size: 12,
-    });
-  };
+                {/* Recherche */}
+                <div className="flex flex-col md:grid md:grid-cols-2 gap-3">
 
-  const handleSearch = () => {
+                    <input
+                        placeholder="🔍 Recherche..."
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
 
-    onSearch({
-      keyword,
-      city,
-      minPrice,
-      maxPrice,
-      minRating: minRating ? Number(minRating) : undefined,
-      type,
-      categoryId: categoryId ? Number(categoryId) : undefined,
-      sortBy,
-      direction,
-      page: 0,
-      size: 12,
-    });
-  };
+                    <input
+                        placeholder="📍 Ville"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
 
-  const handleReset = () => {
+                </div>
 
-    setKeyword("");
-    setCity("");
-    setMinPrice("");
-    setMaxPrice("");
-    setMinRating("");
-    setType("");
-    setCategoryId("");
-    setSortBy("createdAt");
-    setDirection("DESC");
+                {/* Prix */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
 
-    onSearch({
-      page: 0,
-      size: 12,
-    });
-  };
+                    <input
+                        placeholder="💰 Prix min"
+                        value={minPrice}
+                        onChange={(e) => setMinPrice(e.target.value)}
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
 
-  return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+                    <input
+                        placeholder="💰 Prix max"
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(e.target.value)}
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
 
-      <div className="p-4 space-y-4">
+                    <input
+                        placeholder="⭐ Note min"
+                        value={minRating}
+                        onChange={(e) => setMinRating(e.target.value)}
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
 
-        {/* Recherche */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                </div>
 
-          <input
-            placeholder="🔍 Recherche..."
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+                {/* Selects */}
+                <div className="flex flex-col md:grid md:grid-cols-2 gap-3">
 
-          <input
-            placeholder="📍 Ville"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+                    <select
+                        value={categoryId}
+                        onChange={(e) => setCategoryId(e.target.value)}
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="">📦 Catégorie</option>
 
-        </div>
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.name}
+                            </option>
+                        ))}
 
-        {/* Prix */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    </select>
 
-          <input
-            placeholder="💰 Prix min"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+                    <select
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="">📂 Type</option>
+                        <option value="RENTAL">📦 Location</option>
+                        <option value="AUCTION">🔥 Enchère</option>
+                    </select>
 
-          <input
-            placeholder="💰 Prix max"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+                </div>
 
-          <input
-            placeholder="⭐ Note min"
-            value={minRating}
-            onChange={(e) => setMinRating(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+                {/* TRI */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
 
-        </div>
+                    <button
+                        onClick={() => applySort("createdAt", "DESC")}
+                        className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                            }`}
+                    >
+                        🆕 Plus récents
+                    </button>
 
-        {/* Selects */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <button
+                        onClick={() => applySort("pricePerDay", "ASC")}
+                        className="w-full px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                    >
+                        💰 Prix croissant
+                    </button>
 
-          <select
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">📦 Catégorie</option>
+                    <button
+                        onClick={() => applySort("pricePerDay", "DESC")}
+                        className="w-full px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                    >
+                        💰 Prix décroissant
+                    </button>
 
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
+                </div>
 
-          </select>
+            </div>
 
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">📂 Type</option>
-            <option value="RENTAL">📦 Location</option>
-            <option value="AUCTION">🔥 Enchère</option>
-          </select>
+            {/* ACTIONS */}
+            <div
+                className={`border-t border-gray-100 p-4 bg-white ${isMobile
+                        ? "sticky bottom-0 z-20"
+                        : ""
+                    }`}
+            >
 
-        </div>
+                <div className="flex flex-col sm:flex-row gap-3">
 
-        {/* TRI */}
-        <div className="flex flex-wrap gap-2">
+                    <button
+                        onClick={handleSearch}
+                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-semibold transition-colors"
+                    >
+                        🔍 Rechercher
+                    </button>
 
-          <button
-            onClick={() => applySort("createdAt", "DESC")}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-              currentSort === "createdAt"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-            }`}
-          >
-            🆕 Plus récents
-          </button>
+                    <button
+                        onClick={handleReset}
+                        className="bg-red-500 hover:bg-red-600 text-white px-5 py-3 rounded-xl text-sm font-semibold transition-colors"
+                    >
+                        🔄 Effacer
+                    </button>
 
-          <button
-            onClick={() => applySort("pricePerDay", "ASC")}
-            className="px-4 py-2 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
-          >
-            💰 Prix ↑
-          </button>
+                </div>
 
-          <button
-            onClick={() => applySort("pricePerDay", "DESC")}
-            className="px-4 py-2 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
-          >
-            💰 Prix ↓
-          </button>
+            </div>
 
         </div>
-
-      </div>
-
-      {/* ACTIONS */}
-      <div
-        className={`border-t border-gray-100 p-4 bg-white ${
-          isMobile
-            ? "sticky bottom-0 z-20"
-            : ""
-        }`}
-      >
-
-        <div className="flex flex-col sm:flex-row gap-3">
-
-          <button
-            onClick={handleSearch}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-semibold transition-colors"
-          >
-            🔍 Rechercher
-          </button>
-
-          <button
-            onClick={handleReset}
-            className="bg-red-500 hover:bg-red-600 text-white px-5 py-3 rounded-xl text-sm font-semibold transition-colors"
-          >
-            🔄 Effacer
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-  );
+    );
 }
