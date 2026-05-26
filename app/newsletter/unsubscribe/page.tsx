@@ -31,7 +31,7 @@ export default function NewsletterUnsubscribePage() {
       try {
 
         await API.get(
-          `/news-letter/unsubscribe?email=${encodeURIComponent(emailParam)}`
+          `/newsletter/unsubscribe?email=${encodeURIComponent(emailParam)}`
         );
 
         setSuccess(true);
@@ -117,7 +117,7 @@ export default function NewsletterUnsubscribePage() {
               <div className="flex flex-col sm:flex-row gap-3">
 
                 <button
-                  onClick={() => router.push("/news-letter")}
+                  onClick={() => router.push("/newsletter")}
                   className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-semibold text-sm transition-colors"
                 >
                   Se réabonner
