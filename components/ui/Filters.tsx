@@ -182,11 +182,11 @@ export default function Filters({
                 </div>
 
                 {/* TRI */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
 
                     <button
                         onClick={() => applySort("createdAt", "DESC")}
-                        className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
+                        className={`min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
                                 ? "bg-blue-600 text-white"
                                 : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                             }`}
@@ -196,14 +196,14 @@ export default function Filters({
 
                     <button
                         onClick={() => applySort("pricePerDay", "ASC")}
-                        className="w-full px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                        className="min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
                     >
                         💰 Prix croissant
                     </button>
 
                     <button
                         onClick={() => applySort("pricePerDay", "DESC")}
-                        className="w-full px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                        className="min-w-[170px] px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
                     >
                         💰 Prix décroissant
                     </button>
@@ -215,8 +215,8 @@ export default function Filters({
             {/* ACTIONS */}
             <div
                 className={`border-t border-gray-100 p-4 bg-white ${isMobile
-                        ? "sticky bottom-0 z-20"
-                        : ""
+                    ? "sticky bottom-0 z-20"
+                    : ""
                     }`}
             >
 
