@@ -83,7 +83,7 @@ export default function Header() {
                             <Link href="/admin-disputes" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/admin-disputes")}`}>Litiges</Link>
                             <Link href="/admin-faq" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/admin-faq")}`}>FAQ</Link>
                             <Link href="/admin-newsletter" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/admin-newsletter")}`}>Infolettre</Link>
-                            <Link href="/dashboard" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/dashboard")}`}>Dashboard</Link>
+                            <Link href="/dashboard" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/dashboard")}`}>Tableau de bord</Link>
                         </>
                     )}
                 </nav>
@@ -299,7 +299,7 @@ export default function Header() {
                                         { href: "/admin-disputes", label: "⚖️ Litiges" },
                                         { href: "/admin-faq", label: "❓ FAQ" },
                                         { href: "/admin-newsletter", label: "✉️ Infolettre" },
-                                        { href: "/dashboard", label: "📊 Dashboard" },
+                                        { href: "/dashboard", label: "📊 Tableau de bord" },
                                     ].map(({ href, label }) => (
                                         <Link
                                             key={href}
