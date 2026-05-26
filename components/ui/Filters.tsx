@@ -1,199 +1,267 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function Filters({ onSearch, sortBy: currentSort, direction: currentDir }: any) {
-    const [keyword, setKeyword] = useState("");
-    const [city, setCity] = useState("");
-    const [minPrice, setMinPrice] = useState("");
-    const [maxPrice, setMaxPrice] = useState("");
-    const [type, setType] = useState("");
-    const [categoryId, setCategoryId] = useState("");
-    const [sortBy, setSortBy] = useState("createdAt");
-    const [direction, setDirection] = useState("DESC");
-    const [minRating, setMinRating] = useState("");
+export default function Filters({
+  onSearch,
+  sortBy: currentSort,
+  direction: currentDir,
+}: any) {
 
-    const applySort = (sort: string, dir: string) => {
-        setSortBy(sort);
-        setDirection(dir);
+  const [keyword, setKeyword] = useState("");
+  const [city, setCity] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [type, setType] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [direction, setDirection] = useState("DESC");
+  const [minRating, setMinRating] = useState("");
 
-        onSearch({
-            keyword,
-            city,
-            minPrice,
-            maxPrice,
-            minRating: minRating ? Number(minRating) : undefined,
-            type,
-            categoryId: categoryId ? Number(categoryId) : undefined,
-            sortBy: sort,        // ✅ DIRECT
-            direction: dir,      // ✅ DIRECT
-            page: 0,
-            size: 12,
-        });
+  // MOBILE
+  const [isMobile, setIsMobile] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
     };
 
-    const handleReset = () => {
-        setKeyword("");
-        setCity("");
-        setMinPrice("");
-        setMaxPrice("");
-        setMinRating("");
-        setType("");
-        setCategoryId("");
-        setSortBy("createdAt");
-        setDirection("DESC");
+    checkMobile();
 
-        onSearch({
-            page: 0,
-            size: 12,
-        });
-    };
-    const categories = [
-        { id: 1, name: "Électronique" },
-        { id: 2, name: "Électroménager" },
-        { id: 3, name: "Événements" },
-        { id: 4, name: "Véhicules" },
-        { id: 5, name: "Bébé & Enfants" },
-        { id: 6, name: "Sport & Loisirs" },
-        { id: 7, name: "Maison & Meubles" },
-        { id: 8, name: "Mode & Vêtements" },
-        { id: 9, name: "Outils & Bricolage" },
-        { id: 10, name: "Autres" },
-    ];
+    window.addEventListener("resize", checkMobile);
 
+    return () => window.removeEventListener("resize", checkMobile);
 
-    const handleSearch = () => {
-        onSearch({
-            keyword,
-            city,
-            minPrice,
-            maxPrice,
-            minRating: minRating ? Number(minRating) : undefined,
-            type,
-            categoryId: categoryId ? Number(categoryId) : undefined,
-            sortBy,
-            direction,
-            page: 0,
-            size: 12,
-        });
-    };
+  }, []);
 
-    return (
-        <div className="bg-white p-4 rounded-xl shadow mb-6 space-y-3">
+  const categories = [
+    { id: 1, name: "Électronique" },
+    { id: 2, name: "Électroménager" },
+    { id: 3, name: "Événements" },
+    { id: 4, name: "Véhicules" },
+    { id: 5, name: "Bébé & Enfants" },
+    { id: 6, name: "Sport & Loisirs" },
+    { id: 7, name: "Maison & Meubles" },
+    { id: 8, name: "Mode & Vêtements" },
+    { id: 9, name: "Outils & Bricolage" },
+    { id: 10, name: "Autres" },
+  ];
 
-            {/* Recherche */}
-            <input
-                placeholder="Recherche..."
-                value={keyword}
-                onChange={e => setKeyword(e.target.value)}
-                className="input"
-            />
+  const applySort = (sort: string, dir: string) => {
 
-            <input
-                placeholder="Ville"
-                value={city}
-                onChange={e => setCity(e.target.value)}
-                className="input"
-            />
+    setSortBy(sort);
+    setDirection(dir);
 
-            {/* Prix+ note */}
-            <div className="flex gap-2">
+    onSearch({
+      keyword,
+      city,
+      minPrice,
+      maxPrice,
+      minRating: minRating ? Number(minRating) : undefined,
+      type,
+      categoryId: categoryId ? Number(categoryId) : undefined,
+      sortBy: sort,
+      direction: dir,
+      page: 0,
+      size: 12,
+    });
+  };
 
-                <input
-                    placeholder="Prix min"
-                    value={minPrice}
-                    onChange={e => setMinPrice(e.target.value)}
-                    className="input flex-1"
-                />
+  const handleSearch = () => {
 
-                <input
-                    placeholder="Prix max"
-                    value={maxPrice}
-                    onChange={e => setMaxPrice(e.target.value)}
-                    className="input flex-1"
-                />
+    onSearch({
+      keyword,
+      city,
+      minPrice,
+      maxPrice,
+      minRating: minRating ? Number(minRating) : undefined,
+      type,
+      categoryId: categoryId ? Number(categoryId) : undefined,
+      sortBy,
+      direction,
+      page: 0,
+      size: 12,
+    });
 
-                <input
-                    placeholder="Note (1-5) ⭐"
-                    value={minRating}
-                    onChange={e => setMinRating(e.target.value)}
-                    className="input flex-1"
-                />
+    // Fermer auto mobile
+    if (isMobile) {
+      setShowFilters(false);
+    }
+  };
 
-            </div>
+  const handleReset = () => {
 
-            {/* Catégorie + Type */}
-            <div className="flex gap-3">
-                <select
-                    value={categoryId}
-                    onChange={(e) => setCategoryId(e.target.value)}
-                    className="flex-1 border p-2 rounded"
-                >
-                    <option value="">Catégorie</option>
-                    {categories.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                            {cat.name}
-                        </option>
-                    ))}
-                </select>
+    setKeyword("");
+    setCity("");
+    setMinPrice("");
+    setMaxPrice("");
+    setMinRating("");
+    setType("");
+    setCategoryId("");
+    setSortBy("createdAt");
+    setDirection("DESC");
 
-                <select
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    className="flex-1 border p-2 rounded"
-                >
-                    <option value="">Type</option>
-                    <option value="RENTAL">📦 Location</option>
-                    <option value="AUCTION">🔥 Enchère</option>
-                </select>
-            </div>
+    onSearch({
+      page: 0,
+      size: 12,
+    });
+  };
 
-            {/* TRI + ACTIONS */}
-            <div className="flex items-center gap-2 overflow-x-auto">
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 mb-6 overflow-hidden">
 
-                <button
-                    className={`px-3 py-1 rounded text-sm cursor-pointer ${currentSort === "createdAt" ? "bg-blue-600 text-white" : "bg-gray-200 hover:bg-gray-300"
-                        }`}
-                >
-                    🆕 Plus récents
-                </button>
+      {/* HEADER MOBILE */}
+      {isMobile && (
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="w-full flex items-center justify-between px-4 py-4 bg-white border-b border-gray-100"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-lg">🔍</span>
+            <span className="font-semibold text-gray-800">
+              Filtres & Recherche
+            </span>
+          </div>
 
-                <button
-                    onClick={() => applySort("pricePerDay", "ASC")}
-                    className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-sm cursor-pointer"
-                >
-                    💰 Prix ↑
-                </button>
+          <span className="text-xl">
+            {showFilters ? "▲" : "▼"}
+          </span>
+        </button>
+      )}
 
-                <button
-                    onClick={() => applySort("pricePerDay", "DESC")}
-                    className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-sm cursor-pointer"
-                >
-                    💰 Prix ↓
-                </button>
+      {/* CONTENU */}
+      <div
+        className={`p-4 space-y-4 ${
+          isMobile && !showFilters ? "hidden" : "block"
+        }`}
+      >
 
-                {/* PUSH DROITE */}
-                <div className="ml-auto flex gap-2">
+        {/* Recherche */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 
-                    {/* RECHERCHER */}
-                    <button
-                        onClick={handleSearch}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer whitespace-nowrap  cursor-pointer"
-                    >
-                        🔍 Rechercher
-                    </button>
+          <input
+            placeholder="🔍 Recherche..."
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
 
-                    {/* RESET */}
-                    <button
-                        onClick={handleReset}
-                        className="px-3 py-2 rounded bg-red-500 text-white hover:bg-red-600 text-sm whitespace-nowrap cursor-pointer"
-                    >
-                        🔄 Effacer
-                    </button>
-
-                </div>
-            </div>
+          <input
+            placeholder="📍 Ville"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
 
         </div>
-    );
+
+        {/* Prix */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+          <input
+            placeholder="💰 Prix min"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            placeholder="💰 Prix max"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            placeholder="⭐ Note min"
+            value={minRating}
+            onChange={(e) => setMinRating(e.target.value)}
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+        </div>
+
+        {/* Select */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+          <select
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">📦 Catégorie</option>
+
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">📂 Type</option>
+            <option value="RENTAL">📦 Location</option>
+            <option value="AUCTION">🔥 Enchère</option>
+          </select>
+
+        </div>
+
+        {/* TRI */}
+        <div className="flex flex-wrap gap-2">
+
+          <button
+            onClick={() => applySort("createdAt", "DESC")}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+              currentSort === "createdAt"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+            }`}
+          >
+            🆕 Plus récents
+          </button>
+
+          <button
+            onClick={() => applySort("pricePerDay", "ASC")}
+            className="px-4 py-2 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+          >
+            💰 Prix ↑
+          </button>
+
+          <button
+            onClick={() => applySort("pricePerDay", "DESC")}
+            className="px-4 py-2 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+          >
+            💰 Prix ↓
+          </button>
+
+        </div>
+
+        {/* ACTIONS */}
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+
+          <button
+            onClick={handleSearch}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-semibold transition-colors"
+          >
+            🔍 Rechercher
+          </button>
+
+          <button
+            onClick={handleReset}
+            className="sm:w-auto bg-red-500 hover:bg-red-600 text-white px-5 py-3 rounded-xl text-sm font-semibold transition-colors"
+          >
+            🔄 Effacer
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  );
 }
