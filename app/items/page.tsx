@@ -77,74 +77,60 @@ export default function AdminItemsPage() {
 
         <div className="flex flex-col gap-3">
           {filtered.map((item) => (
-           <div
-  key={item.itemId}
-  className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex justify-between items-stretch gap-4 min-h-[160px]"
->
+            <div
+              key={item.itemId}
+              className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex justify-between items-stretch gap-4 min-h-[160px]"
+            >
 
-              <div className="flex items-center gap-4 flex-1 min-w-0">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 ${item.type === "AUCTION" ? "bg-red-50" : "bg-blue-50"
-                  }`}>
-                  {item.type === "AUCTION" ? "🔥" : "📦"}
-                </div>
-               <div className="min-w-0 flex flex-col justify-between h-full">
+             <div className="flex gap-4 flex-1 min-w-0 items-stretch">
 
-  <p className="font-semibold text-gray-900 truncate">
-    #{item.itemId} — {item.title}
-  </p>
-
-  <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-    <span className="text-xs text-gray-400">
-      @{item.username ?? "..."}
-    </span>
-
-    <span className="text-gray-200">·</span>
-
-    <span className="text-xs text-gray-400">
-      📍 {item.city}
-    </span>
+  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 ${
+      item.type === "AUCTION"
+        ? "bg-red-50"
+        : "bg-blue-50"
+  }`}>
+    {item.type === "AUCTION" ? "🔥" : "📦"}
   </div>
 
- <div className="mt-auto pt-4 border-t border-gray-100 flex items-center gap-3 text-xs flex-wrap">
+  <div className="min-w-0 flex flex-col flex-1">
 
-  {item.type === "AUCTION" ? (
-    <>
-      <div className="bg-red-50 text-red-700 px-3 py-1 rounded-full font-medium">
-        💰 {item.currentPrice ?? "—"} $
-      </div>
+    <p className="font-semibold text-gray-900 truncate">
+      #{item.itemId} — {item.title}
+    </p>
 
-      <div className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">
-        👀 58
-      </div>
+    <div className="flex items-center gap-2 mt-1 flex-wrap">
+      <span className="text-xs text-gray-400">
+        @{item.username ?? "..."}
+      </span>
 
-      <div className="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full font-medium">
-        ⭐ 1
-      </div>
+      <span className="text-gray-200">·</span>
 
-      <div className="bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium">
-        ⏳ 1j 12h
-      </div>
-    </>
-  ) : (
-    <>
-      <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">
-        💰 {item.pricePerDay} $/jour
-      </div>
-
-      <div className="bg-green-50 text-green-700 px-3 py-1 rounded-full font-medium">
-        Disponible
-      </div>
-
-      <div className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">
+      <span className="text-xs text-gray-400">
         📍 {item.city}
-      </div>
-    </>
-  )}
+      </span>
+    </div>
 
-</div>
+    <div className="mt-auto pt-4 border-t border-gray-100 flex gap-3 text-xs flex-wrap w-full">
 
+      {item.type === "AUCTION" ? (
+        <>
+          <div>💰 {item.currentPrice}$</div>
+          <div>👀 58</div>
+          <div>⭐ 1</div>
+          <div>⏳ 1j12h</div>
+        </>
+      ) : (
+        <>
+          <div>💰 {item.pricePerDay}$/jour</div>
+          <div>Disponible</div>
+          <div>📍 {item.city}</div>
+        </>
+      )}
+
+    </div>
+
+  </div>
 </div>
-              </div>
 
               <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
                 <input type="checkbox" checked={Boolean(item.active)}
