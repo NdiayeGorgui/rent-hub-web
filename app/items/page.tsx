@@ -66,7 +66,7 @@ export default function AdminItemsPage() {
 
         <div className="relative mb-6">
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
           </svg>
           <input
             placeholder="Rechercher par titre, owner, ville..."
@@ -77,63 +77,41 @@ export default function AdminItemsPage() {
 
         <div className="flex flex-col gap-3">
           {filtered.map((item) => (
-           <div
-  key={item.itemId}
-  className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex justify-between items-stretch gap-4 min-h-[160px]"
->
+            <div key={item.itemId} className="bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-4 flex items-center justify-between gap-4">
 
               <div className="flex items-center gap-4 flex-1 min-w-0">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 ${item.type === "AUCTION" ? "bg-red-50" : "bg-blue-50"
-                  }`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 ${
+                  item.type === "AUCTION" ? "bg-red-50" : "bg-blue-50"
+                }`}>
                   {item.type === "AUCTION" ? "🔥" : "📦"}
                 </div>
-               <div className="min-w-0 flex flex-col justify-between h-full">
-
-  <p className="font-semibold text-gray-900 truncate">
-    #{item.itemId} — {item.title}
-  </p>
-
-  <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-    <span className="text-xs text-gray-400">
-      @{item.username ?? "..."}
-    </span>
-
-    <span className="text-gray-200">·</span>
-
-    <span className="text-xs text-gray-400">
-      📍 {item.city}
-    </span>
-  </div>
-
-  <div className="flex items-center gap-3 mt-3 text-xs flex-wrap">
-
-    {item.type === "AUCTION" ? (
-      <>
-        <div className="bg-red-50 text-red-700 px-3 py-1 rounded-full font-medium">
-          💰 {item.currentPrice ?? "—"} $
-        </div>
-
-        <div className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">
-          👀 58
-        </div>
-
-        <div className="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full font-medium">
-          ⭐ 1
-        </div>
-
-        <div className="bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium">
-          ⏳ 1j 12h
-        </div>
-      </>
-    ) : (
-      <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">
-        💰 {item.pricePerDay} $/jour
-      </div>
-    )}
-
-  </div>
-
-</div>
+                <div className="min-w-0">
+                  <p className="font-semibold text-gray-900 truncate">#{item.itemId} — {item.title}</p>
+                  <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                    <span className="text-xs text-gray-400">@{item.username ?? "..."}</span>
+                    <span className="text-gray-200">·</span>
+                    <span className="text-xs text-gray-400">📍 {item.city}</span>
+                    <span className="text-gray-200">·</span>
+                    <span className="text-xs font-semibold text-blue-600">
+                      {item.type === "AUCTION"
+                        ? `🔥 ${item.currentPrice ?? "—"} $`
+                        : `${item.pricePerDay} $/j`}
+                    </span>
+                  </div>
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {item.premium && (
+                      <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">★ Premium</span>
+                    )}
+                    {item.gracePeriod && (
+                      <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">Grace Period</span>
+                    )}
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                      item.active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                    }`}>
+                      {item.active ? "Actif" : "Désactivé"}
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
