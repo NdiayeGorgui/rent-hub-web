@@ -66,7 +66,7 @@ export default function AdminItemsPage() {
 
         <div className="relative mb-6">
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
           </svg>
           <input
             placeholder="Rechercher par titre, owner, ville..."
@@ -80,53 +80,49 @@ export default function AdminItemsPage() {
             <div key={item.itemId} className="bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-4 flex items-center justify-between gap-4">
 
               <div className="flex items-center gap-4 flex-1 min-w-0">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 ${item.type === "AUCTION" ? "bg-red-50" : "bg-blue-50"
-                  }`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 ${
+                  item.type === "AUCTION" ? "bg-red-50" : "bg-blue-50"
+                }`}>
                   {item.type === "AUCTION" ? "🔥" : "📦"}
                 </div>
                 <div className="min-w-0">
                   <p className="font-semibold text-gray-900 truncate">#{item.itemId} — {item.title}</p>
                   <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                    <span className="text-xs text-gray-400">
-                      @{item.username ?? "..."}
-                    </span>
-
+                    <span className="text-xs text-gray-400">@{item.username ?? "..."}</span>
                     <span className="text-gray-200">·</span>
+                    <span className="text-xs text-gray-400">📍 {item.city}</span>
+                    <span className="text-gray-200">·</span>
+                    <div className="flex items-center gap-3 mt-3 text-xs flex-wrap">
 
-                    <span className="text-xs text-gray-400">
-                      📍 {item.city}
-                    </span>
+  {item.type === "AUCTION" ? (
+    <>
+      <div className="bg-red-50 text-red-700 px-3 py-1 rounded-full font-medium">
+        💰 {item.currentPrice ?? "—"} $
+      </div>
+
+      <div className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">
+        👀 58
+      </div>
+
+      <div className="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full font-medium">
+        ⭐ 1
+      </div>
+
+      <div className="bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium">
+        ⏳ 1j 12h
+      </div>
+    </>
+  ) : (
+    <>
+      <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">
+        💰 {item.pricePerDay} $/jour
+      </div>
+    </>
+  )}
+
+</div>
                   </div>
 
-                  {/* Petit bloc info prix/enchère */}
-                  <div
-                    className={`mt-3 rounded-xl px-4 py-3 border text-sm ${item.type === "AUCTION"
-                        ? "bg-red-50 border-red-100"
-                        : "bg-blue-50 border-blue-100"
-                      }`}
-                  >
-                    {item.type === "AUCTION" ? (
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium text-red-700">
-                          🔥 Enchère actuelle
-                        </span>
-
-                        <span className="font-bold text-red-700">
-                          {item.currentPrice ?? "—"} $
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium text-blue-700">
-                          📦 Prix de location
-                        </span>
-
-                        <span className="font-bold text-blue-700">
-                          {item.pricePerDay} $/jour
-                        </span>
-                      </div>
-                    )}
-                  </div>
                   <div className="flex gap-2 mt-2 flex-wrap">
                     {item.premium && (
                       <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">★ Premium</span>
@@ -134,8 +130,9 @@ export default function AdminItemsPage() {
                     {item.gracePeriod && (
                       <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">Grace Period</span>
                     )}
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${item.active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                      }`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                      item.active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                    }`}>
                       {item.active ? "Actif" : "Désactivé"}
                     </span>
                   </div>
