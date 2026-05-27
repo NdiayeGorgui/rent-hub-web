@@ -415,7 +415,7 @@ export default function Home() {
           {/* GRID */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {items.map((item) => (
-              <div key={item.id} >
+              <div key={item.id}>
 
                 <div
                   className="bg-white rounded-xl shadow hover:scale-105 hover:shadow-md transition-all overflow-hidden cursor-pointer"
@@ -432,36 +432,28 @@ export default function Home() {
                   )}
                 </div>
 
-                {item.type === "AUCTION" && auctionData[item.id] ? (
+               {item.type === "AUCTION" && auctionData[item.id] ? (
 
-                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
-                    <span>💰 {auctionData[item.id].currentPrice} $</span>
-                    <span>👀 {auctionData[item.id].views}</span>
-                    <span>⭐ {auctionData[item.id].watchers}</span>
-                    <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>
-                  </div>
+  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
+    <span>💰 {auctionData[item.id].currentPrice} $</span>
+    <span>👀 {auctionData[item.id].views}</span>
+    <span>⭐ {auctionData[item.id].watchers}</span>
+    <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>
+  </div>
 
-                ) : (
+) : (
 
-                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
+  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
+    <span className="text-red-500 font-semibold">
+      💰 {item.pricePerDay} $ / jour
+    </span>
 
-                    <span className="text-red-500 font-semibold">
-                      💰 {item.pricePerDay} $ / jr
-                    </span>
+    <span>📅 Disponible</span>
 
-                    <span>📅 Disponible</span>
+    <span>📍 {item.city}</span>
+  </div>
 
-                    {item.distanceLabel ? (
-                      <span className="text-green-600 font-medium">
-                        📍 ~{item.distanceLabel}
-                      </span>
-                    ) : (
-                      <span>📍 {item.city}</span>
-                    )}
-
-                  </div>
-
-                )}
+)}
               </div>
             ))}
           </div>
