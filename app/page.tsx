@@ -415,7 +415,7 @@ export default function Home() {
           {/* GRID */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {items.map((item) => (
-              <div key={item.id} >
+              <div key={item.id}  className="flex flex-col">
 
                 <div
                   className="bg-white rounded-xl shadow hover:scale-105 hover:shadow-md transition-all overflow-hidden cursor-pointer"
