@@ -217,12 +217,7 @@ export default function ItemDetailPage() {
                         📦 Prix de location
                     </p>
 
-                    <p className="text-4xl font-bold text-blue-600 mb-3">
-                        {item.pricePerDay} $
-                    </p>
-
-                    <div className="flex items-center gap-2">
-
+                    <div className="flex items-center justify-center gap-3 mt-2">
                         <span className="text-2xl font-bold text-blue-600">
                             {item.pricePerDay} $ / jour
                         </span>
@@ -236,7 +231,6 @@ export default function ItemDetailPage() {
                                 ⛔ Indisponible
                             </span>
                         )}
-
                     </div>
 
                 </div>
