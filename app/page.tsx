@@ -432,28 +432,28 @@ export default function Home() {
                   )}
                 </div>
 
-               {item.type === "AUCTION" && auctionData[item.id] ? (
+                {item.type === "AUCTION" && auctionData[item.id] ? (
 
-  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
-    <span>💰 {auctionData[item.id].currentPrice} $</span>
-    <span>👀 {auctionData[item.id].views}</span>
-    <span>⭐ {auctionData[item.id].watchers}</span>
-    <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>
-  </div>
+                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
+                    <span>💰 {auctionData[item.id].currentPrice} $</span>
+                    <span>👀 {auctionData[item.id].views}</span>
+                    <span>⭐ {auctionData[item.id].watchers}</span>
+                    <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>
+                  </div>
 
-) : (
+                ) : (
 
-  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
-    <span className="text-red-500 font-semibold">
-      💰 {item.pricePerDay} $ / jour
-    </span>
+                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
+                    <span className="text-red-500 font-semibold">
+                      💰 {item.pricePerDay} $ / jour
+                    </span>
 
-    <span>📅 Disponible</span>
+                    <span>📅 Disponible</span>
 
-    <span>📍 {item.city}</span>
-  </div>
+                    <span>📍 {item.city}</span>
+                  </div>
 
-)}
+                )}
               </div>
             ))}
           </div>
