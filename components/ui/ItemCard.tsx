@@ -57,12 +57,6 @@ export default function ItemCard({ item }: Props) {
       {item.description}
     </p>
 
-    {/* Prix en bas */}
-    {item.pricePerDay && (
-      <p className="text-[#FF385C] font-semibold text-sm mt-2">
-        {item.pricePerDay} $ / jour
-      </p>
-    )}
   </div>
 </div>
   );
