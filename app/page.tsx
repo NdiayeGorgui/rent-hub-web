@@ -83,16 +83,16 @@ export default function Home() {
   }, [pathname, router]);
 
   // ── Restaure scroll au retour ─────────────────────────
-useEffect(() => {
-  const savedScroll = sessionStorage.getItem("home_scroll");
-  if (savedScroll) {
-    // Attend que les items soient rendus
-    const timer = setTimeout(() => {
-      window.scrollTo({ top: Number(savedScroll), behavior: "instant" });
-    }, 100); // ← augmente à 300ms
-    return () => clearTimeout(timer);
-  }
-}, []);
+  useEffect(() => {
+    const savedScroll = sessionStorage.getItem("home_scroll");
+    if (savedScroll) {
+      // Attend que les items soient rendus
+      const timer = setTimeout(() => {
+        window.scrollTo({ top: Number(savedScroll), behavior: "instant" });
+      }, 100); // ← augmente à 300ms
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   useEffect(() => {
     if (!loading && !user) router.push("/login");
@@ -102,7 +102,7 @@ useEffect(() => {
     setLoadingItems(true);
     try {
       const res = await searchItems({
-        
+
         ...currentFilters,
         page: currentPage,
         size: 12,
@@ -417,28 +417,42 @@ useEffect(() => {
             {items.map((item) => (
               <div key={item.id}>
 
-               <div
-  className="bg-white rounded-xl shadow hover:scale-105 hover:shadow-md transition-all overflow-hidden cursor-pointer"
-  onClick={() => {
-    sessionStorage.setItem("home_scroll", String(window.scrollY));
-    router.push(`/items/${item.id}`);
-  }}
->
-  <ItemCard item={item} />
-  {item.distanceLabel && (
-    <p className="text-green-600 text-sm font-semibold px-3 pb-2">
-      📍 à ~{item.distanceLabel}
-    </p>
-  )}
-</div>
+                <div
+                  className="bg-white rounded-xl shadow hover:scale-105 hover:shadow-md transition-all overflow-hidden cursor-pointer"
+                  onClick={() => {
+                    sessionStorage.setItem("home_scroll", String(window.scrollY));
+                    router.push(`/items/${item.id}`);
+                  }}
+                >
+                  <ItemCard item={item} />
+                  {item.distanceLabel && (
+                    <p className="text-green-600 text-sm font-semibold px-3 pb-2">
+                      📍 à ~{item.distanceLabel}
+                    </p>
+                  )}
+                </div>
 
-                {item.type === "AUCTION" && auctionData[item.id] && (
+                {item.type === "AUCTION" && auctionData[item.id] ? (
+
                   <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
                     <span>💰 {auctionData[item.id].currentPrice} $</span>
                     <span>👀 {auctionData[item.id].views}</span>
                     <span>⭐ {auctionData[item.id].watchers}</span>
                     <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>
                   </div>
+
+                ) : (
+
+                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
+                    <span className="text-red-500 font-semibold">
+                      💰 {item.pricePerDay} $ / jour
+                    </span>
+
+                    <span>📅 Disponible</span>
+
+                    <span>📍 {item.city}</span>
+                  </div>
+
                 )}
               </div>
             ))}
