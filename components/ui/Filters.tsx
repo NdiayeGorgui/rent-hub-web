@@ -154,11 +154,10 @@ export default function Filters({
 
                             <button
                                 onClick={() => applySort("createdAt", "DESC")}
-                                className={`w-full px-3 py-3 rounded-xl text-sm font-medium transition-colors ${
-                                    currentSort === "createdAt"
+                                className={`w-full px-3 py-3 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
                                         ? "bg-blue-600 text-white"
                                         : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                                }`}
+                                    }`}
                             >
                                 🆕 Récents
                             </button>
@@ -227,11 +226,10 @@ export default function Filters({
 
                             <button
                                 onClick={() => applySort("createdAt", "DESC")}
-                                className={`min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                                    currentSort === "createdAt"
+                                className={`min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
                                         ? "bg-blue-600 text-white"
                                         : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                                }`}
+                                    }`}
                             >
                                 🆕 Plus récents
                             </button>
@@ -256,7 +254,8 @@ export default function Filters({
                 )}
 
                 {/* Selects */}
-                <div className="flex flex-col md:grid md:grid-cols-2 gap-3">
+                {/* Selects */}
+                <div className={isMobile ? "grid grid-cols-2 gap-3" : "flex flex-col md:grid md:grid-cols-2 gap-3"}>
 
                     <select
                         value={categoryId}
@@ -289,11 +288,10 @@ export default function Filters({
 
             {/* ACTIONS */}
             <div
-                className={`border-t border-gray-100 p-4 bg-white ${
-                    isMobile
+                className={`border-t border-gray-100 p-4 bg-white ${isMobile
                         ? "sticky bottom-0 z-20"
                         : ""
-                }`}
+                    }`}
             >
 
                 <div className="flex flex-col sm:flex-row gap-3">
