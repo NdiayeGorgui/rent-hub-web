@@ -208,7 +208,38 @@ export default function ItemDetailPage() {
                     </p>
                 </div>
             )}
+            {/* ── Rental header ── */}
+            {item.type === "RENTAL" && (
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6 text-center">
 
+                    <p className="text-sm text-gray-400 mb-1">
+                        📦 Prix de location
+                    </p>
+
+                    <p className="text-4xl font-bold text-blue-600 mb-3">
+                        {item.pricePerDay} $
+                    </p>
+
+                    <div className="flex items-center justify-center gap-3 flex-wrap">
+
+                        <span className="bg-blue-50 text-blue-600 text-sm font-medium px-3 py-1 rounded-full">
+                            / jour
+                        </span>
+
+                        {item.active ? (
+                            <span className="bg-green-50 text-green-600 text-sm font-medium px-3 py-1 rounded-full">
+                                ✅ Disponible
+                            </span>
+                        ) : (
+                            <span className="bg-red-50 text-red-600 text-sm font-medium px-3 py-1 rounded-full">
+                                ⛔ Indisponible
+                            </span>
+                        )}
+
+                    </div>
+
+                </div>
+            )}
             {/* ── Suivre enchère (seulement si active) ── */}
             {item.type === "AUCTION" && auction && !isOwner && !isAuctionFinished && (
                 <button
@@ -302,9 +333,7 @@ export default function ItemDetailPage() {
                 ) : <p className="text-gray-400">Aucune image</p>}
             </div>
 
-            {item.type === "RENTAL" && (
-                <p className="text-xl font-semibold text-blue-600 mb-2">{item.pricePerDay} $ / jour</p>
-            )}
+
             <p className="text-gray-600 mb-6">{item.description}</p>
 
             {/* ── Localisation ── */}
