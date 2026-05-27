@@ -58,6 +58,7 @@ export default function ItemDetailPage() {
     const [reservePrice, setReservePrice] = useState("");
     const [endDateAuction, setEndDateAuction] = useState("");
     const [activeImageIndex, setActiveImageIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(0);
 
 
     const [showAllUserReviews, setShowAllUserReviews] = useState(false);
@@ -220,10 +221,10 @@ export default function ItemDetailPage() {
                         {item.pricePerDay} $
                     </p>
 
-                    <div className="flex items-center justify-center gap-3 flex-wrap">
+                    <div className="flex items-center gap-2">
 
-                        <span className="bg-blue-50 text-blue-600 text-sm font-medium px-3 py-1 rounded-full">
-                            / jour
+                        <span className="text-2xl font-bold text-blue-600">
+                            {item.pricePerDay} $ / jour
                         </span>
 
                         {item.active ? (
@@ -260,77 +261,56 @@ export default function ItemDetailPage() {
             <div className="flex flex-col gap-3 mb-4">
                 {/* ── Images carousel ── */}
                 {item.imageUrls?.length > 0 ? (
-                    <div className="relative mb-4">
-
-                        {/* Image active */}
-                        <div className="w-full bg-gray-100 rounded-xl overflow-hidden" style={{ aspectRatio: "4/3" }}>
+                    <div className="mb-6">
+                        {/* Image principale */}
+                        <div className="w-full bg-gray-100 rounded-2xl overflow-hidden" style={{ aspectRatio: "4/3" }}>
                             <img
-                                src={`${BASE_URL}${item.imageUrls[activeImageIndex]}`}
-                                className="w-full h-full object-contain transition-opacity duration-300"
-                                alt={`image ${activeImageIndex + 1}`}
+                                src={item.imageUrls[activeIndex].startsWith("http")
+                                    ? item.imageUrls[activeIndex]
+                                    : `${BASE_URL}${item.imageUrls[activeIndex]}`}
+                                className="w-full h-full object-contain"
+                                onError={(e) => { (e.target as HTMLImageElement).src = "/no-image.png"; }}
                             />
                         </div>
 
-                        {/* Flèches (seulement si plusieurs images) */}
-                        {item.imageUrls.length > 1 && (
-                            <>
-                                <button
-                                    onClick={() => setActiveImageIndex(prev => Math.max(prev - 1, 0))}
-                                    disabled={activeImageIndex === 0}
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white bg-opacity-80 shadow flex items-center justify-center disabled:opacity-30 hover:bg-opacity-100 transition-all cursor-pointer"
-                                >
-                                    <svg className="w-4 h-4 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <path d="M15 18l-6-6 6-6" />
-                                    </svg>
-                                </button>
-
-                                <button
-                                    onClick={() => setActiveImageIndex(prev => Math.min(prev + 1, item.imageUrls.length - 1))}
-                                    disabled={activeImageIndex === item.imageUrls.length - 1}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white bg-opacity-80 shadow flex items-center justify-center disabled:opacity-30 hover:bg-opacity-100 transition-all cursor-pointer"
-                                >
-                                    <svg className="w-4 h-4 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <path d="M9 18l6-6-6-6" />
-                                    </svg>
-                                </button>
-                            </>
-                        )}
-
-                        {/* Dots */}
-                        {item.imageUrls.length > 1 && (
-                            <div className="flex justify-center gap-2 mt-3">
-                                {item.imageUrls.map((_: string, i: number) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => setActiveImageIndex(i)}
-                                        className={`h-1.5 rounded-full transition-all cursor-pointer ${i === activeImageIndex ? "w-5 bg-blue-600" : "w-1.5 bg-gray-300 hover:bg-gray-400"
-                                            }`}
-                                    />
-                                ))}
-                            </div>
-                        )}
-
-                        {/* Miniatures */}
+                        {/* Miniatures — seulement si plusieurs images */}
                         {item.imageUrls.length > 1 && (
                             <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
                                 {item.imageUrls.map((url: string, i: number) => (
                                     <button
                                         key={i}
-                                        onClick={() => setActiveImageIndex(i)}
-                                        className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${i === activeImageIndex ? "border-blue-600" : "border-transparent opacity-60 hover:opacity-100"
+                                        onClick={() => setActiveIndex(i)}
+                                        className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-colors ${activeIndex === i ? "border-blue-600" : "border-transparent"
                                             }`}
                                     >
                                         <img
-                                            src={`${BASE_URL}${url}`}
-                                            className="w-full h-full object-contain bg-gray-100"
+                                            src={url.startsWith("http") ? url : `${BASE_URL}${url}`}
+                                            className="w-full h-full object-cover"
                                         />
                                     </button>
                                 ))}
                             </div>
                         )}
 
+                        {/* Dots si beaucoup d'images */}
+                        {item.imageUrls.length > 1 && (
+                            <div className="flex justify-center gap-1.5 mt-3">
+                                {item.imageUrls.map((_: any, i: number) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setActiveIndex(i)}
+                                        className={`h-1.5 rounded-full transition-all ${activeIndex === i ? "w-5 bg-blue-600" : "w-1.5 bg-gray-300"
+                                            }`}
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </div>
-                ) : <p className="text-gray-400">Aucune image</p>}
+                ) : (
+                    <div className="w-full bg-gray-100 rounded-2xl flex items-center justify-center" style={{ aspectRatio: "4/3" }}>
+                        <p className="text-gray-400 text-sm">Aucune image</p>
+                    </div>
+                )}
             </div>
 
 

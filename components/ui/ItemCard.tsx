@@ -6,7 +6,7 @@ type Props = {
 
 
 export default function ItemCard({ item }: Props) {
-  
+
 
   const getImage = () => {
     // ✅ cas normal
@@ -31,44 +31,39 @@ export default function ItemCard({ item }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden cursor-pointer flex flex-col h-full">
-      
-      {/* ✅ image toujours affichée */}
+<div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden cursor-pointer flex flex-col h-full">
+  
+  {/* Image */}
   <div className="w-full bg-gray-100" style={{ aspectRatio: "4/3" }}>
-  <img
-    src={getImage()}
-    className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
-    onError={(e) => {
-      (e.target as HTMLImageElement).src = "/no-image.png";
-    }}
-  />
-</div>
-
-     <div className="p-4 flex flex-col flex-1">
-
-  <div className="mb-2">
-    <span
-      className={`text-xs px-2 py-1 rounded text-white ${
-        item.type === "AUCTION"
-          ? "bg-red-500"
-          : "bg-blue-500"
-      }`}
-    >
-      {item.type === "AUCTION"
-        ? "🔥 ENCHÈRE"
-        : "📦 LOCATION"}
-    </span>
+    <img
+      src={getImage()}
+      className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
+      onError={(e) => { (e.target as HTMLImageElement).src = "/no-image.png"; }}
+    />
   </div>
 
-  <h2 className="font-bold text-lg">
-    {item.title}
-  </h2>
-
-  <p className="text-sm text-gray-500 line-clamp-2 flex-1">
-    {item.description}
-  </p>
-
-</div>
+  {/* Contenu — hauteur fixe */}
+  <div className="p-4 flex flex-col" style={{ minHeight: "120px" }}>
+    <div className="mb-2">
+      <span className={`text-xs px-2 py-1 rounded text-white ${item.type === "AUCTION" ? "bg-red-500" : "bg-blue-500"}`}>
+        {item.type === "AUCTION" ? "🔥 ENCHÈRE" : "📦 LOCATION"}
+      </span>
     </div>
+
+    <h2 className="font-bold text-lg leading-snug mb-1">{item.title}</h2>
+
+    {/* Description — hauteur fixe 2 lignes toujours */}
+    <p className="text-sm text-gray-500 line-clamp-2" style={{ minHeight: "40px" }}>
+      {item.description}
+    </p>
+
+    {/* Prix en bas */}
+    {item.pricePerDay && (
+      <p className="text-[#FF385C] font-semibold text-sm mt-2">
+        {item.pricePerDay} $ / jour
+      </p>
+    )}
+  </div>
+</div>
   );
 }
