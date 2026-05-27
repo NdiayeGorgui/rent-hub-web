@@ -77,14 +77,17 @@ export default function AdminItemsPage() {
 
         <div className="flex flex-col gap-3">
           {filtered.map((item) => (
-            <div key={item.itemId} className="bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-4 flex items-center justify-between gap-4">
+           <div
+  key={item.itemId}
+  className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex justify-between items-stretch gap-4 min-h-[160px]"
+>
 
               <div className="flex items-center gap-4 flex-1 min-w-0">
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 ${item.type === "AUCTION" ? "bg-red-50" : "bg-blue-50"
                   }`}>
                   {item.type === "AUCTION" ? "🔥" : "📦"}
                 </div>
-                <div className="min-w-0">
+               <div className="min-w-0 flex flex-col justify-between h-full">
 
   <p className="font-semibold text-gray-900 truncate">
     #{item.itemId} — {item.title}
@@ -102,33 +105,43 @@ export default function AdminItemsPage() {
     </span>
   </div>
 
-  <div className="flex items-center gap-3 mt-3 text-xs flex-wrap">
+ <div className="mt-auto pt-4 border-t border-gray-100 flex items-center gap-3 text-xs flex-wrap">
 
-    {item.type === "AUCTION" ? (
-      <>
-        <div className="bg-red-50 text-red-700 px-3 py-1 rounded-full font-medium">
-          💰 {item.currentPrice ?? "—"} $
-        </div>
+  {item.type === "AUCTION" ? (
+    <>
+      <div className="bg-red-50 text-red-700 px-3 py-1 rounded-full font-medium">
+        💰 {item.currentPrice ?? "—"} $
+      </div>
 
-        <div className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">
-          👀 58
-        </div>
+      <div className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">
+        👀 58
+      </div>
 
-        <div className="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full font-medium">
-          ⭐ 1
-        </div>
+      <div className="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full font-medium">
+        ⭐ 1
+      </div>
 
-        <div className="bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium">
-          ⏳ 1j 12h
-        </div>
-      </>
-    ) : (
+      <div className="bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium">
+        ⏳ 1j 12h
+      </div>
+    </>
+  ) : (
+    <>
       <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">
         💰 {item.pricePerDay} $/jour
       </div>
-    )}
 
-  </div>
+      <div className="bg-green-50 text-green-700 px-3 py-1 rounded-full font-medium">
+        Disponible
+      </div>
+
+      <div className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">
+        📍 {item.city}
+      </div>
+    </>
+  )}
+
+</div>
 
 </div>
               </div>
