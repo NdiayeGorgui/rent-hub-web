@@ -104,7 +104,7 @@ export default function Filters({
     return (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6 overflow-visible">
 
-            <div className="p-4 space-y-4">
+            <div className={`${isMobile ? "p-5" : "p-4"} space-y-4`}>
 
                 {/* Recherche */}
                 <div className="flex flex-col md:grid md:grid-cols-2 gap-3">
@@ -137,14 +137,14 @@ export default function Filters({
                                 placeholder="💰 Prix min"
                                 value={minPrice}
                                 onChange={(e) => setMinPrice(e.target.value)}
-                                className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
 
                             <input
                                 placeholder="💰 Prix max"
                                 value={maxPrice}
                                 onChange={(e) => setMaxPrice(e.target.value)}
-                                className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
 
                         </div>
@@ -154,7 +154,7 @@ export default function Filters({
 
                             <button
                                 onClick={() => applySort("createdAt", "DESC")}
-                                className={`w-full px-3 py-3 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
+                                className={`w-full px-4 py-3.5 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
                                         ? "bg-blue-600 text-white"
                                         : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                                     }`}
@@ -166,7 +166,7 @@ export default function Filters({
                                 placeholder="⭐ Note min"
                                 value={minRating}
                                 onChange={(e) => setMinRating(e.target.value)}
-                                className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
 
                         </div>
@@ -176,14 +176,14 @@ export default function Filters({
 
                             <button
                                 onClick={() => applySort("pricePerDay", "ASC")}
-                                className="w-full px-3 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                className="w-full px-4 py-3.5 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
                             >
                                 💰 Prix ↑
                             </button>
 
                             <button
                                 onClick={() => applySort("pricePerDay", "DESC")}
-                                className="w-full px-3 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                className="w-full px-4 py-3.5 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
                             >
                                 💰 Prix ↓
                             </button>
@@ -253,7 +253,7 @@ export default function Filters({
 
                 )}
 
-                {/* Selects */}
+               
                 {/* Selects */}
                 <div className={isMobile ? "grid grid-cols-2 gap-3" : "flex flex-col md:grid md:grid-cols-2 gap-3"}>
 
