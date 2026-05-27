@@ -125,31 +125,135 @@ export default function Filters({
 
                 </div>
 
-                {/* Prix */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* MOBILE */}
+                {isMobile ? (
 
-                    <input
-                        placeholder="💰 Prix min"
-                        value={minPrice}
-                        onChange={(e) => setMinPrice(e.target.value)}
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    <div className="space-y-3">
 
-                    <input
-                        placeholder="💰 Prix max"
-                        value={maxPrice}
-                        onChange={(e) => setMaxPrice(e.target.value)}
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                        {/* Prix min / max */}
+                        <div className="grid grid-cols-2 gap-3">
 
-                    <input
-                        placeholder="⭐ Note min"
-                        value={minRating}
-                        onChange={(e) => setMinRating(e.target.value)}
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                            <input
+                                placeholder="💰 Prix min"
+                                value={minPrice}
+                                onChange={(e) => setMinPrice(e.target.value)}
+                                className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
 
-                </div>
+                            <input
+                                placeholder="💰 Prix max"
+                                value={maxPrice}
+                                onChange={(e) => setMaxPrice(e.target.value)}
+                                className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+
+                        </div>
+
+                        {/* Plus récents / Note */}
+                        <div className="grid grid-cols-2 gap-3">
+
+                            <button
+                                onClick={() => applySort("createdAt", "DESC")}
+                                className={`w-full px-3 py-3 rounded-xl text-sm font-medium transition-colors ${
+                                    currentSort === "createdAt"
+                                        ? "bg-blue-600 text-white"
+                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                }`}
+                            >
+                                🆕 Récents
+                            </button>
+
+                            <input
+                                placeholder="⭐ Note min"
+                                value={minRating}
+                                onChange={(e) => setMinRating(e.target.value)}
+                                className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+
+                        </div>
+
+                        {/* Prix croissant / décroissant */}
+                        <div className="grid grid-cols-2 gap-3">
+
+                            <button
+                                onClick={() => applySort("pricePerDay", "ASC")}
+                                className="w-full px-3 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                            >
+                                💰 Prix ↑
+                            </button>
+
+                            <button
+                                onClick={() => applySort("pricePerDay", "DESC")}
+                                className="w-full px-3 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                            >
+                                💰 Prix ↓
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                ) : (
+
+                    <>
+                        {/* WEB */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+                            <input
+                                placeholder="💰 Prix min"
+                                value={minPrice}
+                                onChange={(e) => setMinPrice(e.target.value)}
+                                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+
+                            <input
+                                placeholder="💰 Prix max"
+                                value={maxPrice}
+                                onChange={(e) => setMaxPrice(e.target.value)}
+                                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+
+                            <input
+                                placeholder="⭐ Note min"
+                                value={minRating}
+                                onChange={(e) => setMinRating(e.target.value)}
+                                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+
+                        </div>
+
+                        {/* TRI WEB */}
+                        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+
+                            <button
+                                onClick={() => applySort("createdAt", "DESC")}
+                                className={`min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                                    currentSort === "createdAt"
+                                        ? "bg-blue-600 text-white"
+                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                }`}
+                            >
+                                🆕 Plus récents
+                            </button>
+
+                            <button
+                                onClick={() => applySort("pricePerDay", "ASC")}
+                                className="min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                            >
+                                💰 Prix croissant
+                            </button>
+
+                            <button
+                                onClick={() => applySort("pricePerDay", "DESC")}
+                                className="min-w-[170px] px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                            >
+                                💰 Prix décroissant
+                            </button>
+
+                        </div>
+                    </>
+
+                )}
 
                 {/* Selects */}
                 <div className="flex flex-col md:grid md:grid-cols-2 gap-3">
@@ -181,43 +285,15 @@ export default function Filters({
 
                 </div>
 
-                {/* TRI */}
-                <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-
-                    <button
-                        onClick={() => applySort("createdAt", "DESC")}
-                        className={`min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                            }`}
-                    >
-                        🆕 Plus récents
-                    </button>
-
-                    <button
-                        onClick={() => applySort("pricePerDay", "ASC")}
-                        className="min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
-                    >
-                        💰 Prix croissant
-                    </button>
-
-                    <button
-                        onClick={() => applySort("pricePerDay", "DESC")}
-                        className="min-w-[170px] px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
-                    >
-                        💰 Prix décroissant
-                    </button>
-
-                </div>
-
             </div>
 
             {/* ACTIONS */}
             <div
-                className={`border-t border-gray-100 p-4 bg-white ${isMobile
-                    ? "sticky bottom-0 z-20"
-                    : ""
-                    }`}
+                className={`border-t border-gray-100 p-4 bg-white ${
+                    isMobile
+                        ? "sticky bottom-0 z-20"
+                        : ""
+                }`}
             >
 
                 <div className="flex flex-col sm:flex-row gap-3">
