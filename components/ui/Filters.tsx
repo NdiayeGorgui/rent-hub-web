@@ -42,13 +42,6 @@ export default function Filters({
     const applySort = (sort: string, dir: string) => {
         setSortBy(sort);
         setDirection(dir);
-        onSearch({
-            keyword, city, minPrice, maxPrice,
-            minRating: minRating ? Number(minRating) : undefined,
-            type,
-            categoryId: categoryId ? Number(categoryId) : undefined,
-            sortBy: sort, direction: dir, page: 0, size: 12,
-        });
     };
 
     const handleSearch = () => {
@@ -122,11 +115,10 @@ export default function Filters({
                         <div className="grid grid-cols-2 gap-2">
                             <button
                                 onClick={() => applySort("createdAt", "DESC")}
-                                className={`w-full px-2 py-2 rounded-xl text-sm font-medium transition-colors ${
-                                    currentSort === "createdAt"
+                                className={`w-full px-2 py-2 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
                                         ? "bg-blue-600 text-white"
                                         : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                                }`}
+                                    }`}
                             >
                                 🆕 Récents
                             </button>
@@ -142,13 +134,19 @@ export default function Filters({
                         <div className="grid grid-cols-2 gap-2">
                             <button
                                 onClick={() => applySort("pricePerDay", "ASC")}
-                                className="w-full px-2 py-2 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                className={`w-full px-2 py-2 rounded-xl text-sm font-medium transition-colors ${sortBy === "pricePerDay" && direction === "ASC"
+                                        ? "bg-blue-600 text-white"
+                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                    }`}
                             >
                                 💰 Prix ↑
                             </button>
                             <button
                                 onClick={() => applySort("pricePerDay", "DESC")}
-                                className="w-full px-2 py-2 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                className={`w-full px-2 py-2 rounded-xl text-sm font-medium transition-colors ${sortBy === "pricePerDay" && direction === "ASC"
+                                        ? "bg-blue-600 text-white"
+                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                    }`}
                             >
                                 💰 Prix ↓
                             </button>
@@ -184,23 +182,28 @@ export default function Filters({
                         <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
                             <button
                                 onClick={() => applySort("createdAt", "DESC")}
-                                className={`min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                                    currentSort === "createdAt"
+                                className={`min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
                                         ? "bg-blue-600 text-white"
                                         : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                                }`}
+                                    }`}
                             >
                                 🆕 Plus récents
                             </button>
                             <button
                                 onClick={() => applySort("pricePerDay", "ASC")}
-                                className="min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                className={`min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${sortBy === "pricePerDay" && direction === "ASC"
+                                        ? "bg-blue-600 text-white"
+                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                    }`}
                             >
                                 💰 Prix croissant
                             </button>
                             <button
                                 onClick={() => applySort("pricePerDay", "DESC")}
-                                className="min-w-[170px] px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                className={`min-w-[170px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${sortBy === "pricePerDay" && direction === "DESC"
+                                        ? "bg-blue-600 text-white"
+                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                    }`}
                             >
                                 💰 Prix décroissant
                             </button>
@@ -235,23 +238,20 @@ export default function Filters({
             </div>
 
             {/* ── Actions ── */}
-            <div className={`border-t border-gray-100 bg-white ${
-                isMobile ? "p-2 sticky bottom-0 z-20" : "p-4"
-            }`}>
+            <div className={`border-t border-gray-100 bg-white ${isMobile ? "p-2 sticky bottom-0 z-20" : "p-4"
+                }`}>
                 <div className={`flex gap-${isMobile ? "2" : "3"} flex-row`}>
                     <button
                         onClick={handleSearch}
-                        className={`flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors ${
-                            isMobile ? "py-2" : "py-3"
-                        }`}
+                        className={`flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors ${isMobile ? "py-2" : "py-3"
+                            }`}
                     >
                         🔍 Rechercher
                     </button>
                     <button
                         onClick={handleReset}
-                        className={`bg-red-500 hover:bg-red-600 text-white px-4 rounded-xl text-sm font-semibold transition-colors ${
-                            isMobile ? "py-2" : "py-3"
-                        }`}
+                        className={`bg-red-500 hover:bg-red-600 text-white px-4 rounded-xl text-sm font-semibold transition-colors ${isMobile ? "py-2" : "py-3"
+                            }`}
                     >
                         🔄 Effacer
                     </button>
