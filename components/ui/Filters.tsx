@@ -58,13 +58,22 @@ export default function Filters({
         });
     };
 
-    const handleReset = () => {
-        setKeyword(""); setCity(""); setMinPrice(""); setMaxPrice("");
-        setMinRating(""); setType(""); setCategoryId("");
-        setSortBy("createdAt"); setDirection("DESC");
-        onSearch({ page: 0, size: 12 });
-    };
+const handleReset = () => {
+    setKeyword("");
+    setCity("");
+    setMinPrice("");
+    setMaxPrice("");
+    setMinRating("");
+    setType("");
+    setCategoryId("");
 
+    // reset tri
+    setSortBy("");
+    setDirection("");
+
+    // aucun filtre envoyé
+    onSearch({});
+};
     // ── Classes conditionnelles ───────────────────────────
     const inputClass = isMobile
         ? "w-full border border-gray-200 rounded-xl px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
