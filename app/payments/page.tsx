@@ -24,33 +24,33 @@ export default function PaymentsPage() {
         }
     };
 
-// ✅ Filtre les AUCTION_FEE qui ont un AUCTION_REFUND correspondant
-// par même userId + même auctionId
+    // ✅ Filtre les AUCTION_FEE qui ont un AUCTION_REFUND correspondant
+    // par même userId + même auctionId
 
-const refundedAuctionIds = new Set(
-  payments
-    .filter(p => p.paymentType === "AUCTION_REFUND")
-    .map(p => `${p.userId}_${p.auctionId}`)
-);
+    const refundedAuctionIds = new Set(
+        payments
+            .filter(p => p.paymentType === "AUCTION_REFUND")
+            .map(p => `${p.userId}_${p.auctionId}`)
+    );
 
-const refundable = payments.filter(p =>
-  p.status === "SUCCESS" &&
-  p.paymentType === "AUCTION_FEE" &&
-  !refundedAuctionIds.has(`${p.userId}_${p.auctionId}`)
-);
+    const refundable = payments.filter(p =>
+        p.status === "SUCCESS" &&
+        p.paymentType === "AUCTION_FEE" &&
+        !refundedAuctionIds.has(`${p.userId}_${p.auctionId}`)
+    );
 
-const [search, setSearch] = useState("");
+    const [search, setSearch] = useState("");
 
-// Filtre combiné
-const filteredPayments = payments.filter(p =>
-  p.userFullName?.toLowerCase().includes(search.toLowerCase()) ||
-  String(p.id).includes(search)
-);
+    // Filtre combiné
+    const filteredPayments = payments.filter(p =>
+        p.userFullName?.toLowerCase().includes(search.toLowerCase()) ||
+        String(p.id).includes(search)
+    );
 
-const filteredRefundable = refundable.filter(p =>
-  p.userFullName?.toLowerCase().includes(search.toLowerCase()) ||
-  String(p.id).includes(search)
-);
+    const filteredRefundable = refundable.filter(p =>
+        p.userFullName?.toLowerCase().includes(search.toLowerCase()) ||
+        String(p.id).includes(search)
+    );
 
     useEffect(() => {
         loadAllPayments();
@@ -97,7 +97,7 @@ const filteredRefundable = refundable.filter(p =>
         );
     };
 
-   
+
 
     return (
         <div className="max-w-4xl mx-auto px-6 py-8">
@@ -126,29 +126,29 @@ const filteredRefundable = refundable.filter(p =>
                     </button>
                 ))}
             </div>
-            
+
             {/* Barre de recherche */}
-<div className="relative mb-6">
-  <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
-    viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-  </svg>
-  <input
-    type="text"
-    value={search}
-    onChange={e => setSearch(e.target.value)}
-    placeholder="Rechercher par nom ou numéro de paiement..."
-    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-  />
-  {search && (
-    <button
-      onClick={() => setSearch("")}
-      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-    >
-      ✕
-    </button>
-  )}
-</div>
+            <div className="relative mb-6">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+                </svg>
+                <input
+                    type="text"
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    placeholder="Rechercher par nom ou numéro de paiement..."
+                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {search && (
+                    <button
+                        onClick={() => setSearch("")}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                        ✕
+                    </button>
+                )}
+            </div>
 
             {/* ── Liste tous les paiements ── */}
             {activeTab === "list" && (
@@ -160,7 +160,7 @@ const filteredRefundable = refundable.filter(p =>
                         </div>
                     ) : filteredPayments.map(p => (
                         <div key={p.id} className="bg-white rounded-2xl border border-gray-100 p-5">
-        
+
                             <div className="flex items-start justify-between mb-3">
                                 <div>
                                     <p className="font-bold text-gray-900">Paiement #{p.id}</p>
@@ -173,7 +173,7 @@ const filteredRefundable = refundable.filter(p =>
                                         </span>
                                     )}
                                     {statusBadge(p.status)}
-                                    
+
                                 </div>
                             </div>
                             <div className="flex items-center gap-6 text-sm text-gray-600">

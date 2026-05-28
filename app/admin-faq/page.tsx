@@ -9,6 +9,17 @@ export default function AdminFaqPage() {
   const [form, setForm] = useState({ id: null as any, theme: "", question: "", answer: "" });
   const [saving, setSaving] = useState(false);
 
+  const themes = [
+    "Paiement",
+    "Location",
+    "Enchère",
+    "Compte",
+    "Remboursement",
+    "Sécurité",
+    "Abonnement",
+    "Autre",
+  ];
+
   useEffect(() => { loadFaqs(); }, []);
 
   const loadFaqs = async () => {
@@ -62,11 +73,19 @@ export default function AdminFaqPage() {
             {form.id ? "✏️ Modifier la FAQ" : "➕ Ajouter une FAQ"}
           </h2>
           <div className="flex flex-col gap-3">
-            <input
-              placeholder="Thème (ex: Paiement)"
-              value={form.theme} onChange={e => setForm({ ...form, theme: e.target.value })}
-              className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
-            />
+            <select
+              value={form.theme}
+              onChange={e => setForm({ ...form, theme: e.target.value })}
+              className="border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+            >
+              <option value="">📂 Choisir un thème</option>
+
+              {themes.map((theme) => (
+                <option key={theme} value={theme}>
+                  {theme}
+                </option>
+              ))}
+            </select>
             <input
               placeholder="Question"
               value={form.question} onChange={e => setForm({ ...form, question: e.target.value })}
