@@ -44,15 +44,23 @@ export default function Filters({
         setDirection(dir);
     };
 
-    const handleSearch = () => {
-        onSearch({
-            keyword, city, minPrice, maxPrice,
-            minRating: minRating ? Number(minRating) : undefined,
-            type,
-            categoryId: categoryId ? Number(categoryId) : undefined,
-            sortBy, direction, page: 0, size: 12,
-        });
-    };
+const handleSearch = () => {
+    onSearch({
+        keyword,
+        city,
+        minPrice,
+        maxPrice,
+        minRating: minRating ? Number(minRating) : undefined,
+        type,
+        categoryId: categoryId ? Number(categoryId) : undefined,
+
+        sortBy,
+        direction,
+
+        page: 0,
+        size: 12,
+    });
+};
 
     const handleReset = () => {
         setKeyword(""); setCity(""); setMinPrice(""); setMaxPrice("");
@@ -116,8 +124,8 @@ export default function Filters({
                             <button
                                 onClick={() => applySort("createdAt", "DESC")}
                                 className={`w-full px-2 py-2 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
-                                        ? "bg-blue-600 text-white"
-                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                                     }`}
                             >
                                 🆕 Récents
@@ -135,21 +143,22 @@ export default function Filters({
                             <button
                                 onClick={() => applySort("pricePerDay", "ASC")}
                                 className={`w-full px-2 py-2 rounded-xl text-sm font-medium transition-colors ${sortBy === "pricePerDay" && direction === "ASC"
-                                        ? "bg-blue-600 text-white"
-                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                                     }`}
                             >
                                 💰 Prix ↑
                             </button>
                             <button
                                 onClick={() => applySort("pricePerDay", "DESC")}
-                                className={`w-full px-2 py-2 rounded-xl text-sm font-medium transition-colors ${sortBy === "pricePerDay" && direction === "ASC"
-                                        ? "bg-blue-600 text-white"
-                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                className={`w-full px-2 py-2 rounded-xl text-sm font-medium transition-colors ${sortBy === "pricePerDay" && direction === "DESC"
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                                     }`}
                             >
                                 💰 Prix ↓
                             </button>
+
                         </div>
 
                     </div>
@@ -183,8 +192,8 @@ export default function Filters({
                             <button
                                 onClick={() => applySort("createdAt", "DESC")}
                                 className={`min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${currentSort === "createdAt"
-                                        ? "bg-blue-600 text-white"
-                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                                     }`}
                             >
                                 🆕 Plus récents
@@ -192,8 +201,8 @@ export default function Filters({
                             <button
                                 onClick={() => applySort("pricePerDay", "ASC")}
                                 className={`min-w-[160px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${sortBy === "pricePerDay" && direction === "ASC"
-                                        ? "bg-blue-600 text-white"
-                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                                     }`}
                             >
                                 💰 Prix croissant
@@ -201,8 +210,8 @@ export default function Filters({
                             <button
                                 onClick={() => applySort("pricePerDay", "DESC")}
                                 className={`min-w-[170px] px-4 py-3 rounded-xl text-sm font-medium transition-colors ${sortBy === "pricePerDay" && direction === "DESC"
-                                        ? "bg-blue-600 text-white"
-                                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                                     }`}
                             >
                                 💰 Prix décroissant
@@ -258,6 +267,6 @@ export default function Filters({
                 </div>
             </div>
 
-        </div>
+        </div >
     );
 }

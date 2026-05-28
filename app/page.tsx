@@ -205,21 +205,38 @@ export default function Home() {
       loadAuctions(res);
     }
   };
-  const handleSearch = async (filters: any) => {
-    const cleanedFilters = Object.fromEntries(
-      Object.entries(filters).filter(([key, v]) =>
-        !["sortBy", "direction", "page", "size"].includes(key) &&
-        v !== null && v !== "" && v !== undefined
-      )
-    );
-    setActiveFilters(cleanedFilters);
-    setActiveFiltersCount(Object.keys(cleanedFilters).length);
-    setPage(0);
-    setNearbyMode(false);
-    setShowFilters(false);
-    updateUrl(0, sortBy, direction, cleanedFilters); // ← sync URL
-    await loadItems(0, sortBy, direction, cleanedFilters);
-  };
+const handleSearch = async (data: any) => {
+
+  const {
+    sortBy: newSortBy = "createdAt",
+    direction: newDirection = "DESC",
+    ...filters
+  } = data;
+
+  setSortBy(newSortBy);
+  setDirection(newDirection);
+
+  const cleanedFilters = Object.fromEntries(
+    Object.entries(filters).filter(([_, v]) =>
+      v !== null && v !== "" && v !== undefined
+    )
+  );
+
+  setActiveFilters(cleanedFilters);
+  setActiveFiltersCount(Object.keys(cleanedFilters).length);
+  setPage(0);
+  setNearbyMode(false);
+  setShowFilters(false);
+
+  updateUrl(0, newSortBy, newDirection, cleanedFilters);
+
+  await loadItems(
+    0,
+    newSortBy,
+    newDirection,
+    cleanedFilters
+  );
+};
 
   const handleNearby = () => {
     setLoadingNearby(true);
