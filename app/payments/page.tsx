@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAllPayments, refundAuctionFee } from "@/services/paymentService";
+import { getAllPayments, refundAuctionFee, refundSimple } from "@/services/paymentService";
 
 export default function PaymentsPage() {
   const [activeTab, setActiveTab] = useState<"list" | "refund">("list");
@@ -22,21 +22,20 @@ export default function PaymentsPage() {
     }
   };
 
-  const handleRefund = async () => {
-    if (!selectedPayment) return;
-    if (!confirm(`Confirmer le remboursement de ${selectedPayment.amount} $ ?`)) return;
-    try {
-      setLoading(true);
-      await refundAuctionFee(selectedPayment.paymentIntentId);
-      alert("Remboursement effectué ✅");
-      setSelectedPayment(null);
-      loadAllPayments();
-    } catch {
-      alert("Impossible d'effectuer le remboursement");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleRefundSimple = async () => {
+  if (!selectedPayment) return;
+  setLoading(true);
+  try {
+    await refundSimple(selectedPayment.paymentIntentId);
+    alert("Remboursement effectué ✅");
+    setSelectedPayment(null);
+    loadAllPayments();
+  } catch (err: any) {
+    alert(err?.response?.data?.message || "Erreur lors du remboursement");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const statusBadge = (status: string) => {
     const map: Record<string, string> = {
@@ -196,7 +195,7 @@ export default function PaymentsPage() {
                   Annuler
                 </button>
                 <button
-                  onClick={handleRefund}
+                  onClick={handleRefundSimple}
                   disabled={loading}
                   className="flex-1 py-3 bg-red-600 text-white rounded-xl text-sm font-semibold hover:bg-red-700 disabled:opacity-60 transition-colors cursor-pointer flex items-center justify-center gap-2"
                 >
