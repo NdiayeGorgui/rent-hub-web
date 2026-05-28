@@ -445,7 +445,7 @@ export default function Home() {
 
                   <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
                     <span className="text-red-500 font-semibold">
-                      💰 {item.pricePerDay} $ / jour
+                      💰 {item.pricePerDay} $ / j
                     </span>
 
                     <span>📅 Disponible</span>
