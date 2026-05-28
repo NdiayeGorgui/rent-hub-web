@@ -44,23 +44,19 @@ export default function Filters({
         setDirection(dir);
     };
 
-const handleSearch = () => {
-    onSearch({
-        keyword,
-        city,
-        minPrice,
-        maxPrice,
-        minRating: minRating ? Number(minRating) : undefined,
-        type,
-        categoryId: categoryId ? Number(categoryId) : undefined,
-
-        sortBy,
-        direction,
-
-        page: 0,
-        size: 12,
-    });
-};
+    const handleSearch = () => {
+        onSearch({
+            keyword,
+            city,
+            minPrice,
+            maxPrice,
+            minRating: minRating ? Number(minRating) : undefined,
+            type,
+            categoryId: categoryId ? Number(categoryId) : undefined,
+            ...(sortBy ? { sortBy } : {}),
+            ...(direction ? { direction } : {}),
+        });
+    };
 
     const handleReset = () => {
         setKeyword(""); setCity(""); setMinPrice(""); setMaxPrice("");
