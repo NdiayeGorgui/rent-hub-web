@@ -71,7 +71,12 @@ export default function PaymentsPage() {
         );
     };
 
-    const refundable = payments.filter(p => p.status === "SUCCESS" && p.paymentType === "AUCTION_FEE");
+    const refundable = payments.filter(
+        p =>
+            p.status === "SUCCESS" &&
+            p.paymentType === "AUCTION_FEE" &&
+            !p.alreadyRefunded
+    );
 
     return (
         <div className="max-w-4xl mx-auto px-6 py-8">
@@ -111,12 +116,20 @@ export default function PaymentsPage() {
                         </div>
                     ) : payments.map(p => (
                         <div key={p.id} className="bg-white rounded-2xl border border-gray-100 p-5">
+                            // Dans renderPaymentCard web — section cardHeader
                             <div className="flex items-start justify-between mb-3">
                                 <div>
                                     <p className="font-bold text-gray-900">Paiement #{p.id}</p>
                                     <p className="text-gray-400 text-sm">{p.userFullName || "Utilisateur inconnu"}</p>
                                 </div>
-                                {statusBadge(p.status)}
+                                <div className="flex items-center gap-2">
+                                    {statusBadge(p.status)}
+                                    {p.alreadyRefunded && (
+                                        <span className="text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">
+                                            Déjà remboursé
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                             <div className="flex items-center gap-6 text-sm text-gray-600">
                                 <span className="text-green-600 font-bold text-base">{p.amount} $</span>
