@@ -12,6 +12,7 @@ import { formatNotificationDate } from "@/lib/formatDate";
 const getTypeConfig = (type: string) => {
   switch (type) {
     case "CREATED": return { icon: "📦", label: "Demande de location" };
+    case "RENTAL_REQUEST": return { icon: "📦", label: "Demande de location" };
     case "APPROVED": return { icon: "✅", label: "Location approuvée" };
     case "STARTED": return { icon: "⏰", label: "Location démarrée" };
     case "CANCELLED": return { icon: "❌", label: "Location annulée" };
