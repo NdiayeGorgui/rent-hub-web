@@ -54,7 +54,7 @@ export default function Filters({
             type,
             categoryId: categoryId ? Number(categoryId) : undefined,
             ...(sortBy ? { sortBy } : {}),
-            ...(direction ? { direction } : {}),
+            ...(sortBy ? { direction } : {}),
         });
     };
 

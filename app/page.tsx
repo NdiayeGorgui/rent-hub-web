@@ -34,6 +34,7 @@ export default function Home() {
     minPrice: "Prix min",
     maxPrice: "Prix max",
     minRating: "Note min",
+    sortBy: "Tri",
   };
 
   const { user, loading } = useAuth();
@@ -160,6 +161,18 @@ export default function Home() {
     if (key === "maxPrice") {
       return `${value} $ max`;
     }
+
+    if (key === "sortBy") {
+  if (value === "createdAt") return "🆕 Plus récents";
+
+  if (value === "pricePerDay" && activeFilters.direction === "ASC") {
+    return "💰 Prix croissant";
+  }
+
+  if (value === "pricePerDay" && activeFilters.direction === "DESC") {
+    return "💰 Prix décroissant";
+  }
+}
 
     return value;
   };
