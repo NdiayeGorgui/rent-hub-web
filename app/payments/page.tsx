@@ -12,15 +12,15 @@ export default function PaymentsPage() {
     const getTypeConfig = (type: string) => {
         switch (type) {
 
-            case "AUCTION_PENALTY": return { icon: "💳", label: "Pénalité" };
-            case "AUCTION_CANCELLED": return { icon: "❌", label: "Enchère annulée" };
-            case "AUCTION_FEE": return { icon: "💳", label: "Frais enchère" };
-            case "AUCTION_REFUND": return { icon: "💳", label: "Remboursement" };
+            case "AUCTION_PENALTY": return { label: "Pénalité" };
+            case "AUCTION_CANCELLED": return { label: "Enchère annulée" };
+            case "AUCTION_FEE": return { label: "Frais enchère" };
+            case "AUCTION_REFUND": return { label: "Remboursement" };
             case "FAILED": return { icon: "❌", label: "Échec" };
             case "PENDING": return { icon: "🔄", label: "En attente" };
             case "SUCCESS": return { icon: "✅", label: "Réussi" };
-            case "SUBSCRIPTION": return { icon: "🔄", label: "Abonnement" };
-            default: return { icon: "🔔", label: type };
+            case "SUBSCRIPTION": return { label: "Abonnement" };
+            default: return { label: type };
         }
     };
 
@@ -92,8 +92,8 @@ export default function PaymentsPage() {
                         key={key}
                         onClick={() => { setActiveTab(key as any); setSelectedPayment(null); }}
                         className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer ${activeTab === key
-                                ? "bg-blue-600 text-white"
-                                : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300"
+                            ? "bg-blue-600 text-white"
+                            : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300"
                             }`}
                     >
                         {label}
@@ -161,7 +161,9 @@ export default function PaymentsPage() {
                                                 {statusBadge(p.status)}
                                             </div>
                                             <div className="flex items-center gap-6 text-sm">
-                                                <span className="text-green-600 font-bold text-base">{p.amount} $</span>
+                                                <span className="text-green-600 font-bold text-base whitespace-nowrap">
+                                                    {p.amount} $
+                                                </span>
                                                 <span className="text-gray-400 text-xs">
                                                     {new Date(p.createdAt).toLocaleDateString("fr-CA", {
                                                         year: "numeric", month: "short", day: "numeric"
