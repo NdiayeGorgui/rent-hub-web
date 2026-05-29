@@ -292,66 +292,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Items publiés */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
-                <h2 className="font-bold text-gray-900 mb-3">📦 Items publiés</h2>
-                {publishedItems.length === 0 ? (
-                    <p className="text-gray-400 text-sm">Aucun item publié</p>
-                ) : (
-                    <div className="flex flex-col gap-2">
-                        {publishedItems.map((item) => (
-                            <div key={item.id} className="flex items-center justify-between border-b border-gray-50 pb-2 last:border-0">
-                                <div>
-                                    <p className="text-sm font-medium text-gray-800">#{item.id} — {item.title}</p>
-                                    <p className="text-xs text-gray-400">
-                                        {item.type === "AUCTION"
-                                            ? `${formatDate(item.createdAt)} → ${formatDate(item.auctionEndDate)}`
-                                            : formatDate(item.createdAt)}
-                                    </p>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-sm font-semibold text-blue-600">
-                                        {item.type === "AUCTION"
-                                            ? `🔥 ${item.currentPrice ?? "—"} $`
-                                            : `${item.pricePerDay} $/j`}
-                                    </p>
-                                    <p className="text-xs text-gray-400">⭐ {Number(item.averageRating || 0).toFixed(2)}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-
-            {/* Items loués */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
-                <h2 className="font-bold text-gray-900 mb-3">🔁 Items loués</h2>
-                {rentedItems.length === 0 ? (
-                    <p className="text-gray-400 text-sm">Aucun item loué</p>
-                ) : (
-                    <div className="flex flex-col gap-2">
-                        {rentedItems.map((item) => (
-                            <div key={`${item.id}-${item.rentalId}`} className="flex items-center justify-between border-b border-gray-50 pb-2 last:border-0">
-                                <div>
-                                    <p className="text-sm font-medium text-gray-800">#{item.id} — {item.title}</p>
-                                    <p className="text-xs text-gray-400">
-                                        {item.type === "AUCTION"
-                                            ? `${formatDate(item.createdAt)} → ${formatDate(item.auctionEndDate)}`
-                                            : `${formatDate(item.startDate)} → ${formatDate(item.endDate)}`}
-                                    </p>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-sm font-semibold text-blue-600">
-                                        {item.type === "AUCTION"
-                                            ? `🔥 ${item.currentPrice ?? "—"} $`
-                                            : `${item.pricePerDay} $/j`}
-                                    </p>
-                                    <p className="text-xs text-gray-400">⭐ {Number(item.averageRating || 0).toFixed(2)}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+           
 
             {/* Paiements */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
