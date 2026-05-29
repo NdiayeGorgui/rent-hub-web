@@ -74,14 +74,63 @@ export default function AdminDisputesPage() {
     }
   };
 
-  const getStatusConfig = (status: string) => {
-    switch (status) {
-      case "OPEN": return { label: "Ouvert", cls: "bg-orange-50 text-orange-700 border border-orange-200" };
-      case "IN_REVIEW": return { label: "En révision", cls: "bg-blue-50 text-blue-700 border border-blue-200" };
-      case "RESOLVED": return { label: "Résolu", cls: "bg-green-50 text-green-700 border border-green-200" };
-      case "REJECTED": return { label: "Rejeté", cls: "bg-red-50 text-red-700 border border-red-200" };
-      default: return { label: status, cls: "bg-gray-100 text-gray-500" };
-    }
+const getStatusConfig = (status: string) => {
+  switch (status) {
+
+    case "OPEN":
+      return {
+        label: getDecisionLabel(status),
+        cls: "bg-orange-50 text-orange-700 border border-orange-200"
+      };
+
+    case "IN_REVIEW":
+      return {
+        label: getDecisionLabel(status),
+        cls: "bg-blue-50 text-blue-700 border border-blue-200"
+      };
+
+    case "RESOLVED":
+      return {
+        label: getDecisionLabel(status),
+        cls: "bg-green-50 text-green-700 border border-green-200"
+      };
+
+    case "REJECTED":
+      return {
+        label: getDecisionLabel(status),
+        cls: "bg-red-50 text-red-700 border border-red-200"
+      };
+
+    default:
+      return {
+        label: status,
+        cls: "bg-gray-100 text-gray-500"
+      };
+  }
+};
+
+  const getDecisionLabel = (value: string) => {
+    const map: Record<string, string> = {
+
+      // Décisions
+      RESOLVED: "Approuvé",
+      REJECTED: "Rejeté",
+
+      // Actions
+      NONE: "Aucune action",
+      SUSPEND_USER: "Suspendre l'utilisateur",
+      DEACTIVATE_ITEM: "Désactiver l'item",
+      REFUND_AUCTION_FEE: "Rembourser les frais d'enchère",
+
+      // Statuts
+      OPEN: "Ouvert",
+      IN_REVIEW: "En révision",
+      SUCCESS: "Réussi",
+      FAILED: "Échec",
+      PENDING: "En attente",
+    };
+
+    return map[value] ?? value;
   };
 
   const openDisputes = disputes.filter(d => d.status === "OPEN" || d.status === "IN_REVIEW");
@@ -151,7 +200,7 @@ export default function AdminDisputesPage() {
                       <p className="text-sm text-gray-600">{d.reason}</p>
                       {d.adminDecision && (
                         <div className="mt-3 bg-blue-50 rounded-lg px-4 py-2 text-sm text-blue-700 italic">
-                          Décision : {d.adminDecision}
+                          Décision : {getDecisionLabel(d.adminDecision)}
                         </div>
                       )}
                     </div>
@@ -263,8 +312,18 @@ export default function AdminDisputesPage() {
               {/* Résumé */}
               {decision && (
                 <div className="bg-orange-50 border border-orange-200 rounded-xl px-4 py-3 mb-6 text-sm">
-                  <p className="text-gray-700">Décision : <span className="font-bold">{decision}</span></p>
-                  {action && <p className="text-gray-700 mt-0.5">Action : <span className="font-bold">{action}</span></p>}
+                  <p className="text-gray-700">
+                    Décision : <span className="font-bold">
+                      {getDecisionLabel(decision)}
+                    </span>
+                  </p>
+                  {action && (
+                    <p className="text-gray-700 mt-0.5">
+                      Action : <span className="font-bold">
+                        {getDecisionLabel(action)}
+                      </span>
+                    </p>
+                  )}
                 </div>
               )}
 
