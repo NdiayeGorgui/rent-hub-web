@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getAllDisputesAdmin, resolveDisputeAdmin } from "@/services/adminDisputeService";
-import { fetchItemDetails } from "@/services/itemService";
+
 
 export default function AdminDisputesPage() {
   const [activeTab, setActiveTab] = useState<"list" | "resolve">("list");
@@ -10,7 +10,7 @@ export default function AdminDisputesPage() {
   const [selectedDispute, setSelectedDispute] = useState<any>(null);
   const [decision, setDecision] = useState<"RESOLVED" | "REJECTED" | null>(null);
   const [adminComment, setAdminComment] = useState("");
-  const [itemsMap, setItemsMap] = useState<Record<number, any>>({});
+
   const [action, setAction] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [resolveLoading, setResolveLoading] = useState(false);
@@ -21,16 +21,11 @@ export default function AdminDisputesPage() {
     try {
       const data = await getAllDisputesAdmin();
       setDisputes(data);
-      const uniqueItemIds = [...new Set(data.map((d: any) => d.itemId))] as number[];
-      const results = await Promise.all(
-        uniqueItemIds.map(async (id) => {
-          try { return [id, await fetchItemDetails(id)]; }
-          catch { return [id, null]; }
-        })
-      );
-      setItemsMap(Object.fromEntries(results));
-    } catch { alert("Impossible de charger les litiges"); }
-    finally { setLoading(false); }
+    } catch {
+      alert("Impossible de charger les litiges");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleResolve = async () => {
@@ -74,40 +69,40 @@ export default function AdminDisputesPage() {
     }
   };
 
-const getStatusConfig = (status: string) => {
-  switch (status) {
+  const getStatusConfig = (status: string) => {
+    switch (status) {
 
-    case "OPEN":
-      return {
-        label: getDecisionLabel(status),
-        cls: "bg-orange-50 text-orange-700 border border-orange-200"
-      };
+      case "OPEN":
+        return {
+          label: getDecisionLabel(status),
+          cls: "bg-orange-50 text-orange-700 border border-orange-200"
+        };
 
-    case "IN_REVIEW":
-      return {
-        label: getDecisionLabel(status),
-        cls: "bg-blue-50 text-blue-700 border border-blue-200"
-      };
+      case "IN_REVIEW":
+        return {
+          label: getDecisionLabel(status),
+          cls: "bg-blue-50 text-blue-700 border border-blue-200"
+        };
 
-    case "RESOLVED":
-      return {
-        label: getDecisionLabel(status),
-        cls: "bg-green-50 text-green-700 border border-green-200"
-      };
+      case "RESOLVED":
+        return {
+          label: getDecisionLabel(status),
+          cls: "bg-green-50 text-green-700 border border-green-200"
+        };
 
-    case "REJECTED":
-      return {
-        label: getDecisionLabel(status),
-        cls: "bg-red-50 text-red-700 border border-red-200"
-      };
+      case "REJECTED":
+        return {
+          label: getDecisionLabel(status),
+          cls: "bg-red-50 text-red-700 border border-red-200"
+        };
 
-    default:
-      return {
-        label: status,
-        cls: "bg-gray-100 text-gray-500"
-      };
-  }
-};
+      default:
+        return {
+          label: status,
+          cls: "bg-gray-100 text-gray-500"
+        };
+    }
+  };
 
   const getDecisionLabel = (value: string) => {
     const map: Record<string, string> = {
@@ -188,7 +183,7 @@ const getStatusConfig = (status: string) => {
                           {d.rentalId ? "📦" : "🔥"}
                         </div>
                         <div>
-                          <h2 className="font-semibold text-gray-900">{itemsMap[d.itemId]?.title ?? "Chargement..."}</h2>
+                          <h2 className="font-semibold text-gray-900">{d.itemTitle ?? "Item supprimé"}</h2>
                           <p className="text-xs text-gray-400">
                             {d.rentalId ? `Location #${d.rentalId}` : `Enchère #${d.auctionId}`}
                           </p>
@@ -198,6 +193,15 @@ const getStatusConfig = (status: string) => {
                     </div>
                     <div className="px-6 py-4">
                       <p className="text-sm text-gray-600">{d.reason}</p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        👤 Plaignant : {d.openedUsername}
+                      </p>
+
+                      {d.reportedUsername && (
+                        <p className="text-xs text-gray-400">
+                          ⚠️ Accusé : {d.reportedUsername}
+                        </p>
+                      )}
                       {d.adminDecision && (
                         <div className="mt-3 bg-blue-50 rounded-lg px-4 py-2 text-sm text-blue-700 italic">
                           Décision : {getDecisionLabel(d.adminDecision)}
@@ -229,7 +233,7 @@ const getStatusConfig = (status: string) => {
                       onClick={() => { setSelectedDispute(d); setDecision(null); setAction(null); setAdminComment(""); }}
                       className="text-left bg-white rounded-xl border border-gray-200 px-5 py-4 hover:border-violet-400 hover:shadow-sm transition-all cursor-pointer"
                     >
-                      <p className="font-semibold text-gray-900">{itemsMap[d.itemId]?.title ?? "Chargement..."}</p>
+                      <p className="font-semibold text-gray-900">{d.itemTitle ?? "Item supprimé"}</p>
                       <p className="text-sm text-gray-400 mt-0.5">
                         {d.rentalId ? `📦 Location #${d.rentalId}` : `🔥 Enchère #${d.auctionId}`}
                       </p>
@@ -249,10 +253,19 @@ const getStatusConfig = (status: string) => {
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900">Litige #{selectedDispute.id}</p>
-                  <p className="text-sm text-gray-400">{itemsMap[selectedDispute.itemId]?.title}</p>
+                  <p className="text-sm text-gray-400">{selectedDispute.itemTitle ?? "Item supprimé"}</p>
                   <p className="text-xs text-gray-400 mt-0.5">
                     {selectedDispute.rentalId ? `Location #${selectedDispute.rentalId}` : `Enchère #${selectedDispute.auctionId}`}
                   </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    👤 Plaignant : {selectedDispute.openedUsername}
+                  </p>
+
+                  {selectedDispute.reportedUsername && (
+                    <p className="text-xs text-gray-400">
+                      ⚠️ Accusé : {selectedDispute.reportedUsername}
+                    </p>
+                  )}
                 </div>
               </div>
 
