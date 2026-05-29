@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getAllPayments, refundAuctionFee, refundSimple } from "@/services/paymentService";
+import { useEffect, useState, useMemo  } from "react";
+import { getAllPayments, refundSimple } from "@/services/paymentService";
+
 
 export default function PaymentsPage() {
     const [activeTab, setActiveTab] = useState<"list" | "refund">("list");
     const [payments, setPayments] = useState<any[]>([]);
     const [selectedPayment, setSelectedPayment] = useState<any>(null);
     const [loading, setLoading] = useState(false);
+    
 
     const getTypeConfig = (type: string) => {
         switch (type) {
@@ -27,17 +29,18 @@ export default function PaymentsPage() {
     // ✅ Filtre les AUCTION_FEE qui ont un AUCTION_REFUND correspondant
     // par même userId + même auctionId
 
-    const refundedAuctionIds = new Set(
-        payments
-            .filter(p => p.paymentType === "AUCTION_REFUND")
-            .map(p => `${p.userId}_${p.auctionId}`)
-    );
+// Frontend — remplace le filtre
+const refundedItemIds = useMemo(() => new Set(
+  payments
+    .filter(p => p.paymentType === "AUCTION_REFUND")
+    .map(p => `${p.userId}_${p.itemId}`)
+), [payments]);
 
-    const refundable = payments.filter(p =>
-        p.status === "SUCCESS" &&
-        p.paymentType === "AUCTION_FEE" &&
-        !refundedAuctionIds.has(`${p.userId}_${p.auctionId}`)
-    );
+const refundable = useMemo(() => payments.filter(p =>
+  p.status === "SUCCESS" &&
+  p.paymentType === "AUCTION_FEE" &&
+  !refundedItemIds.has(`${p.userId}_${p.itemId}`)
+), [payments, refundedItemIds]);
 
     const [search, setSearch] = useState("");
 
