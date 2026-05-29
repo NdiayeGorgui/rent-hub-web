@@ -7,15 +7,16 @@ import {
   getMyDisputes,
 } from "@/services/disputeService";
 import { fetchMyRentals } from "@/services/rentalService";
-import { fetchItemDetails } from "@/services/itemService";
+
 import { getMyWonAuctions, getMyClosedAuctionsAsOwner } from "@/services/auctionService";
+import { fetchItemsBatch } from "@/services/itemService";
 
 export default function DisputesPage() {
   const [activeTab, setActiveTab] = useState<"list" | "create">("list");
   const [disputes, setDisputes] = useState<any[]>([]);
   const [rentals, setRentals] = useState<any[]>([]);
   const [selectedRental, setSelectedRental] = useState<any>(null);
-  const [itemsMap, setItemsMap] = useState<Record<number, any>>({});
+
   const [reason, setReason] = useState("");
   const [description, setDescription] = useState("");
   const [disputeType, setDisputeType] = useState<"rental" | "auction">("rental");
@@ -26,6 +27,7 @@ export default function DisputesPage() {
   const [loading, setLoading] = useState(false);
 
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [itemsMap, setItemsMap] = useState<Record<number, any>>({});
 
   useEffect(() => {
     if (activeTab === "list") loadDisputes();
@@ -34,52 +36,82 @@ export default function DisputesPage() {
 
   const loadDisputes = async () => {
     setLoading(true);
+
     try {
       const data = await getMyDisputes();
       setDisputes(data);
-      const uniqueItemIds = [...new Set(data.map((d: any) => d.itemId))] as number[];
-      const results = await Promise.all(
-        uniqueItemIds.map(async (id) => {
-          try { return [id, await fetchItemDetails(id)]; }
-          catch { return [id, null]; }
-        })
-      );
-      setItemsMap(Object.fromEntries(results));
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const loadRentals = async () => {
+
     setLoading(true);
+
     try {
-      const [rentalsData, disputesData] = await Promise.all([fetchMyRentals(), getMyDisputes()]);
-      const disputedRentalIds = disputesData.filter((d: any) => d.rentalId).map((d: any) => d.rentalId);
-      const disputedAuctionIds = disputesData.filter((d: any) => d.auctionId).map((d: any) => d.auctionId);
+
+      const [rentalsData, disputesData] = await Promise.all([
+        fetchMyRentals(),
+        getMyDisputes()
+      ]);
+
+      const disputedRentalIds = disputesData
+        .filter((d: any) => d.rentalId)
+        .map((d: any) => d.rentalId);
+
+      const disputedAuctionIds = disputesData
+        .filter((d: any) => d.auctionId)
+        .map((d: any) => d.auctionId);
 
       const availableRentals = rentalsData.filter(
-        (r: any) => r.status === "ENDED" && !disputedRentalIds.includes(r.id)
+        (r: any) =>
+          r.status === "ENDED" &&
+          !disputedRentalIds.includes(r.id)
       );
+
       setRentals(availableRentals);
 
-      let won: any[] = [], owned: any[] = [];
-      try { won = (await getMyWonAuctions()).filter((a: any) => !disputedAuctionIds.includes(a.id)); } catch { }
-      try { owned = (await getMyClosedAuctionsAsOwner()).filter((a: any) => !disputedAuctionIds.includes(a.id)); } catch { }
+      let won: any[] = [];
+      let owned: any[] = [];
+
+      try {
+        won = (await getMyWonAuctions())
+          .filter((a: any) => !disputedAuctionIds.includes(a.id));
+      } catch { }
+
+      try {
+        owned = (await getMyClosedAuctionsAsOwner())
+          .filter((a: any) => !disputedAuctionIds.includes(a.id));
+      } catch { }
+
       setWonAuctions(won);
       setOwnerAuctions(owned);
 
-      const allIds = [...new Set([
-        ...availableRentals.map((r: any) => r.itemId),
-        ...won.map((a: any) => a.itemId),
-        ...owned.map((a: any) => a.itemId),
-      ])] as number[];
+      // ✅ IDs uniques
+      const allIds = [
+        ...new Set([
+          ...availableRentals.map((r: any) => r.itemId),
+          ...won.map((a: any) => a.itemId),
+          ...owned.map((a: any) => a.itemId),
+        ])
+      ] as number[];
 
-      const results = await Promise.all(
-        allIds.map(async (id) => {
-          try { return [id, await fetchItemDetails(id)]; }
-          catch { return [id, null]; }
-        })
+      // ✅ BATCH REQUEST
+      const items = await fetchItemsBatch(allIds);
+
+      // ✅ MAP
+      const map = Object.fromEntries(
+        items.map((item: any) => [item.id, item])
       );
-      setItemsMap(Object.fromEntries(results));
-    } finally { setLoading(false); }
+
+      setItemsMap(map);
+
+    } finally {
+
+      setLoading(false);
+
+    }
   };
 
   const handleCreate = async () => {
@@ -159,8 +191,8 @@ export default function DisputesPage() {
           ].map(({ key, label, icon }) => (
             <button key={key} onClick={() => setActiveTab(key as any)}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${activeTab === key
-                  ? "bg-blue-600 text-white shadow-sm cursor-pointer"
-                  : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
+                ? "bg-blue-600 text-white shadow-sm cursor-pointer"
+                : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
                 }`}
             >
               <span>{icon}</span> {label}
@@ -195,7 +227,7 @@ export default function DisputesPage() {
                         </div>
                         <div>
                           <h2 className="font-semibold text-gray-900">
-                            {itemsMap[d.itemId]?.title ?? "Chargement..."}
+                            {d.itemTitle}
                           </h2>
                           <p className="text-xs text-gray-400">
                             {d.rentalId ? `Location #${d.rentalId}` : `Enchère #${d.auctionId}`}
@@ -207,7 +239,22 @@ export default function DisputesPage() {
                       </span>
                     </div>
                     <div className="px-6 py-4">
-                      <p className="text-sm text-gray-600">{d.reason}</p>
+
+                      <p className="text-sm font-medium text-gray-800 mb-2">
+                        {d.reason}
+                      </p>
+
+                      <div className="space-y-1">
+                        <p className="text-xs text-gray-500">
+                          👤 Plaignant : {d.openedUsername}
+                        </p>
+
+                        {d.reportedUsername && (
+                          <p className="text-xs text-red-500">
+                            ⚠️ Accusé : {d.reportedUsername}
+                          </p>
+                        )}
+                      </div>
                       {d.adminDecision && (
                         <div className="mt-3 bg-blue-50 rounded-lg px-4 py-2 text-sm text-blue-700 italic">
                           Décision admin : {d.adminDecision}
@@ -237,8 +284,8 @@ export default function DisputesPage() {
                     setReason(""); setDescription("");
                   }}
                   className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${disputeType === key
-                      ? "bg-blue-600 text-white shadow-sm cursor-pointer"
-                      : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
+                    ? "bg-blue-600 text-white shadow-sm cursor-pointer"
+                    : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
                     }`}
                 >
                   <span>{icon}</span> {label}
@@ -262,7 +309,7 @@ export default function DisputesPage() {
                       {rentals.map((r) => (
                         <button key={r.id} onClick={() => setSelectedRental(r)}
                           className="text-left bg-white rounded-xl border border-gray-200 px-5 py-4 hover:border-blue-400 hover:shadow-sm transition-all cursor-pointer">
-                          <p className="font-semibold text-gray-900">{itemsMap[r.itemId]?.title ?? "Chargement..."}</p>
+                          <p className="font-semibold text-gray-900">{r.itemTitle ?? "Article"}</p>
                           <p className="text-sm text-gray-400 mt-0.5">Location #{r.id}</p>
                         </button>
                       ))}
@@ -275,7 +322,7 @@ export default function DisputesPage() {
                     <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">📦</div>
                     <div>
                       <p className="font-semibold text-gray-900">Location #{selectedRental.id}</p>
-                      <p className="text-sm text-gray-400">{itemsMap[selectedRental.itemId]?.title}</p>
+                      <p className="text-sm text-gray-400">{selectedRental.itemTitle}</p>
                     </div>
                   </div>
                   <div className="flex flex-col gap-4">
@@ -325,8 +372,8 @@ export default function DisputesPage() {
                     <button key={key}
                       onClick={() => { setAuctionRole(key as any); setSelectedAuction(null); setReason(""); setDescription(""); }}
                       className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${auctionRole === key
-                          ? "bg-blue-600 text-white shadow-sm cursor-pointer"
-                          : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
+                        ? "bg-blue-600 text-white shadow-sm cursor-pointer"
+                        : "bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
                         }`}
                     >
                       <span>{icon}</span> {label}
@@ -350,7 +397,7 @@ export default function DisputesPage() {
                         {currentAuctions.map((a) => (
                           <button key={a.id} onClick={() => setSelectedAuction(a)}
                             className="text-left bg-white rounded-xl border border-gray-200 px-5 py-4 hover:border-blue-400 hover:shadow-sm transition-all cursor-pointer">
-                            <p className="font-semibold text-gray-900">{itemsMap[a.itemId]?.title ?? "Chargement..."}</p>
+                            <p className="font-semibold text-gray-900">{a.itemTitle ?? "Article"}</p>
                             <p className="text-sm text-gray-400 mt-0.5">Enchère #{a.id} — {a.currentPrice} $</p>
                             <p className="text-sm text-red-400 mt-1">
                               {auctionRole === "winner" ? "⚠️ Le vendeur ne livre pas" : "⚠️ Le gagnant refuse de payer"}
@@ -366,7 +413,7 @@ export default function DisputesPage() {
                       <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">🔥</div>
                       <div>
                         <p className="font-semibold text-gray-900">Enchère #{selectedAuction.id}</p>
-                        <p className="text-sm text-gray-400">{itemsMap[selectedAuction.itemId]?.title}</p>
+                        <p className="text-sm text-gray-400">{selectedAuction.itemTitle}</p>
                       </div>
                     </div>
                     <div className="flex flex-col gap-4">

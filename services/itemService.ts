@@ -64,3 +64,8 @@ export const updateItem = async (id: number, formData: FormData) => {
   const res = await API.put(`/items/item/${id}/with-images`, formData);
   return res.data;
 };
+
+export const fetchItemsBatch = async (ids: number[]) => {
+  const response = await API.post("/items/internal/batch", ids);
+  return response.data;
+};
