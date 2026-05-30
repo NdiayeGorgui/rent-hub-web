@@ -1,11 +1,15 @@
 export const saveToken = (token: string) => {
-  localStorage.setItem("token", token);
+    // ← Supprime d'abord l'ancien
+    localStorage.removeItem("token");
+    // ← Puis sauvegarde le nouveau
+    localStorage.setItem("token", token);
 };
 
-export const getToken = () => {
-  return localStorage.getItem("token");
+export const getToken = (): string | null => {
+    if (typeof window === "undefined") return null;
+    return localStorage.getItem("token");
 };
 
 export const logout = () => {
-  localStorage.removeItem("token");
+    localStorage.removeItem("token");
 };
