@@ -7,16 +7,14 @@ import {
     getMyParticipatingAuctions,
     placeBid,
 } from "@/services/auctionService";
-import { fetchItemDetails } from "@/services/itemService";
-import { fetchUserProfile } from "@/services/authService";
+
 import Link from "next/link";
 
 export default function AuctionsPage() {
     const router = useRouter();
     const [mode, setMode] = useState<"launched" | "participating">("launched");
     const [auctions, setAuctions] = useState<any[]>([]);
-    const [itemsMap, setItemsMap] = useState<Record<number, any>>({});
-    const [ownersMap, setOwnersMap] = useState<Record<string, any>>({});
+
     const [loading, setLoading] = useState(false);
     const [bidAmounts, setBidAmounts] = useState<Record<number, string>>({});
     const [bidLoadingId, setBidLoadingId] = useState<number | null>(null);
@@ -57,59 +55,30 @@ export default function AuctionsPage() {
     };
 
     // ── Load data ─────────────────────────────────────────
-    const loadData = useCallback(async () => {
+const loadData = useCallback(async () => {
 
-        setLoading(true);
-        try {
-            const data = mode === "launched"
+    setLoading(true);
+
+    try {
+
+        const data =
+            mode === "launched"
                 ? await getMyLaunchedAuctions()
                 : await getMyParticipatingAuctions();
 
-            setAuctions(data);
+        setAuctions(data);
 
-            // Charger les items
-            const uniqueItemIds = [...new Set(data.map((a: any) => a.itemId))];
-            const itemsResults = await Promise.all(
-                uniqueItemIds.map(async (itemId: any) => {
-                    try { return [itemId, await fetchItemDetails(itemId)]; }
-                    catch { return [itemId, null]; }
-                })
-            );
-            setItemsMap(Object.fromEntries(itemsResults));
+    } catch (e) {
 
-            // Charger les owners (pour mode participating)
-            if (mode === "participating") {
-                const ownerIds = [...new Set(data.map((a: any) => a.ownerId?.toString()).filter(Boolean))];
-                const ownersResults = await Promise.all(
-                    ownerIds.map(async (ownerId: any) => {
-                        try { return [ownerId, await fetchUserProfile(ownerId)]; }
-                        catch { return [ownerId, null]; }
-                    })
-                );
-                setOwnersMap(Object.fromEntries(ownersResults));
-            }
-            if (mode === "launched") {
-                const winnerIds = [...new Set(
-                    data
-                        .filter((a: any) => a.winnerId)
-                        .map((a: any) => a.winnerId?.toString())
-                )];
-                const winnersResults = await Promise.all(
-                    winnerIds.map(async (winnerId: any) => {
-                        try { return [winnerId, await fetchUserProfile(winnerId)]; }
-                        catch { return [winnerId, null]; }
-                    })
-                );
-                // merge dans ownersMap
-                setOwnersMap(Object.fromEntries(winnersResults));
-            }
+        console.log("Error loading auctions", e);
 
-        } catch (e) {
-            console.log("Error loading auctions", e);
-        } finally {
-            setLoading(false);
-        }
-    }, [mode]);
+    } finally {
+
+        setLoading(false);
+
+    }
+
+}, [mode]);
 
     useEffect(() => { loadData(); }, [loadData]);
 
@@ -176,8 +145,7 @@ export default function AuctionsPage() {
                 ) : (
                     <div className="flex flex-col gap-4">
                         {auctions.map((auction) => {
-                            const item = itemsMap[auction.itemId];
-                            const owner = ownersMap[auction.ownerId?.toString()];
+                           
                             const { label, cls } = getStatusConfig(auction.status);
                             const isOpen = auction.status === "OPEN";
                             const timeLeft = auction.endDate ? getTimeLeft(auction.endDate) : "—";
@@ -193,7 +161,7 @@ export default function AuctionsPage() {
                                             </div>
                                             <div>
                                                 <h2 className="font-semibold text-gray-900">
-                                                    {item?.title ?? "Chargement..."}
+                                                   {auction.itemTitle ?? "Item"}
                                                 </h2>
                                                 <p className="text-xs text-gray-400">Enchère #{auction.id}</p>
                                             </div>
@@ -277,7 +245,7 @@ export default function AuctionsPage() {
                                                     href={`/users/${auction.ownerId}`}
                                                     className="text-blue-600 font-medium text-sm hover:underline"
                                                 >
-                                                    @{owner?.username ?? "..."}
+                                                   @{auction.ownerUsername ?? "Unknown"}
                                                 </Link>
                                             </div>
                                         )}
@@ -295,7 +263,7 @@ export default function AuctionsPage() {
                                                         href={`/users/${auction.winnerId}`}
                                                         className="text-sm font-medium text-green-600 hover:underline"
                                                     >
-                                                        🏆 @{ownersMap[auction.winnerId?.toString()]?.username ?? "Chargement..."}
+                                                       🏆 @{auction.winnerUsername ?? "Unknown"}
                                                     </Link>
                                                 </div>
                                             )}
@@ -341,7 +309,7 @@ export default function AuctionsPage() {
                                         {/* Message propriétaire (mode participating) */}
                                         {mode === "participating" && (
                                             <button
-                                                onClick={() => router.push(`/messages/chat?receiverId=${auction.ownerId}&itemId=${auction.itemId}&receiverUsername=${owner?.username ?? ""}`)}
+                                                onClick={() => router.push(`/messages/chat?receiverId=${auction.ownerId}&itemId=${auction.itemId}&receiverUsername=${auction.ownerUsername ?? ""}`)}
                                                 className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg text-sm font-semibold hover:bg-emerald-600 transition-colors cursor-pointer"
                                             >
                                                 ✉️ Contacter
@@ -352,7 +320,7 @@ export default function AuctionsPage() {
                                         {mode === "launched" && auction.winnerId && auction.status === "CLOSED" && (
                                             <button
                                                 onClick={() => router.push(
-                                                    `/messages/chat?receiverId=${auction.winnerId}&itemId=${auction.itemId}&receiverUsername=${ownersMap[auction.winnerId?.toString()]?.username ?? ""}`
+                                                    `/messages/chat?receiverId=${auction.winnerId}&itemId=${auction.itemId}&receiverUsername=${auction.winnerUsername ?? ""}`
                                                 )}
                                                 className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg text-sm font-semibold hover:bg-emerald-600 transition-colors cursor-pointer"
                                             >
