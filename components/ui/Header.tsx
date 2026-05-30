@@ -299,6 +299,27 @@ export default function Header() {
                                         {icon} {label}
                                     </Link>
                                 ))}
+                                <div className="border-t border-gray-100 my-1" />
+
+                                <div className="px-4 py-2">
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                                        Légal
+                                    </p>
+                                </div>
+
+                                {platformLinks.legal.map(({ href, label }) => (
+                                    <Link
+                                        key={href}
+                                        href={href}
+                                        onClick={() => setPlatformMenuOpen(false)}
+                                        className={`flex items-center gap-2 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href
+                                                ? "text-blue-600 font-medium bg-blue-50"
+                                                : "text-gray-700"
+                                            }`}
+                                    >
+                                        📜 {label}
+                                    </Link>
+                                ))}
                             </div>
                         </div>
                     </>
@@ -391,9 +412,9 @@ export default function Header() {
                                         { href: "/rentals", label: "📋 Locations" },
                                         { href: "/auctions", label: "🔥 Enchères" },
                                         { href: "/disputes", label: "⚖️ Litiges" },
-                                        { href: "/profile", label: "👤 Profil" },
                                         { href: "/faq", label: "❓ Centre d'aide" },
                                         { href: "/subscription", label: "⭐ Premium" },
+                                        { href: "/profile", label: "👤 Profil" },
                                     ].map(({ href, label }) => (
                                         <Link key={href} href={href} onClick={() => setMenuOpen(false)}
                                             className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>

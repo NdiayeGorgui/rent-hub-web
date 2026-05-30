@@ -219,7 +219,7 @@ export default function ItemDetailPage() {
 
                     <div className="flex items-center justify-center gap-3 mt-2">
                         <span className="text-2xl font-bold text-blue-600">
-                            {item.pricePerDay} $ / jour
+                            {item.pricePerDay} $ / j
                         </span>
 
                         {item.active ? (
