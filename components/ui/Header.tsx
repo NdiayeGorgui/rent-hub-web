@@ -16,6 +16,9 @@ export default function Header() {
     const { unreadCount } = useNotifications();
     const [menuOpen, setMenuOpen] = useState(false);
 
+    const [platformOpen, setPlatformOpen] = useState(false);
+    const [platformMenuOpen, setPlatformMenuOpen] = useState(false)
+
     const initials = user?.fullName
         ?.split(" ")
         .map((n: string) => n[0])
@@ -75,6 +78,100 @@ export default function Header() {
                             <Link href="/auctions" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/auctions")}`}>Enchères</Link>
                             <Link href="/disputes" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/disputes")}`}>Litiges</Link>
                             <Link href="/profile" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/profile")}`}>Profil</Link>
+                            <Link href="/profile" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/profile")}`}>Profil</Link>
+
+                            {/* ← Ajoute ici */}
+                            <div className="relative">
+                                <button
+                                    onClick={() => setPlatformOpen(!platformOpen)}
+                                    className={`text-sm px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 ${platformOpen ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+                                        }`}
+                                >
+                                    Plateforme
+                                    <svg
+                                        className={`w-3.5 h-3.5 transition-transform ${platformOpen ? "rotate-180" : ""}`}
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                                    >
+                                        <path d="M6 9l6 6 6-6" />
+                                    </svg>
+                                </button>
+
+                                {platformOpen && (
+                                    <>
+                                        {/* Backdrop pour fermer en cliquant ailleurs */}
+                                        <div
+                                            className="fixed inset-0 z-40"
+                                            onClick={() => setPlatformOpen(false)}
+                                        />
+
+                                        {/* Dropdown */}
+                                        <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden py-2">
+
+                                            {/* Gonifty */}
+                                            <div className="px-3 py-1.5">
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Gonifty</p>
+                                            </div>
+                                            {[
+                                                { href: "/apropos", label: "À propos de Gonifty" },
+                                                { href: "/publicite", label: "Régie publicitaire" },
+                                                { href: "/contact", label: "Contactez-nous" },
+                                            ].map(({ href, label }) => (
+                                                <Link
+                                                    key={href}
+                                                    href={href}
+                                                    onClick={() => setPlatformOpen(false)}
+                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                                                >
+                                                    {label}
+                                                </Link>
+                                            ))}
+
+                                            <div className="my-1.5 border-t border-gray-100" />
+
+                                            {/* Communauté */}
+                                            <div className="px-3 py-1.5">
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Communauté</p>
+                                            </div>
+                                            {[
+                                                { href: "/loueur", label: "Devenir loueur" },
+                                                { href: "/vendeur", label: "Devenir vendeur (Enchères)" },
+                                                { href: "/avis", label: "Nos avis" },
+                                                { href: "/newsletter", label: "Infolettre" },
+                                            ].map(({ href, label }) => (
+                                                <Link
+                                                    key={href}
+                                                    href={href}
+                                                    onClick={() => setPlatformOpen(false)}
+                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                                                >
+                                                    {label}
+                                                </Link>
+                                            ))}
+
+                                            <div className="my-1.5 border-t border-gray-100" />
+
+                                            {/* Légal */}
+                                            <div className="px-3 py-1.5">
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Légal</p>
+                                            </div>
+                                            {[
+                                                { href: "/conditions-utilisation", label: "Conditions d'utilisation" },
+                                                { href: "/politique-confidentialite", label: "Politique de confidentialité" },
+                                                { href: "/cookies", label: "Cookies" },
+                                            ].map(({ href, label }) => (
+                                                <Link
+                                                    key={href}
+                                                    href={href}
+                                                    onClick={() => setPlatformOpen(false)}
+                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                                                >
+                                                    {label}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                         </>
                     ) : (
                         <>
@@ -159,15 +256,14 @@ export default function Header() {
                         </button>
                     </Link>
 
-                    {/* Hamburger */}
+                    {/* ← Hamburger PLATEFORME (haut) */}
                     <button
-                        onClick={() => setMenuOpen(!menuOpen)}
+                        onClick={() => setPlatformMenuOpen(!platformMenuOpen)}
                         className="w-9 h-9 flex items-center justify-center text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
                     >
-                        {menuOpen ? (
+                        {platformMenuOpen ? (
                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <line x1="18" y1="6" x2="6" y2="18" />
-                                <line x1="6" y1="6" x2="18" y2="18" />
+                                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                             </svg>
                         ) : (
                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -178,6 +274,63 @@ export default function Header() {
                         )}
                     </button>
                 </div>
+                {/* Overlay plateforme mobile */}
+                {platformMenuOpen && (
+                    <>
+                        <div
+                            className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
+                            onClick={() => setPlatformMenuOpen(false)}
+                        />
+                        <div className="md:hidden fixed top-[60px] right-0 w-64 bg-white shadow-xl z-50 overflow-hidden rounded-bl-2xl">
+                            <div className="py-2">
+
+                                {/* Gonifty */}
+                                <div className="px-4 py-2">
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Gonifty</p>
+                                </div>
+                                {[
+                                    { href: "/apropos", label: "ℹ️ À propos de Gonifty" },
+                                    { href: "/publicite", label: "📢 Régie publicitaire" },
+                                    { href: "/contact", label: "📬 Contactez-nous" },
+                                ].map(({ href, label }) => (
+                                    <Link
+                                        key={href}
+                                        href={href}
+                                        onClick={() => setPlatformMenuOpen(false)}
+                                        className={`flex items-center px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
+                                            }`}
+                                    >
+                                        {label}
+                                    </Link>
+                                ))}
+
+                                <div className="border-t border-gray-100 my-1" />
+
+                                {/* Communauté */}
+                                <div className="px-4 py-2">
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Communauté</p>
+                                </div>
+                                {[
+                                    { href: "/loueur", label: "🏠 Devenir loueur" },
+                                    { href: "/vendeur", label: "🔥 Devenir vendeur" },
+                                    { href: "/avis", label: "⭐ Nos avis" },
+                                    { href: "/newsletter", label: "📧 Infolettre" },
+                                ].map(({ href, label }) => (
+                                    <Link
+                                        key={href}
+                                        href={href}
+                                        onClick={() => setPlatformMenuOpen(false)}
+                                        className={`flex items-center px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
+                                            }`}
+                                    >
+                                        {label}
+                                    </Link>
+                                ))}
+
+                            </div>
+                        </div>
+                    </>
+                )}
 
             </header>
 
