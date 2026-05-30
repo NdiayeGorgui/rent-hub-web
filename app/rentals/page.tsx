@@ -12,6 +12,7 @@ import {
 import { hasReviewedRental } from "@/services/reviewService";
 
 import Link from "next/link";
+import { BASE_URL } from "@/lib/baseURL";
 
 export default function RentalsPage() {
     const router = useRouter();
@@ -136,9 +137,13 @@ export default function RentalsPage() {
                                             <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-100">
                                                 {rental.itemImageUrls?.length > 0 ? (
                                                     <img
-                                                        src={rental.itemImageUrls[0]}
-                                                        alt={rental.itemTitle}
-                                                        className="w-full h-full object-cover"
+                                                        src={
+                                                            rental.itemImageUrls?.length
+                                                                ? `${BASE_URL}${rental.itemImageUrls[0]}`
+                                                                : "/placeholder.png"
+                                                        }
+                                                        alt={rental.itemTitle ?? "Item"}
+                                                        className="w-full h-full object-contain rounded-xl"
                                                     />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center">
