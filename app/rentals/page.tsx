@@ -10,8 +10,7 @@ import {
     RentalResponse,
 } from "@/services/rentalService";
 import { hasReviewedRental } from "@/services/reviewService";
-import { fetchItemDetails } from "@/services/itemService";
-import { fetchUserProfile } from "@/services/authService";
+
 import Link from "next/link";
 
 export default function RentalsPage() {
@@ -19,8 +18,7 @@ export default function RentalsPage() {
 
     const [mode, setMode] = useState<"renter" | "owner">("renter");
     const [rentals, setRentals] = useState<RentalResponse[]>([]);
-    const [itemsMap, setItemsMap] = useState<Record<number, any>>({});
-    const [usersMap, setUsersMap] = useState<Record<string, any>>({});
+
     const [reviewedMap, setReviewedMap] = useState<Record<number, boolean>>({});
     const [loading, setLoading] = useState(false);
     const [actionLoadingId, setActionLoadingId] = useState<number | null>(null);
@@ -32,23 +30,10 @@ export default function RentalsPage() {
             const filtered = data.filter((r) => r.status !== "CANCELLED");
             setRentals(filtered);
 
-            const uniqueItemIds = [...new Set(filtered.map((r) => r.itemId))];
-            const itemsResults = await Promise.all(
-                uniqueItemIds.map(async (itemId) => {
-                    try { return [itemId, await fetchItemDetails(itemId)]; }
-                    catch { return [itemId, null]; }
-                })
-            );
-            setItemsMap(Object.fromEntries(itemsResults));
 
-            const renterIds = [...new Set(filtered.map((r) => (r as any).renterId).filter(Boolean))];
-            const usersResults = await Promise.all(
-                renterIds.map(async (userId) => {
-                    try { return [userId, await fetchUserProfile(userId)]; }
-                    catch { return [userId, null]; }
-                })
-            );
-            setUsersMap(Object.fromEntries(usersResults));
+
+
+
 
             const reviewsResults = await Promise.all(
                 filtered.map(async (rental) => {
@@ -140,8 +125,7 @@ export default function RentalsPage() {
                 ) : (
                     <div className="flex flex-col gap-4">
                         {rentals.map((rental) => {
-                            const itemDetails = itemsMap[rental.itemId];
-                            const renter = usersMap[(rental as any).renterId];
+
                             const { label, cls } = getStatusConfig(rental.status);
 
                             return (
@@ -149,12 +133,22 @@ export default function RentalsPage() {
                                     {/* HEADER */}
                                     <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-lg">
-                                                🏠
+                                            <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-100">
+                                                {rental.itemImageUrls?.length > 0 ? (
+                                                    <img
+                                                        src={rental.itemImageUrls[0]}
+                                                        alt={rental.itemTitle}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center">
+                                                        🏠
+                                                    </div>
+                                                )}
                                             </div>
                                             <div>
                                                 <h2 className="font-semibold text-gray-900">
-                                                    {itemDetails?.title ?? "Chargement..."}
+                                                    {rental.itemTitle}
                                                 </h2>
                                                 <p className="text-xs text-gray-400">Location #{rental.id}</p>
                                             </div>
@@ -177,17 +171,17 @@ export default function RentalsPage() {
                                             </p>
                                             {mode === "owner" ? (
                                                 <Link
-                                                    href={`/users/${renter?.userId}`}
+                                                    href={`/users/${rental.renterId}`}
                                                     className="text-blue-600 font-medium text-sm hover:underline"
                                                 >
-                                                    @{renter?.username ?? "..."}
+                                                    @{rental.renterUsername}
                                                 </Link>
                                             ) : (
                                                 <Link
-                                                    href={`/users/${itemDetails?.publisher?.userId}`}
+                                                    href={`/users/${rental.ownerId}`}
                                                     className="text-blue-600 font-medium text-sm hover:underline"
                                                 >
-                                                    @{itemDetails?.publisher?.username ?? "..."}
+                                                    @{rental.ownerUsername}
                                                 </Link>
                                             )}
                                         </div>
@@ -222,13 +216,13 @@ export default function RentalsPage() {
                                             onClick={() => {
                                                 const receiverId =
                                                     mode === "owner"
-                                                        ? (rental as any).renterId
-                                                        : itemDetails?.publisher?.userId;
+                                                        ? rental.renterId
+                                                        : rental.ownerId;
 
                                                 const username =
                                                     mode === "owner"
-                                                        ? renter?.username
-                                                        : itemDetails?.publisher?.username;
+                                                        ? rental.renterUsername
+                                                        : rental.ownerUsername;
 
                                                 router.push(
                                                     `/messages/chat?receiverId=${receiverId}&itemId=${rental.itemId}&receiverUsername=${username ?? ""}`
