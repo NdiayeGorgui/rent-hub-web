@@ -9,7 +9,7 @@ import {
     cancelRental,
     RentalResponse,
 } from "@/services/rentalService";
-import { hasReviewedRental } from "@/services/reviewService";
+import { hasReviewedRentalBatch } from "@/services/reviewService";
 
 import Link from "next/link";
 import { BASE_URL } from "@/lib/baseURL";
@@ -31,18 +31,26 @@ export default function RentalsPage() {
             const filtered = data.filter((r) => r.status !== "CANCELLED");
             setRentals(filtered);
 
+            try {
 
+                const reviewedMap = await hasReviewedRentalBatch(
+                    filtered.map(r => r.id)
+                );
 
+                setReviewedMap(reviewedMap);
 
+            } catch (e) {
 
+                console.error("Error loading reviews", e);
 
-            const reviewsResults = await Promise.all(
-                filtered.map(async (rental) => {
-                    try { return [rental.id, await hasReviewedRental(rental.id)]; }
-                    catch { return [rental.id, false]; }
-                })
-            );
-            setReviewedMap(Object.fromEntries(reviewsResults));
+                const fallback: Record<number, boolean> = {};
+
+                filtered.forEach(r => {
+                    fallback[r.id] = false;
+                });
+
+                setReviewedMap(fallback);
+            }
         } catch (e) {
             console.log("Error loading rentals", e);
         } finally {
