@@ -2,17 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { fetchMyProfile } from "@/services/profileService";
-import { fetchItemDetails } from "@/services/itemService";
-import { getAuctionAllByItemId, getAuctionByItemId } from "@/services/auctionService";
-import { fetchMyRentals } from "@/services/rentalService";
+
 import { getMyPayments, payPenalty } from "@/services/paymentService";
 import { handleWebPayment } from "@/services/stripeWeb";
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [publishedItems, setPublishedItems] = useState<any[]>([]);
-    const [rentedItems, setRentedItems] = useState<any[]>([]);
+   
     const [payments, setPayments] = useState<any[]>([]);
     const [pendingPenalty, setPendingPenalty] = useState<any>(null);
     const [penaltyStep, setPenaltyStep] = useState<"idle" | "payment">("idle");
@@ -36,52 +33,8 @@ export default function ProfilePage() {
             );
             setPendingPenalty(penalty ?? null);
 
-            if (data.publishedItems?.length) {
-                const details = await Promise.all(
-                    data.publishedItems.map(async (item: any) => {
-                        const d = await fetchItemDetails(item.id);
-                        d.id = item.id;
-                        if (d.type === "AUCTION") {
-                            try {
-                                const a = await getAuctionAllByItemId(item.id);
-                                d.currentPrice = a?.currentPrice ?? null;
-                                d.auctionEndDate = a?.endDate ?? null;
-                            } catch { }
-                        }
-                        return d;
-                    })
-                );
-                setPublishedItems(details);
-            }
-
-            const rentals = await fetchMyRentals();
-            const confirmedRentals = rentals.filter((r: any) =>
-                ["APPROVED", "ONGOING", "ENDED"].includes(r.status)
-            );
-            if (confirmedRentals?.length) {
-                const details = await Promise.all(
-                    confirmedRentals.map(async (rental: any) => {
-                        const d = await fetchItemDetails(rental.itemId);
-
-                        d.id = rental.itemId;
-                        d.rentalId = rental.id;
-
-                        d.startDate = rental.startDate;
-                        d.endDate = rental.endDate;
-
-                        if (d.type === "AUCTION") {
-                            try {
-                                const a = await getAuctionByItemId(d.id);
-                                d.currentPrice = a?.currentPrice ?? null;
-                                d.auctionEndDate = a?.endDate ?? null;
-                            } catch { }
-                        }
-
-                        return d;
-                    })
-                );
-                setRentedItems(details);
-            }
+           
+            
         } catch (err) {
             console.log(err);
         } finally {
