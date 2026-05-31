@@ -9,6 +9,7 @@ import {
 } from "@/services/auctionService";
 
 import Link from "next/link";
+import { BASE_URL } from "@/lib/baseURL";
 
 export default function AuctionsPage() {
     const router = useRouter();
@@ -55,30 +56,30 @@ export default function AuctionsPage() {
     };
 
     // ── Load data ─────────────────────────────────────────
-const loadData = useCallback(async () => {
+    const loadData = useCallback(async () => {
 
-    setLoading(true);
+        setLoading(true);
 
-    try {
+        try {
 
-        const data =
-            mode === "launched"
-                ? await getMyLaunchedAuctions()
-                : await getMyParticipatingAuctions();
+            const data =
+                mode === "launched"
+                    ? await getMyLaunchedAuctions()
+                    : await getMyParticipatingAuctions();
 
-        setAuctions(data);
+            setAuctions(data);
 
-    } catch (e) {
+        } catch (e) {
 
-        console.log("Error loading auctions", e);
+            console.log("Error loading auctions", e);
 
-    } finally {
+        } finally {
 
-        setLoading(false);
+            setLoading(false);
 
-    }
+        }
 
-}, [mode]);
+    }, [mode]);
 
     useEffect(() => { loadData(); }, [loadData]);
 
@@ -145,7 +146,7 @@ const loadData = useCallback(async () => {
                 ) : (
                     <div className="flex flex-col gap-4">
                         {auctions.map((auction) => {
-                           
+
                             const { label, cls } = getStatusConfig(auction.status);
                             const isOpen = auction.status === "OPEN";
                             const timeLeft = auction.endDate ? getTimeLeft(auction.endDate) : "—";
@@ -157,11 +158,25 @@ const loadData = useCallback(async () => {
                                     <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50">
                                         <div className="flex items-center gap-3">
                                             <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-lg">
-                                                🔥
+                                                {auction.itemImages?.length > 0 ? (
+                                                    <img
+                                                        src={
+                                                            auction.itemImages?.length
+                                                                ? `${BASE_URL}${auction.itemImages[0]}`
+                                                                : "/placeholder.png"
+                                                        }
+                                                        alt={auction.itemImages ?? "Item"}
+                                                        className="w-full h-full object-contain rounded-xl"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center">
+                                                        🔥
+                                                    </div>
+                                                )}
                                             </div>
                                             <div>
                                                 <h2 className="font-semibold text-gray-900">
-                                                   {auction.itemTitle ?? "Item"}
+                                                    {auction.itemTitle ?? "Item"}
                                                 </h2>
                                                 <p className="text-xs text-gray-400">Enchère #{auction.id}</p>
                                             </div>
@@ -245,7 +260,7 @@ const loadData = useCallback(async () => {
                                                     href={`/users/${auction.ownerId}`}
                                                     className="text-blue-600 font-medium text-sm hover:underline"
                                                 >
-                                                   @{auction.ownerUsername ?? "Unknown"}
+                                                    @{auction.ownerUsername ?? "Unknown"}
                                                 </Link>
                                             </div>
                                         )}
@@ -263,7 +278,7 @@ const loadData = useCallback(async () => {
                                                         href={`/users/${auction.winnerId}`}
                                                         className="text-sm font-medium text-green-600 hover:underline"
                                                     >
-                                                       🏆 @{auction.winnerUsername ?? "Unknown"}
+                                                        🏆 @{auction.winnerUsername ?? "Unknown"}
                                                     </Link>
                                                 </div>
                                             )}
