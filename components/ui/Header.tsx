@@ -14,13 +14,9 @@ export default function Header() {
     const isAdmin = user?.roles?.includes("ROLE_ADMIN");
     const { unreadMessages } = useMessages();
     const { unreadCount } = useNotifications();
-
-    // Menu hamburger bas — navigation principale (user + admin)
     const [menuOpen, setMenuOpen] = useState(false);
-    // Dropdown plateforme desktop
-    const [platformOpen, setPlatformOpen] = useState(false);
-    // Menu hamburger haut — plateforme (user seulement)
-    const [platformMenuOpen, setPlatformMenuOpen] = useState(false);
+    
+   const [platformOpen, setPlatformOpen] = useState(false);
 
     const initials = user?.fullName
         ?.split(" ")
@@ -43,31 +39,11 @@ export default function Header() {
         setMenuOpen(false);
     };
 
-    // ── Liens plateforme ──────────────────────────────────
-    const platformLinks = {
-        gonifty: [
-            { href: "/apropos", label: "À propos de Gonifty", icon: "ℹ️" },
-            { href: "/publicite", label: "Régie publicitaire", icon: "📢" },
-            { href: "/contact", label: "Contactez-nous", icon: "📬" },
-        ],
-        communaute: [
-            { href: "/loueur", label: "Devenir loueur", icon: "🏠" },
-            { href: "/vendeur", label: "Devenir vendeur (Enchères)", icon: "🔥" },
-            { href: "/avis", label: "Nos avis", icon: "⭐" },
-            { href: "/newsletter", label: "Infolettre", icon: "📧" },
-        ],
-        legal: [
-            { href: "/conditions-utilisation", label: "Conditions d'utilisation" },
-            { href: "/politique-confidentialite", label: "Politique de confidentialité" },
-            { href: "/cookies", label: "Cookies" },
-        ],
-    };
-
     return (
         <>
             <header className="bg-white border-b border-gray-100 px-4 md:px-6 flex items-center justify-between h-[60px] sticky top-0 z-50">
 
-                {/* ── Logo ── */}
+                {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 flex-shrink-0">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isAdmin ? "bg-violet-600" : "bg-blue-600"}`}>
                         {isAdmin ? (
@@ -90,7 +66,7 @@ export default function Header() {
                     )}
                 </Link>
 
-                {/* ── Nav desktop ── */}
+                {/* Nav desktop — masqué sur mobile */}
                 <nav className="hidden md:flex items-center gap-0.5">
                     {!isAdmin ? (
                         <>
@@ -101,65 +77,101 @@ export default function Header() {
                             <Link href="/auctions" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/auctions")}`}>Enchères</Link>
                             <Link href="/disputes" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/disputes")}`}>Litiges</Link>
                             <Link href="/profile" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/profile")}`}>Profil</Link>
+                            <Link href="/profile" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/profile")}`}>Profil</Link>
 
-                            {/* Dropdown Plateforme */}
-                            <div className="relative">
-                                <button
-                                    onClick={() => setPlatformOpen(!platformOpen)}
-                                    className={`text-sm px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 ${platformOpen
-                                        ? "bg-blue-50 text-blue-600 font-medium"
-                                        : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-                                        }`}
-                                >
-                                    Plateforme
-                                    <svg className={`w-3.5 h-3.5 transition-transform ${platformOpen ? "rotate-180" : ""}`}
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <path d="M6 9l6 6 6-6" />
-                                    </svg>
-                                </button>
+{/* ← Ajoute ici */}
+<div className="relative">
+  <button
+    onClick={() => setPlatformOpen(!platformOpen)}
+    className={`text-sm px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 ${
+      platformOpen ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+    }`}
+  >
+    Plateforme
+    <svg
+      className={`w-3.5 h-3.5 transition-transform ${platformOpen ? "rotate-180" : ""}`}
+      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+    >
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </button>
 
-                                {platformOpen && (
-                                    <>
-                                        <div className="fixed inset-0 z-40" onClick={() => setPlatformOpen(false)} />
-                                        <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden py-2">
+  {platformOpen && (
+    <>
+      {/* Backdrop pour fermer en cliquant ailleurs */}
+      <div
+        className="fixed inset-0 z-40"
+        onClick={() => setPlatformOpen(false)}
+      />
 
-                                            <div className="px-3 py-1.5">
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Gonifty</p>
-                                            </div>
-                                            {platformLinks.gonifty.map(({ href, label }) => (
-                                                <Link key={href} href={href} onClick={() => setPlatformOpen(false)}
-                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
-                                                    {label}
-                                                </Link>
-                                            ))}
+      {/* Dropdown */}
+      <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden py-2">
 
-                                            <div className="my-1.5 border-t border-gray-100" />
+        {/* Gonifty */}
+        <div className="px-3 py-1.5">
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Gonifty</p>
+        </div>
+        {[
+          { href: "/apropos", label: "À propos de Gonifty" },
+          { href: "/publicite", label: "Régie publicitaire" },
+          { href: "/contact", label: "Contactez-nous" },
+        ].map(({ href, label }) => (
+          <Link
+            key={href}
+            href={href}
+            onClick={() => setPlatformOpen(false)}
+            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+          >
+            {label}
+          </Link>
+        ))}
 
-                                            <div className="px-3 py-1.5">
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Communauté</p>
-                                            </div>
-                                            {platformLinks.communaute.map(({ href, label }) => (
-                                                <Link key={href} href={href} onClick={() => setPlatformOpen(false)}
-                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
-                                                    {label}
-                                                </Link>
-                                            ))}
+        <div className="my-1.5 border-t border-gray-100" />
 
-                                            <div className="my-1.5 border-t border-gray-100" />
+        {/* Communauté */}
+        <div className="px-3 py-1.5">
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Communauté</p>
+        </div>
+        {[
+          { href: "/loueur", label: "Devenir loueur" },
+          { href: "/vendeur", label: "Devenir vendeur (Enchères)" },
+          { href: "/avis", label: "Nos avis" },
+          { href: "/newsletter", label: "Infolettre" },
+        ].map(({ href, label }) => (
+          <Link
+            key={href}
+            href={href}
+            onClick={() => setPlatformOpen(false)}
+            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+          >
+            {label}
+          </Link>
+        ))}
 
-                                            <div className="px-3 py-1.5">
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Légal</p>
-                                            </div>
-                                            {platformLinks.legal.map(({ href, label }) => (
-                                                <Link key={href} href={href} onClick={() => setPlatformOpen(false)}
-                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
-                                                    {label}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </>
-                                )}
-                            </div>
+        <div className="my-1.5 border-t border-gray-100" />
+
+        {/* Légal */}
+        <div className="px-3 py-1.5">
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Légal</p>
+        </div>
+        {[
+          { href: "/conditions-utilisation", label: "Conditions d'utilisation" },
+          { href: "/politique-confidentialite", label: "Politique de confidentialité" },
+          { href: "/cookies", label: "Cookies" },
+        ].map(({ href, label }) => (
+          <Link
+            key={href}
+            href={href}
+            onClick={() => setPlatformOpen(false)}
+            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+          >
+            {label}
+          </Link>
+        ))}
+      </div>
+    </>
+  )}
+</div>
                         </>
                     ) : (
                         <>
@@ -174,7 +186,7 @@ export default function Header() {
                     )}
                 </nav>
 
-                {/* ── Actions droite desktop ── */}
+                {/* Actions droite desktop */}
                 <div className="hidden md:flex items-center gap-2">
                     {!isAdmin && (
                         <>
@@ -227,9 +239,8 @@ export default function Header() {
                     </button>
                 </div>
 
-                {/* ── Actions droite mobile ── */}
+                {/* Actions droite mobile */}
                 <div className="flex md:hidden items-center gap-2">
-
                     {/* Notifs */}
                     <Link href="/notifications">
                         <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
@@ -245,20 +256,15 @@ export default function Header() {
                         </button>
                     </Link>
 
-                    {/* Hamburger haut :
-                        - Admin  → ouvre menuOpen (son menu nav)
-                        - User   → ouvre platformMenuOpen (plateforme)
-                    */}
+                    {/* Hamburger */}
                     <button
-                        onClick={() => isAdmin
-                            ? setMenuOpen(!menuOpen)
-                            : setPlatformMenuOpen(!platformMenuOpen)
-                        }
+                        onClick={() => setMenuOpen(!menuOpen)}
                         className="w-9 h-9 flex items-center justify-center text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
                     >
-                        {(isAdmin ? menuOpen : platformMenuOpen) ? (
+                        {menuOpen ? (
                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
                             </svg>
                         ) : (
                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -270,67 +276,11 @@ export default function Header() {
                     </button>
                 </div>
 
-                {/* ── Drawer plateforme mobile (user seulement, haut) ── */}
-                {platformMenuOpen && !isAdmin && (
-                    <>
-                        <div className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
-                            onClick={() => setPlatformMenuOpen(false)} />
-                        <div className="md:hidden fixed top-[60px] right-0 w-64 bg-white shadow-xl z-50 overflow-hidden rounded-bl-2xl">
-                            <div className="py-2">
-
-                                <div className="px-4 py-2">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Gonifty</p>
-                                </div>
-                                {platformLinks.gonifty.map(({ href, label, icon }) => (
-                                    <Link key={href} href={href} onClick={() => setPlatformMenuOpen(false)}
-                                        className={`flex items-center gap-2 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
-                                        {icon} {label}
-                                    </Link>
-                                ))}
-
-                                <div className="border-t border-gray-100 my-1" />
-
-                                <div className="px-4 py-2">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Communauté</p>
-                                </div>
-                                {platformLinks.communaute.map(({ href, label, icon }) => (
-                                    <Link key={href} href={href} onClick={() => setPlatformMenuOpen(false)}
-                                        className={`flex items-center gap-2 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
-                                        {icon} {label}
-                                    </Link>
-                                ))}
-                                <div className="border-t border-gray-100 my-1" />
-
-                                <div className="px-4 py-2">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                                        Légal
-                                    </p>
-                                </div>
-
-                                {platformLinks.legal.map(({ href, label }) => (
-                                    <Link
-                                        key={href}
-                                        href={href}
-                                        onClick={() => setPlatformMenuOpen(false)}
-                                        className={`flex items-center gap-2 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href
-                                                ? "text-blue-600 font-medium bg-blue-50"
-                                                : "text-gray-700"
-                                            }`}
-                                    >
-                                        📜 {label}
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-                    </>
-                )}
-
             </header>
 
-            {/* ── Bottom nav mobile — user seulement ── */}
+            {/* Bottom nav mobile — 5 icônes principales */}
             {!isAdmin && (
-                <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-40 flex items-center justify-around px-2 py-2">
-
+                <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-40 flex items-center justify-around px-2 py-2 safe-area-pb">
                     {/* Accueil */}
                     <Link href="/" className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${isActiveMobile("/")}`}>
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -349,11 +299,21 @@ export default function Header() {
                     </Link>
 
                     {/* Poster */}
-                    <Link href="/create" className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${isActiveMobile("/create")}`}>
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <Link
+                        href="/create"
+                        className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${isActiveMobile("/create")}`}
+                    >
+                        <svg
+                            className="w-5 h-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                        >
                             <line x1="12" y1="5" x2="12" y2="19" />
                             <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
+
                         <span className="text-[10px] font-medium">Poster</span>
                     </Link>
 
@@ -370,7 +330,7 @@ export default function Header() {
                         <span className="text-[10px] font-medium">Chat</span>
                     </Link>
 
-                    {/* Hamburger bas — menu navigation */}
+                    {/* Menu hamburger mobile */}
                     <button
                         onClick={() => setMenuOpen(!menuOpen)}
                         className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-gray-400"
@@ -385,94 +345,87 @@ export default function Header() {
                 </nav>
             )}
 
-{/* Drawer admin — s'ouvre depuis le haut */}
-{menuOpen && isAdmin && (
-    <>
-        <div className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
-            onClick={() => setMenuOpen(false)} />
-        <div className="md:hidden fixed top-[60px] right-0 w-64 bg-white rounded-bl-2xl shadow-xl z-50 overflow-y-auto max-h-[calc(100vh-60px)]"
-            onClick={e => e.stopPropagation()}>
-            <div className="p-4 border-b border-gray-100">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center text-sm font-bold text-white">
-                        {initials}
-                    </div>
-                    <div>
-                        <p className="font-semibold text-sm text-gray-900">{user?.fullName}</p>
-                        <p className="text-xs text-gray-400">@{user?.username}</p>
-                    </div>
-                </div>
-            </div>
-            <div className="py-2">
-                {[
-                    { href: "/items", label: "📦 Produits" },
-                    { href: "/users", label: "👥 Utilisateurs" },
-                    { href: "/admin-disputes", label: "⚖️ Litiges" },
-                    { href: "/payments", label: "💳 Paiements" },
-                    { href: "/admin-faq", label: "❓ FAQ" },
-                    { href: "/admin-newsletter", label: "✉️ Infolettre" },
-                    { href: "/dashboard", label: "📊 Tableau de bord" },
-                ].map(({ href, label }) => (
-                    <Link key={href} href={href} onClick={() => setMenuOpen(false)}
-                        className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-violet-600 font-medium bg-violet-50" : "text-gray-700"}`}>
-                        {label}
-                    </Link>
-                ))}
-                <div className="border-t border-gray-100 mt-2 pt-2">
-                    <button onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                        🚪 Déconnexion
-                    </button>
-                </div>
-            </div>
-        </div>
-    </>
-)}
+            {/* Overlay menu mobile */}
+            {menuOpen && (
+                <>
+                    {/* Backdrop */}
+                    <div
+                        className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
+                        onClick={() => setMenuOpen(false)}
+                    />
 
-{/* Drawer user — s'ouvre depuis le bas */}
-{menuOpen && !isAdmin && (
-    <>
-        <div className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
-            onClick={() => setMenuOpen(false)} />
-        <div className="md:hidden fixed bottom-16 right-0 w-64 bg-white rounded-tl-2xl shadow-xl z-50 overflow-hidden"
-            onClick={e => e.stopPropagation()}>
-            <div className="p-4 border-b border-gray-100">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold text-white">
-                        {initials}
-                    </div>
-                    <div>
-                        <p className="font-semibold text-sm text-gray-900">{user?.fullName}</p>
-                        <p className="text-xs text-gray-400">@{user?.username}</p>
-                    </div>
-                </div>
-            </div>
-            <div className="py-2">
-                {[
-                    { href: "/rentals", label: "📋 Locations" },
-                    { href: "/auctions", label: "🔥 Enchères" },
-                    { href: "/disputes", label: "⚖️ Litiges" },
-                    { href: "/faq", label: "❓ Centre d'aide" },
-                    { href: "/subscription", label: "⭐ Premium" },
-                    { href: "/profile", label: "👤 Profil" },
-                ].map(({ href, label }) => (
-                    <Link key={href} href={href} onClick={() => setMenuOpen(false)}
-                        className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
-                        {label}
-                    </Link>
-                ))}
-                <div className="border-t border-gray-100 mt-2 pt-2">
-                    <button onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                        🚪 Déconnexion
-                    </button>
-                </div>
-            </div>
-        </div>
-    </>
-)}
+                    {/* Drawer */}
+                    <div className="md:hidden fixed bottom-16 right-0 w-64 bg-white rounded-tl-2xl shadow-xl z-50 overflow-hidden">
+                        <div className="p-4 border-b border-gray-100">
+                            <div className="flex items-center gap-3">
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white ${isAdmin ? "bg-violet-600" : "bg-blue-600"}`}>
+                                    {initials}
+                                </div>
+                                <div>
+                                    <p className="font-semibold text-sm text-gray-900">{user?.fullName}</p>
+                                    <p className="text-xs text-gray-400">@{user?.username}</p>
+                                </div>
+                            </div>
+                        </div>
 
-            {/* Spacer bottom nav mobile */}
+                        <div className="py-2">
+                            {!isAdmin ? (
+                                <>
+                                    {[
+                                        { href: "/rentals", label: "📋 Locations" },
+                                        { href: "/auctions", label: "🔥 Enchères" },
+                                        { href: "/disputes", label: "⚖️ Litiges" },
+                                        { href: "/profile", label: "👤 Profil" },
+                                        { href: "/faq", label: "❓ Centre d'aide" },
+                                        { href: "/subscription", label: "⭐ Premium" },
+                                    ].map(({ href, label }) => (
+                                        <Link
+                                            key={href}
+                                            href={href}
+                                            onClick={() => setMenuOpen(false)}
+                                            className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}
+                                        >
+                                            {label}
+                                        </Link>
+                                    ))}
+                                </>
+                            ) : (
+                                <>
+                                    {[
+                                        { href: "/items", label: "📦 Produits" },
+                                        { href: "/users", label: "👥 Utilisateurs" },
+                                        { href: "/admin-disputes", label: "⚖️ Litiges" },
+                                        { href: "/payments", label: "💳 Paiements" },
+                                        { href: "/admin-faq", label: "❓ FAQ" },
+                                        { href: "/admin-newsletter", label: "✉️ Infolettre" },
+                                        { href: "/dashboard", label: "📊 Tableau de bord" },
+                                    ].map(({ href, label }) => (
+                                        <Link
+                                            key={href}
+                                            href={href}
+                                            onClick={() => setMenuOpen(false)}
+                                            className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}
+                                        >
+                                            {label}
+                                        </Link>
+                                    ))}
+                                </>
+                            )}
+
+                            <div className="border-t border-gray-100 mt-2 pt-2">
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                >
+                                    🚪 Déconnexion
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {/* Spacer pour le bottom nav mobile */}
             {!isAdmin && <div className="md:hidden h-16" />}
         </>
     );
