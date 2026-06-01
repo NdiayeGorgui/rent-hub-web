@@ -30,3 +30,19 @@ API.interceptors.request.use((config) => {
 
   return config;
 });
+
+
+API.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response?.status === 401) {
+            // Token expiré ou invalide — vide et redirige
+            localStorage.removeItem("token");
+            if (typeof window !== "undefined" &&
+                !window.location.pathname.includes("/login")) {
+                window.location.href = "/login";
+            }
+        }
+        return Promise.reject(error);
+    }
+);
