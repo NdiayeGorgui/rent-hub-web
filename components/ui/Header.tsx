@@ -15,9 +15,8 @@ export default function Header() {
     const { unreadMessages } = useMessages();
     const { unreadCount } = useNotifications();
     const [menuOpen, setMenuOpen] = useState(false);
-
     const [platformOpen, setPlatformOpen] = useState(false);
-    const [platformMenuOpen, setPlatformMenuOpen] = useState(false)
+    const [platformMenuOpen, setPlatformMenuOpen] = useState(false);
 
     const initials = user?.fullName
         ?.split(" ")
@@ -38,13 +37,14 @@ export default function Header() {
         await logout();
         router.push("/login");
         setMenuOpen(false);
+        setPlatformMenuOpen(false);
     };
 
     return (
         <>
             <header className="bg-white border-b border-gray-100 px-4 md:px-6 flex items-center justify-between h-[60px] sticky top-0 z-50">
 
-                {/* Logo */}
+                {/* ── Logo ── */}
                 <Link href="/" className="flex items-center gap-2 flex-shrink-0">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isAdmin ? "bg-violet-600" : "bg-blue-600"}`}>
                         {isAdmin ? (
@@ -67,7 +67,7 @@ export default function Header() {
                     )}
                 </Link>
 
-                {/* Nav desktop — masqué sur mobile */}
+                {/* ── Nav desktop ── */}
                 <nav className="hidden md:flex items-center gap-0.5">
                     {!isAdmin ? (
                         <>
@@ -79,35 +79,22 @@ export default function Header() {
                             <Link href="/disputes" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/disputes")}`}>Litiges</Link>
                             <Link href="/profile" className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${isActive("/profile")}`}>Profil</Link>
 
-
-                            {/* ← Ajoute ici */}
+                            {/* Dropdown Plateforme desktop */}
                             <div className="relative">
                                 <button
                                     onClick={() => setPlatformOpen(!platformOpen)}
-                                    className={`text-sm px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 ${platformOpen ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-                                        }`}
+                                    className={`text-sm px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 ${platformOpen ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"}`}
                                 >
                                     Plateforme
-                                    <svg
-                                        className={`w-3.5 h-3.5 transition-transform ${platformOpen ? "rotate-180" : ""}`}
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                                    >
+                                    <svg className={`w-3.5 h-3.5 transition-transform ${platformOpen ? "rotate-180" : ""}`}
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                         <path d="M6 9l6 6 6-6" />
                                     </svg>
                                 </button>
-
                                 {platformOpen && (
                                     <>
-                                        {/* Backdrop pour fermer en cliquant ailleurs */}
-                                        <div
-                                            className="fixed inset-0 z-40"
-                                            onClick={() => setPlatformOpen(false)}
-                                        />
-
-                                        {/* Dropdown */}
+                                        <div className="fixed inset-0 z-40" onClick={() => setPlatformOpen(false)} />
                                         <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden py-2">
-
-                                            {/* Gonifty */}
                                             <div className="px-3 py-1.5">
                                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Gonifty</p>
                                             </div>
@@ -116,19 +103,12 @@ export default function Header() {
                                                 { href: "/publicite", label: "Régie publicitaire" },
                                                 { href: "/contact", label: "Contactez-nous" },
                                             ].map(({ href, label }) => (
-                                                <Link
-                                                    key={href}
-                                                    href={href}
-                                                    onClick={() => setPlatformOpen(false)}
-                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
-                                                >
+                                                <Link key={href} href={href} onClick={() => setPlatformOpen(false)}
+                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
                                                     {label}
                                                 </Link>
                                             ))}
-
                                             <div className="my-1.5 border-t border-gray-100" />
-
-                                            {/* Communauté */}
                                             <div className="px-3 py-1.5">
                                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Communauté</p>
                                             </div>
@@ -138,19 +118,12 @@ export default function Header() {
                                                 { href: "/avis", label: "Nos avis" },
                                                 { href: "/newsletter", label: "Infolettre" },
                                             ].map(({ href, label }) => (
-                                                <Link
-                                                    key={href}
-                                                    href={href}
-                                                    onClick={() => setPlatformOpen(false)}
-                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
-                                                >
+                                                <Link key={href} href={href} onClick={() => setPlatformOpen(false)}
+                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
                                                     {label}
                                                 </Link>
                                             ))}
-
                                             <div className="my-1.5 border-t border-gray-100" />
-
-                                            {/* Légal */}
                                             <div className="px-3 py-1.5">
                                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Légal</p>
                                             </div>
@@ -159,12 +132,8 @@ export default function Header() {
                                                 { href: "/politique-confidentialite", label: "Politique de confidentialité" },
                                                 { href: "/cookies", label: "Cookies" },
                                             ].map(({ href, label }) => (
-                                                <Link
-                                                    key={href}
-                                                    href={href}
-                                                    onClick={() => setPlatformOpen(false)}
-                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
-                                                >
+                                                <Link key={href} href={href} onClick={() => setPlatformOpen(false)}
+                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
                                                     {label}
                                                 </Link>
                                             ))}
@@ -186,7 +155,7 @@ export default function Header() {
                     )}
                 </nav>
 
-                {/* Actions droite desktop */}
+                {/* ── Actions droite desktop ── */}
                 <div className="hidden md:flex items-center gap-2">
                     {!isAdmin && (
                         <>
@@ -239,133 +208,188 @@ export default function Header() {
                     </button>
                 </div>
 
-                {/* Actions droite mobile */}
-                {!isAdmin && (
-                    <div className="flex md:hidden items-center gap-2">
-                        <Link href="/subscription">
-                            <button className="w-9 h-9 flex items-center justify-center text-yellow-500">
-                                ⭐
-                            </button>
-                        </Link>
+                {/* ── Actions droite mobile ── */}
+                <div className="flex md:hidden items-center gap-1">
 
-                        <Link href="/messages/inbox">
-                            <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
-                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                                </svg>
-
-                                {unreadMessages > 0 && (
-                                    <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center">
-                                        {unreadMessages > 9 ? "9+" : unreadMessages}
-                                    </span>
-                                )}
-                            </button>
-                        </Link>
-                        {/* Notifs */}
-                        <Link href="/notifications">
-                            <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
-                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                                </svg>
-                                {unreadCount > 0 && (
-                                    <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-medium">
-                                        {unreadCount > 9 ? "9+" : unreadCount}
-                                    </span>
-                                )}
-                            </button>
-                        </Link>
-
-                        {/* ← Hamburger PLATEFORME (haut) */}
-                        <button
-                            onClick={() =>
-                                isAdmin
-                                    ? setMenuOpen(!menuOpen)
-                                    : setPlatformMenuOpen(!platformMenuOpen)
-                            }
-                            className="w-9 h-9 flex items-center justify-center text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                            {(isAdmin ? menuOpen : platformMenuOpen) ? (
-                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                                </svg>
-                            ) : (
-                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <line x1="3" y1="6" x2="21" y2="6" />
-                                    <line x1="3" y1="12" x2="21" y2="12" />
-                                    <line x1="3" y1="18" x2="21" y2="18" />
-                                </svg>
+                    {/* Notifs — pour tous */}
+                    <Link href="/notifications">
+                        <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                            </svg>
+                            {unreadCount > 0 && (
+                                <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-medium">
+                                    {unreadCount > 9 ? "9+" : unreadCount}
+                                </span>
                             )}
                         </button>
-                    </div>
-                )}
-                {/* Overlay plateforme mobile */}
-                {platformMenuOpen && (
-                    <>
-                        <div
-                            className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
-                            onClick={() => setPlatformMenuOpen(false)}
-                        />
-                        <div className="md:hidden fixed top-[60px] right-0 w-64 bg-white shadow-xl z-50 overflow-hidden rounded-bl-2xl">
-                            <div className="py-2">
+                    </Link>
 
-                                {/* Gonifty */}
-                                <div className="px-4 py-2">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Gonifty</p>
-                                </div>
-                                {[
-                                    { href: "/apropos", label: "ℹ️ À propos de Gonifty" },
-                                    { href: "/publicite", label: "📢 Régie publicitaire" },
-                                    { href: "/contact", label: "📬 Contactez-nous" },
-                                    { href: "/disputes", label: "⚖️ Litiges" },
-                                ].map(({ href, label }) => (
-                                    <Link
-                                        key={href}
-                                        href={href}
-                                        onClick={() => setPlatformMenuOpen(false)}
-                                        className={`flex items-center px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
-                                            }`}
-                                    >
-                                        {label}
-                                    </Link>
-                                ))}
-
-                                <div className="border-t border-gray-100 my-1" />
-
-                                {/* Communauté */}
-                                <div className="px-4 py-2">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Communauté</p>
-                                </div>
-                                {[
-                                    { href: "/loueur", label: "🏠 Devenir loueur" },
-                                    { href: "/vendeur", label: "🔥 Devenir vendeur" },
-                                    { href: "/avis", label: "⭐ Nos avis" },
-                                    { href: "/newsletter", label: "📧 Infolettre" },
-                                    { href: "/profile", label: " 👤 Profil" },
-                                ].map(({ href, label }) => (
-                                    <Link
-                                        key={href}
-                                        href={href}
-                                        onClick={() => setPlatformMenuOpen(false)}
-                                        className={`flex items-center px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
-                                            }`}
-                                    >
-                                        {label}
-                                    </Link>
-                                ))}
-
-                            </div>
-                        </div>
-                    </>
-                )}
+                    {/* Hamburger haut :
+                        User  → ouvre platformMenuOpen (plateforme)
+                        Admin → ouvre menuOpen (nav admin)
+                    */}
+                    <button
+                        onClick={() => isAdmin
+                            ? setMenuOpen(!menuOpen)
+                            : setPlatformMenuOpen(!platformMenuOpen)
+                        }
+                        className="w-9 h-9 flex items-center justify-center text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <line x1="3" y1="12" x2="21" y2="12" />
+                            <line x1="3" y1="18" x2="21" y2="18" />
+                        </svg>
+                    </button>
+                </div>
 
             </header>
 
-            {/* Bottom nav mobile — 5 icônes principales */}
+            {/* ══════════════════════════════════════════
+                DRAWER PLATEFORME — User seulement, haut
+            ══════════════════════════════════════════ */}
+            {platformMenuOpen && !isAdmin && (
+                <div className="md:hidden fixed top-[60px] right-0 w-72 bg-white shadow-2xl z-50 rounded-bl-2xl border-l border-b border-gray-100"
+                    style={{ maxHeight: "calc(100vh - 60px)", overflowY: "auto" }}>
+
+                    {/* Header drawer */}
+                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+                        <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center">
+                                <svg className="w-3.5 h-3.5 fill-white" viewBox="0 0 24 24">
+                                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                                </svg>
+                            </div>
+                            <span className="font-semibold text-sm text-gray-900">Plateforme</span>
+                        </div>
+                        <button
+                            onClick={() => setPlatformMenuOpen(false)}
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-gray-500"
+                        >
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {/* Gonifty */}
+                    <div className="px-4 pt-3 pb-1">
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Gonifty</p>
+                    </div>
+                    {[
+                        { href: "/apropos", label: "À propos de Gonifty", icon: "ℹ️" },
+                        { href: "/publicite", label: "Régie publicitaire", icon: "📢" },
+                        { href: "/contact", label: "Contactez-nous", icon: "📬" },
+                    ].map(({ href, label, icon }) => (
+                        <Link key={href} href={href} onClick={() => setPlatformMenuOpen(false)}
+                            className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
+                            <span className="text-base">{icon}</span>{label}
+                        </Link>
+                    ))}
+
+                    <div className="border-t border-gray-100 my-1" />
+
+                    {/* Communauté */}
+                    <div className="px-4 pt-2 pb-1">
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Communauté</p>
+                    </div>
+                    {[
+                        { href: "/loueur", label: "Devenir loueur", icon: "🏠" },
+                        { href: "/vendeur", label: "Devenir vendeur", icon: "🔥" },
+                        { href: "/avis", label: "Nos avis", icon: "⭐" },
+                        { href: "/newsletter", label: "Infolettre", icon: "📧" },
+                    ].map(({ href, label, icon }) => (
+                        <Link key={href} href={href} onClick={() => setPlatformMenuOpen(false)}
+                            className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
+                            <span className="text-base">{icon}</span>{label}
+                        </Link>
+                    ))}
+
+                    <div className="border-t border-gray-100 my-1" />
+
+                    {/* Légal */}
+                    <div className="px-4 pt-2 pb-1">
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Légal</p>
+                    </div>
+                    {[
+                        { href: "/conditions-utilisation", label: "Conditions d'utilisation", icon: "📄" },
+                        { href: "/politique-confidentialite", label: "Politique de confidentialité", icon: "🔒" },
+                        { href: "/cookies", label: "Cookies", icon: "🍪" },
+                    ].map(({ href, label, icon }) => (
+                        <Link key={href} href={href} onClick={() => setPlatformMenuOpen(false)}
+                            className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
+                            <span className="text-base">{icon}</span>{label}
+                        </Link>
+                    ))}
+
+                    <div className="pb-4" />
+                </div>
+            )}
+
+            {/* ══════════════════════════════════════════
+                DRAWER ADMIN — Admin seulement, haut
+            ══════════════════════════════════════════ */}
+            {menuOpen && isAdmin && (
+                <div className="md:hidden fixed top-[60px] right-0 w-72 bg-white shadow-2xl z-50 rounded-bl-2xl border-l border-b border-gray-100"
+                    style={{ maxHeight: "calc(100vh - 60px)", overflowY: "auto" }}>
+
+                    {/* Header drawer admin */}
+                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+                        <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full bg-violet-600 flex items-center justify-center text-sm font-bold text-white">
+                                {initials}
+                            </div>
+                            <div>
+                                <p className="font-semibold text-sm text-gray-900">{user?.fullName}</p>
+                                <p className="text-xs text-gray-400">Administrateur</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => setMenuOpen(false)}
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-gray-500"
+                        >
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div className="py-2">
+                        {[
+                            { href: "/items", label: "📦 Produits" },
+                            { href: "/users", label: "👥 Utilisateurs" },
+                            { href: "/admin-disputes", label: "⚖️ Litiges" },
+                            { href: "/payments", label: "💳 Paiements" },
+                            { href: "/admin-faq", label: "❓ FAQ" },
+                            { href: "/admin-newsletter", label: "✉️ Infolettre" },
+                            { href: "/dashboard", label: "📊 Tableau de bord" },
+                        ].map(({ href, label }) => (
+                            <Link key={href} href={href} onClick={() => setMenuOpen(false)}
+                                className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-violet-600 font-medium bg-violet-50" : "text-gray-700"}`}>
+                                {label}
+                            </Link>
+                        ))}
+
+                        <div className="border-t border-gray-100 mt-2 pt-2">
+                            <button onClick={handleLogout}
+                                className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                🚪 Déconnexion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ══════════════════════════════════════════
+                BOTTOM NAV — User seulement
+            ══════════════════════════════════════════ */}
             {!isAdmin && (
-                <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-40 flex items-center justify-around px-2 py-2 safe-area-pb">
+                <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-40 flex items-center justify-around px-2 py-2">
+
                     {/* Accueil */}
-                    <Link href="/" className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${isActiveMobile("/")}`}>
+                    <Link href="/" className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors ${isActiveMobile("/")}`}>
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
                         </svg>
@@ -373,7 +397,7 @@ export default function Header() {
                     </Link>
 
                     {/* Mes items */}
-                    <Link href="/my-items" className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${isActiveMobile("/my-items")}`}>
+                    <Link href="/my-items" className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors ${isActiveMobile("/my-items")}`}>
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <rect x="2" y="7" width="20" height="14" rx="2" />
                             <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
@@ -382,29 +406,16 @@ export default function Header() {
                     </Link>
 
                     {/* Poster */}
-                    <Link
-                        href="/create"
-                        className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${isActiveMobile("/create")}`}
-                    >
-                        <svg
-                            className="w-5 h-5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                        >
+                    <Link href="/create" className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors ${isActiveMobile("/create")}`}>
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <line x1="12" y1="5" x2="12" y2="19" />
                             <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
-
                         <span className="text-[10px] font-medium">Poster</span>
                     </Link>
 
                     {/* Locations */}
-                    <Link
-                        href="/rentals"
-                        className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${isActiveMobile("/rentals")}`}
-                    >
+                    <Link href="/rentals" className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors ${isActiveMobile("/rentals")}`}>
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M9 11l3 3L22 4" />
                             <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
@@ -412,112 +423,75 @@ export default function Header() {
                         <span className="text-[10px] font-medium">Locations</span>
                     </Link>
 
-                    {/* Enchères */}
-                    <Link
-                        href="/auctions"
-                        className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${isActiveMobile("/auctions")}`}
+                    {/* Menu hamburger bas — navigation user */}
+                    <button
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors ${menuOpen ? "text-blue-600" : "text-gray-400"}`}
                     >
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <line x1="3" y1="12" x2="21" y2="12" />
+                            <line x1="3" y1="18" x2="21" y2="18" />
                         </svg>
-                        <span className="text-[10px] font-medium">Enchères</span>
-                    </Link>
+                        <span className="text-[10px] font-medium">Menu</span>
+                    </button>
                 </nav>
             )}
 
-            {/* Overlay menu mobile */}
-            {menuOpen && isAdmin && (
-                <>
-                    {/* Backdrop */}
-                    <div
-                        className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
-                        onClick={() => setMenuOpen(false)}
-                    />
+            {/* ══════════════════════════════════════════
+                DRAWER USER bas — navigation principale
+            ══════════════════════════════════════════ */}
+            {menuOpen && !isAdmin && (
+                <div className="md:hidden fixed bottom-16 right-0 w-72 bg-white shadow-2xl z-50 rounded-tl-2xl border-l border-t border-gray-100"
+                    style={{ maxHeight: "calc(100vh - 120px)", overflowY: "auto" }}>
 
-                    {/* Drawer */}
-                    <div className="md:hidden fixed bottom-16 right-0 w-64 bg-white rounded-tl-2xl shadow-xl z-50 overflow-hidden">
-                        <div className="p-4 border-b border-gray-100">
-                            <div className="flex items-center gap-3">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white ${isAdmin ? "bg-violet-600" : "bg-blue-600"}`}>
-                                    {initials}
-                                </div>
-                                <div>
-                                    <p className="font-semibold text-sm text-gray-900">{user?.fullName}</p>
-                                    <p className="text-xs text-gray-400">@{user?.username}</p>
-                                </div>
+                    {/* Header drawer user */}
+                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+                        <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold text-white">
+                                {initials}
+                            </div>
+                            <div>
+                                <p className="font-semibold text-sm text-gray-900">{user?.fullName}</p>
+                                <p className="text-xs text-gray-400">@{user?.username}</p>
                             </div>
                         </div>
+                        <button
+                            onClick={() => setMenuOpen(false)}
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-gray-500"
+                        >
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        </button>
+                    </div>
 
-                        <div className="py-2">
-                            {!isAdmin ? (
-                                <>
-                                    {[
-                                        { href: "/rentals", label: "📋 Locations" },
-                                        { href: "/auctions", label: "🔥 Enchères" },
-                                        { href: "/disputes", label: "⚖️ Litiges" },
-                                        { href: "/profile", label: "👤 Profil" },
-                                        { href: "/faq", label: "❓ Centre d'aide" },
-                                        { href: "/subscription", label: "⭐ Premium" },
-                                    ].map(({ href, label }) => (
-                                        <Link
-                                            key={href}
-                                            href={href}
-                                            onClick={() => setMenuOpen(false)}
-                                            className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}
-                                        >
-                                            {label}
-                                        </Link>
-                                    ))}
-                                </>
-                            ) : (
-                                <>
-                                    {[
-                                        { href: "/items", label: "📦 Produits" },
-                                        { href: "/users", label: "👥 Utilisateurs" },
-                                        { href: "/admin-disputes", label: "⚖️ Litiges" },
-                                        { href: "/payments", label: "💳 Paiements" },
-                                        { href: "/admin-faq", label: "❓ FAQ" },
-                                        { href: "/admin-newsletter", label: "✉️ Infolettre" },
-                                        { href: "/dashboard", label: "📊 Tableau de bord" },
-                                    ].map(({ href, label }) => (
-                                        <Link
-                                            key={href}
-                                            href={href}
-                                            onClick={() => setMenuOpen(false)}
-                                            className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}
-                                        >
-                                            {label}
-                                        </Link>
-                                    ))}
-                                </>
-                            )}
+                    <div className="py-2">
+                        {[
+                            { href: "/auctions", label: "🔥 Enchères" },
+                            { href: "/disputes", label: "⚖️ Litiges" },
+                            { href: "/messages/inbox", label: "💬 Messages" },
+                            { href: "/faq", label: "❓ Centre d'aide" },
+                            { href: "/subscription", label: "⭐ Premium" },
+                            { href: "/profile", label: "👤 Profil" },
+                        ].map(({ href, label }) => (
+                            <Link key={href} href={href} onClick={() => setMenuOpen(false)}
+                                className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
+                                {label}
+                            </Link>
+                        ))}
 
-                            <div className="border-t border-gray-100 mt-2 pt-2">
-
-                                {!isAdmin && (
-                                    <Link
-                                        href="/profile"
-                                        onClick={() => setPlatformMenuOpen(false)}
-                                        className="flex items-center gap-2 px-5 py-3 text-sm text-gray-700 hover:bg-gray-50"
-                                    >
-                                        👤 Profil
-                                    </Link>
-                                )}
-
-                                <button
-                                    onClick={handleLogout}
-                                    className="w-full flex items-center gap-2 px-5 py-3 text-sm text-red-600 hover:bg-red-50"
-                                >
-                                    🚪 Déconnexion
-                                </button>
-
-                            </div>
+                        <div className="border-t border-gray-100 mt-2 pt-2">
+                            <button onClick={handleLogout}
+                                className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                🚪 Déconnexion
+                            </button>
                         </div>
                     </div>
-                </>
+                </div>
             )}
 
-            {/* Spacer pour le bottom nav mobile */}
+            {/* Spacer bottom nav mobile */}
             {!isAdmin && <div className="md:hidden h-16" />}
         </>
     );
