@@ -240,63 +240,65 @@ export default function Header() {
                 </div>
 
                 {/* Actions droite mobile */}
-                <div className="flex md:hidden items-center gap-2">
-                    <Link href="/subscription">
-                        <button className="w-9 h-9 flex items-center justify-center text-yellow-500">
-                            ⭐
-                        </button>
-                    </Link>
+                {!isAdmin && (
+                    <div className="flex md:hidden items-center gap-2">
+                        <Link href="/subscription">
+                            <button className="w-9 h-9 flex items-center justify-center text-yellow-500">
+                                ⭐
+                            </button>
+                        </Link>
 
-                    <Link href="/messages/inbox">
-                        <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                            </svg>
+                        <Link href="/messages/inbox">
+                            <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
+                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                </svg>
 
-                            {unreadMessages > 0 && (
-                                <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center">
-                                    {unreadMessages > 9 ? "9+" : unreadMessages}
-                                </span>
+                                {unreadMessages > 0 && (
+                                    <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center">
+                                        {unreadMessages > 9 ? "9+" : unreadMessages}
+                                    </span>
+                                )}
+                            </button>
+                        </Link>
+                        {/* Notifs */}
+                        <Link href="/notifications">
+                            <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
+                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                                </svg>
+                                {unreadCount > 0 && (
+                                    <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-medium">
+                                        {unreadCount > 9 ? "9+" : unreadCount}
+                                    </span>
+                                )}
+                            </button>
+                        </Link>
+
+                        {/* ← Hamburger PLATEFORME (haut) */}
+                        <button
+                            onClick={() =>
+                                isAdmin
+                                    ? setMenuOpen(!menuOpen)
+                                    : setPlatformMenuOpen(!platformMenuOpen)
+                            }
+                            className="w-9 h-9 flex items-center justify-center text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                            {(isAdmin ? menuOpen : platformMenuOpen) ? (
+                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                                </svg>
+                            ) : (
+                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <line x1="3" y1="6" x2="21" y2="6" />
+                                    <line x1="3" y1="12" x2="21" y2="12" />
+                                    <line x1="3" y1="18" x2="21" y2="18" />
+                                </svg>
                             )}
                         </button>
-                    </Link>
-                    {/* Notifs */}
-                    <Link href="/notifications">
-                        <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                            </svg>
-                            {unreadCount > 0 && (
-                                <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-medium">
-                                    {unreadCount > 9 ? "9+" : unreadCount}
-                                </span>
-                            )}
-                        </button>
-                    </Link>
-
-                    {/* ← Hamburger PLATEFORME (haut) */}
-                    <button
-                       onClick={() =>
-    isAdmin
-        ? setMenuOpen(!menuOpen)
-        : setPlatformMenuOpen(!platformMenuOpen)
-}
-                        className="w-9 h-9 flex items-center justify-center text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                       {(isAdmin ? menuOpen : platformMenuOpen) ? (
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                            </svg>
-                        ) : (
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <line x1="3" y1="6" x2="21" y2="6" />
-                                <line x1="3" y1="12" x2="21" y2="12" />
-                                <line x1="3" y1="18" x2="21" y2="18" />
-                            </svg>
-                        )}
-                    </button>
-                </div>
+                    </div>
+                )}
                 {/* Overlay plateforme mobile */}
                 {platformMenuOpen && (
                     <>
@@ -315,7 +317,7 @@ export default function Header() {
                                     { href: "/apropos", label: "ℹ️ À propos de Gonifty" },
                                     { href: "/publicite", label: "📢 Régie publicitaire" },
                                     { href: "/contact", label: "📬 Contactez-nous" },
-                                    { href: "/disputes", label: "⚖️ Litiges"},
+                                    { href: "/disputes", label: "⚖️ Litiges" },
                                 ].map(({ href, label }) => (
                                     <Link
                                         key={href}
@@ -339,7 +341,7 @@ export default function Header() {
                                     { href: "/vendeur", label: "🔥 Devenir vendeur" },
                                     { href: "/avis", label: "⭐ Nos avis" },
                                     { href: "/newsletter", label: "📧 Infolettre" },
-                                    { href: "/profile", label: " 👤 Profil"},
+                                    { href: "/profile", label: " 👤 Profil" },
                                 ].map(({ href, label }) => (
                                     <Link
                                         key={href}
@@ -424,7 +426,7 @@ export default function Header() {
             )}
 
             {/* Overlay menu mobile */}
-           {menuOpen && isAdmin && (
+            {menuOpen && isAdmin && (
                 <>
                     {/* Backdrop */}
                     <div
@@ -492,13 +494,15 @@ export default function Header() {
 
                             <div className="border-t border-gray-100 mt-2 pt-2">
 
-                                <Link
-                                    href="/profile"
-                                    onClick={() => setPlatformMenuOpen(false)}
-                                    className="flex items-center gap-2 px-5 py-3 text-sm text-gray-700 hover:bg-gray-50"
-                                >
-                                    👤 Profil
-                                </Link>
+                                {!isAdmin && (
+                                    <Link
+                                        href="/profile"
+                                        onClick={() => setPlatformMenuOpen(false)}
+                                        className="flex items-center gap-2 px-5 py-3 text-sm text-gray-700 hover:bg-gray-50"
+                                    >
+                                        👤 Profil
+                                    </Link>
+                                )}
 
                                 <button
                                     onClick={handleLogout}
