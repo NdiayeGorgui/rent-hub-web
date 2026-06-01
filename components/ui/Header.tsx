@@ -385,73 +385,92 @@ export default function Header() {
                 </nav>
             )}
 
-            {/* ── Drawer menu bas — user nav + admin nav ── */}
-            {menuOpen && (
-                <>
-                    <div className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
-                        onClick={() => setMenuOpen(false)} />
-
-                    <div className={`md:hidden fixed right-0 w-64 bg-white rounded-tl-2xl shadow-xl z-50 overflow-hidden ${isAdmin ? "top-[60px]" : "bottom-16"}`}>
-                        <div className="p-4 border-b border-gray-100">
-                            <div className="flex items-center gap-3">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white ${isAdmin ? "bg-violet-600" : "bg-blue-600"}`}>
-                                    {initials}
-                                </div>
-                                <div>
-                                    <p className="font-semibold text-sm text-gray-900">{user?.fullName}</p>
-                                    <p className="text-xs text-gray-400">@{user?.username}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="py-2">
-                            {!isAdmin ? (
-                                // ── Menu navigation user (bas) ──
-                                <>
-                                    {[
-                                        { href: "/rentals", label: "📋 Locations" },
-                                        { href: "/auctions", label: "🔥 Enchères" },
-                                        { href: "/disputes", label: "⚖️ Litiges" },
-                                        { href: "/faq", label: "❓ Centre d'aide" },
-                                        { href: "/subscription", label: "⭐ Premium" },
-                                        { href: "/profile", label: "👤 Profil" },
-                                    ].map(({ href, label }) => (
-                                        <Link key={href} href={href} onClick={() => setMenuOpen(false)}
-                                            className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
-                                            {label}
-                                        </Link>
-                                    ))}
-                                </>
-                            ) : (
-                                // ── Menu navigation admin (haut) ──
-                                <>
-                                    {[
-                                        { href: "/items", label: "📦 Produits" },
-                                        { href: "/users", label: "👥 Utilisateurs" },
-                                        { href: "/admin-disputes", label: "⚖️ Litiges" },
-                                        { href: "/payments", label: "💳 Paiements" },
-                                        { href: "/admin-faq", label: "❓ FAQ" },
-                                        { href: "/admin-newsletter", label: "✉️ Infolettre" },
-                                        { href: "/dashboard", label: "📊 Tableau de bord" },
-                                    ].map(({ href, label }) => (
-                                        <Link key={href} href={href} onClick={() => setMenuOpen(false)}
-                                            className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
-                                            {label}
-                                        </Link>
-                                    ))}
-                                </>
-                            )}
-
-                            <div className="border-t border-gray-100 mt-2 pt-2">
-                                <button onClick={handleLogout}
-                                    className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                    🚪 Déconnexion
-                                </button>
-                            </div>
-                        </div>
+{/* Drawer admin — s'ouvre depuis le haut */}
+{menuOpen && isAdmin && (
+    <>
+        <div className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
+            onClick={() => setMenuOpen(false)} />
+        <div className="md:hidden fixed top-[60px] right-0 w-64 bg-white rounded-bl-2xl shadow-xl z-50 overflow-y-auto max-h-[calc(100vh-60px)]"
+            onClick={e => e.stopPropagation()}>
+            <div className="p-4 border-b border-gray-100">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center text-sm font-bold text-white">
+                        {initials}
                     </div>
-                </>
-            )}
+                    <div>
+                        <p className="font-semibold text-sm text-gray-900">{user?.fullName}</p>
+                        <p className="text-xs text-gray-400">@{user?.username}</p>
+                    </div>
+                </div>
+            </div>
+            <div className="py-2">
+                {[
+                    { href: "/items", label: "📦 Produits" },
+                    { href: "/users", label: "👥 Utilisateurs" },
+                    { href: "/admin-disputes", label: "⚖️ Litiges" },
+                    { href: "/payments", label: "💳 Paiements" },
+                    { href: "/admin-faq", label: "❓ FAQ" },
+                    { href: "/admin-newsletter", label: "✉️ Infolettre" },
+                    { href: "/dashboard", label: "📊 Tableau de bord" },
+                ].map(({ href, label }) => (
+                    <Link key={href} href={href} onClick={() => setMenuOpen(false)}
+                        className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-violet-600 font-medium bg-violet-50" : "text-gray-700"}`}>
+                        {label}
+                    </Link>
+                ))}
+                <div className="border-t border-gray-100 mt-2 pt-2">
+                    <button onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                        🚪 Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </>
+)}
+
+{/* Drawer user — s'ouvre depuis le bas */}
+{menuOpen && !isAdmin && (
+    <>
+        <div className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
+            onClick={() => setMenuOpen(false)} />
+        <div className="md:hidden fixed bottom-16 right-0 w-64 bg-white rounded-tl-2xl shadow-xl z-50 overflow-hidden"
+            onClick={e => e.stopPropagation()}>
+            <div className="p-4 border-b border-gray-100">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold text-white">
+                        {initials}
+                    </div>
+                    <div>
+                        <p className="font-semibold text-sm text-gray-900">{user?.fullName}</p>
+                        <p className="text-xs text-gray-400">@{user?.username}</p>
+                    </div>
+                </div>
+            </div>
+            <div className="py-2">
+                {[
+                    { href: "/rentals", label: "📋 Locations" },
+                    { href: "/auctions", label: "🔥 Enchères" },
+                    { href: "/disputes", label: "⚖️ Litiges" },
+                    { href: "/faq", label: "❓ Centre d'aide" },
+                    { href: "/subscription", label: "⭐ Premium" },
+                    { href: "/profile", label: "👤 Profil" },
+                ].map(({ href, label }) => (
+                    <Link key={href} href={href} onClick={() => setMenuOpen(false)}
+                        className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
+                        {label}
+                    </Link>
+                ))}
+                <div className="border-t border-gray-100 mt-2 pt-2">
+                    <button onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                        🚪 Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </>
+)}
 
             {/* Spacer bottom nav mobile */}
             {!isAdmin && <div className="md:hidden h-16" />}
