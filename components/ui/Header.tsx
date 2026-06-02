@@ -211,13 +211,58 @@ export default function Header() {
                 {/* ── Actions droite mobile ── */}
                 <div className="flex md:hidden items-center gap-1">
 
-                    {/* Notifs — pour tous */}
+                    {/* Centre d'aide */}
+                    <Link href="/faq">
+                        <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
+                            <svg
+                                className="w-5 h-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                <path d="M12 17h.01" />
+                            </svg>
+                        </button>
+                    </Link>
+
+                    {/* Messages */}
+                    <Link href="/messages/inbox">
+                        <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
+                            <svg
+                                className="w-5 h-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                            </svg>
+
+                            {unreadMessages > 0 && (
+                                <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-medium">
+                                    {unreadMessages > 9 ? "9+" : unreadMessages}
+                                </span>
+                            )}
+                        </button>
+                    </Link>
+
+                    {/* Notifications */}
                     <Link href="/notifications">
                         <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <svg
+                                className="w-5 h-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
                                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                                 <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                             </svg>
+
                             {unreadCount > 0 && (
                                 <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-medium">
                                     {unreadCount > 9 ? "9+" : unreadCount}
@@ -226,23 +271,28 @@ export default function Header() {
                         </button>
                     </Link>
 
-                    {/* Hamburger haut :
-                        User  → ouvre platformMenuOpen (plateforme)
-                        Admin → ouvre menuOpen (nav admin)
-                    */}
+                    {/* Menu hamburger */}
                     <button
-                        onClick={() => isAdmin
-                            ? setMenuOpen(!menuOpen)
-                            : setPlatformMenuOpen(!platformMenuOpen)
+                        onClick={() =>
+                            isAdmin
+                                ? setMenuOpen(!menuOpen)
+                                : setPlatformMenuOpen(!platformMenuOpen)
                         }
                         className="w-9 h-9 flex items-center justify-center text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
                     >
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <svg
+                            className="w-5 h-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                        >
                             <line x1="3" y1="6" x2="21" y2="6" />
                             <line x1="3" y1="12" x2="21" y2="12" />
                             <line x1="3" y1="18" x2="21" y2="18" />
                         </svg>
                     </button>
+
                 </div>
 
             </header>
@@ -280,6 +330,7 @@ export default function Header() {
                     </div>
                     {[
                         { href: "/apropos", label: "À propos de Gonifty", icon: "ℹ️" },
+                        { href: "/disputes", label: "Litiges", icon: "ℹ⚖️" },
                         { href: "/publicite", label: "Régie publicitaire", icon: "📢" },
                         { href: "/contact", label: "Contactez-nous", icon: "📬" },
                     ].map(({ href, label, icon }) => (
@@ -309,20 +360,20 @@ export default function Header() {
 
                     <div className="border-t border-gray-100 my-1" />
 
-                    {/* Légal */}
+                    {/* Compte */}
+                    <div className="border-t border-gray-100 my-1" />
+
                     <div className="px-4 pt-2 pb-1">
-                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Légal</p>
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                            Mon compte
+                        </p>
                     </div>
-                    {[
-                        { href: "/conditions-utilisation", label: "Conditions d'utilisation", icon: "📄" },
-                        { href: "/politique-confidentialite", label: "Politique de confidentialité", icon: "🔒" },
-                        { href: "/cookies", label: "Cookies", icon: "🍪" },
-                    ].map(({ href, label, icon }) => (
-                        <Link key={href} href={href} onClick={() => setPlatformMenuOpen(false)}
-                            className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
-                            <span className="text-base">{icon}</span>{label}
-                        </Link>
-                    ))}
+                    <Link href="/profile">
+                        👤 Profil
+                    </Link>
+                    <button onClick={handleLogout}>
+                        🚪 Déconnexion
+                    </button>
 
                     <div className="pb-4" />
                 </div>
@@ -423,73 +474,29 @@ export default function Header() {
                         <span className="text-[10px] font-medium">Locations</span>
                     </Link>
 
-                    {/* Menu hamburger bas — navigation user */}
-                    <button
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors ${menuOpen ? "text-blue-600" : "text-gray-400"}`}
+                    {/* Enchères */}
+                    <Link
+                        href="/auctions"
+                        className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors ${isActiveMobile("/auctions")}`}
                     >
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <line x1="3" y1="6" x2="21" y2="6" />
-                            <line x1="3" y1="12" x2="21" y2="12" />
-                            <line x1="3" y1="18" x2="21" y2="18" />
+                        <svg
+                            className="w-5 h-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                        >
+                            <path d="M14 4l6 6-10 10H4v-6L14 4z" />
+                            <path d="M13 5l6 6" />
                         </svg>
-                        <span className="text-[10px] font-medium">Menu</span>
-                    </button>
+
+                        <span className="text-[10px] font-medium">
+                            Enchères
+                        </span>
+                    </Link>
                 </nav>
             )}
 
-            {/* ══════════════════════════════════════════
-                DRAWER USER bas — navigation principale
-            ══════════════════════════════════════════ */}
-            {menuOpen && !isAdmin && (
-                <div className="md:hidden fixed bottom-16 right-0 w-72 bg-white shadow-2xl z-50 rounded-tl-2xl border-l border-t border-gray-100"
-                    style={{ maxHeight: "calc(100vh - 120px)", overflowY: "auto" }}>
-
-                    {/* Header drawer user */}
-                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                        <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold text-white">
-                                {initials}
-                            </div>
-                            <div>
-                                <p className="font-semibold text-sm text-gray-900">{user?.fullName}</p>
-                                <p className="text-xs text-gray-400">@{user?.username}</p>
-                            </div>
-                        </div>
-                        <button
-                            onClick={() => setMenuOpen(false)}
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-gray-500"
-                        >
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <div className="py-2">
-                        {[
-                            { href: "/auctions", label: "🔥 Enchères" },
-                            { href: "/disputes", label: "⚖️ Litiges" },
-                            { href: "/messages/inbox", label: "💬 Messages" },
-                            { href: "/faq", label: "❓ Centre d'aide" },
-                            { href: "/subscription", label: "⭐ Premium" },
-                            { href: "/profile", label: "👤 Profil" },
-                        ].map(({ href, label }) => (
-                            <Link key={href} href={href} onClick={() => setMenuOpen(false)}
-                                className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === href ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"}`}>
-                                {label}
-                            </Link>
-                        ))}
-
-                        <div className="border-t border-gray-100 mt-2 pt-2">
-                            <button onClick={handleLogout}
-                                className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                🚪 Déconnexion
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {/* Spacer bottom nav mobile */}
             {!isAdmin && <div className="md:hidden h-16" />}
