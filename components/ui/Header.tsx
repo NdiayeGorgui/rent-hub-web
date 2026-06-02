@@ -329,7 +329,7 @@ export default function Header() {
                         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Gonifty</p>
                     </div>
                     {[
-                        { href: "/apropos", label: "À propos de Gonifty", icon: "ℹ️" },
+
                         { href: "/disputes", label: "Litiges", icon: "⚖️" },
                         { href: "/publicite", label: "Régie publicitaire", icon: "📢" },
                         { href: "/contact", label: "Contactez-nous", icon: "📬" },
@@ -362,32 +362,31 @@ export default function Header() {
 
                     <div className="border-t border-gray-100 my-1" />
 
-<div className="px-4 pt-2 pb-1">
-    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-        Mon compte
-    </p>
-</div>
+                    <div className="px-4 pt-2 pb-1">
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                            Mon compte
+                        </p>
+                    </div>
 
-<Link
-    href="/profile"
-    onClick={() => setPlatformMenuOpen(false)}
-    className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${
-        pathname === "/profile"
-            ? "text-blue-600 font-medium bg-blue-50"
-            : "text-gray-700"
-    }`}
->
-    <span className="text-base">👤</span>
-    Profil
-</Link>
+                    <Link
+                        href="/profile"
+                        onClick={() => setPlatformMenuOpen(false)}
+                        className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === "/profile"
+                                ? "text-blue-600 font-medium bg-blue-50"
+                                : "text-gray-700"
+                            }`}
+                    >
+                        <span className="text-base">👤</span>
+                        Profil
+                    </Link>
 
-<button
-    onClick={handleLogout}
-    className="w-full text-left flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 text-gray-700"
->
-    <span className="text-base">🚪</span>
-    Déconnexion
-</button>
+                    <button
+                        onClick={handleLogout}
+                        className="w-full text-left flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 text-gray-700"
+                    >
+                        <span className="text-base">🚪</span>
+                        Déconnexion
+                    </button>
                 </div>
             )}
 
