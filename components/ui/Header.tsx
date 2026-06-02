@@ -211,56 +211,59 @@ export default function Header() {
                 {/* ── Actions droite mobile ── */}
                 <div className="flex md:hidden items-center gap-1">
                     {/* Premium */}
-                    <Link href="/subscription">
-                        <button className="w-9 h-9 flex items-center justify-center text-yellow-500 hover:text-yellow-600 transition-colors">
-                            <svg
-                                className="w-5 h-5"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                            >
-                                <path d="M12 2l2.9 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l7.1-1.01L12 2z" />
-                            </svg>
-                        </button>
-                    </Link>
+                    {!isAdmin && (
+                        <>
+                            <Link href="/subscription">
+                                <button className="w-9 h-9 flex items-center justify-center text-yellow-500 hover:text-yellow-600 transition-colors">
+                                    <svg
+                                        className="w-5 h-5"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                    >
+                                        <path d="M12 2l2.9 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l7.1-1.01L12 2z" />
+                                    </svg>
+                                </button>
+                            </Link>
 
-                    {/* Centre d'aide */}
-                    <Link href="/faq">
-                        <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
-                            <svg
-                                className="w-5 h-5"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                            >
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                                <path d="M12 17h.01" />
-                            </svg>
-                        </button>
-                    </Link>
+                            {/* Centre d'aide */}
+                            <Link href="/faq">
+                                <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
+                                    <svg
+                                        className="w-5 h-5"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                    >
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                        <path d="M12 17h.01" />
+                                    </svg>
+                                </button>
+                            </Link>
 
-                    {/* Messages */}
-                    <Link href="/messages/inbox">
-                        <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
-                            <svg
-                                className="w-5 h-5"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                            >
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                            </svg>
+                            {/* Messages */}
+                            <Link href="/messages/inbox">
+                                <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
+                                    <svg
+                                        className="w-5 h-5"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                    >
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
 
-                            {unreadMessages > 0 && (
-                                <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-medium">
-                                    {unreadMessages > 9 ? "9+" : unreadMessages}
-                                </span>
-                            )}
-                        </button>
-                    </Link>
-
+                                    {unreadMessages > 0 && (
+                                        <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-medium">
+                                            {unreadMessages > 9 ? "9+" : unreadMessages}
+                                        </span>
+                                    )}
+                                </button>
+                            </Link>
+                        </>
+                    )}
                     {/* Notifications */}
                     <Link href="/notifications">
                         <button className="w-9 h-9 flex items-center justify-center text-gray-500 relative">
