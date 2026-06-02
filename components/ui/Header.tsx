@@ -210,6 +210,18 @@ export default function Header() {
 
                 {/* ── Actions droite mobile ── */}
                 <div className="flex md:hidden items-center gap-1">
+                    {/* Premium */}
+                    <Link href="/subscription">
+                        <button className="w-9 h-9 flex items-center justify-center text-yellow-500 hover:text-yellow-600 transition-colors">
+                            <svg
+                                className="w-5 h-5"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                            >
+                                <path d="M12 2l2.9 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l7.1-1.01L12 2z" />
+                            </svg>
+                        </button>
+                    </Link>
 
                     {/* Centre d'aide */}
                     <Link href="/faq">
@@ -371,8 +383,8 @@ export default function Header() {
                         href="/profile"
                         onClick={() => setPlatformMenuOpen(false)}
                         className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-gray-50 ${pathname === "/profile"
-                                ? "text-blue-600 font-medium bg-blue-50"
-                                : "text-gray-700"
+                            ? "text-blue-600 font-medium bg-blue-50"
+                            : "text-gray-700"
                             }`}
                     >
                         <span className="text-base">👤</span>
