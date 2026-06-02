@@ -2,14 +2,20 @@ import { BASE_URL } from "@/lib/baseURL";
 
 type Props = {
   item: any;
+  auction?: any;
 };
 
-export default function ItemCard({ item }: Props) {
+export default function ItemCard({
+  item,
+  auction,
+}: Props) {
 
   const getImage = () => {
     if (item.imageUrls && item.imageUrls.length > 0) {
       const url = item.imageUrls[0];
-      return url.startsWith("http") ? url : `${BASE_URL}${url}`;
+      return url.startsWith("http")
+        ? url
+        : `${BASE_URL}${url}`;
     }
 
     if (item.imageUrl) {
@@ -20,6 +26,11 @@ export default function ItemCard({ item }: Props) {
 
     return `${BASE_URL}/uploads/no-image.png`;
   };
+
+  const displayedPrice =
+    item.type === "AUCTION"
+      ? auction?.currentPrice ?? 0
+      : item.pricePerDay;
 
   return (
     <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition overflow-hidden cursor-pointer group">
@@ -38,15 +49,23 @@ export default function ItemCard({ item }: Props) {
 
         {/* BADGE */}
         <div className="absolute top-2 left-2">
-          <span className={`text-[10px] px-2 py-1 rounded-full text-white font-semibold
-            ${item.type === "AUCTION" ? "bg-red-500" : "bg-blue-600"}`}>
-            {item.type === "AUCTION" ? "🔥 ENCHÈRE" : "📦 LOCATION"}
+          <span
+            className={`text-[10px] px-2 py-1 rounded-full text-white font-semibold ${
+              item.type === "AUCTION"
+                ? "bg-red-500"
+                : "bg-blue-600"
+            }`}
+          >
+            {item.type === "AUCTION"
+              ? "🔥 ENCHÈRE"
+              : "📦 LOCATION"}
           </span>
         </div>
 
-        {/* PRIX OVERLAY */}
+        {/* PRIX */}
         <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
-          {item.pricePerDay} $ / jour
+          💰 {displayedPrice} $
+          {item.type === "RENTAL" && " / jour"}
         </div>
 
       </div>
@@ -54,12 +73,12 @@ export default function ItemCard({ item }: Props) {
       {/* CONTENT */}
       <div className="p-3 flex flex-col gap-1">
 
-        {/* TITLE */}
+        {/* TITRE */}
         <h2 className="font-semibold text-sm line-clamp-2 leading-snug min-h-[38px]">
           {item.title}
         </h2>
 
-        {/* CITY */}
+        {/* VILLE */}
         <p className="text-xs text-gray-500">
           📍 {item.city}
         </p>
@@ -70,6 +89,7 @@ export default function ItemCard({ item }: Props) {
         </p>
 
       </div>
+
     </div>
   );
 }

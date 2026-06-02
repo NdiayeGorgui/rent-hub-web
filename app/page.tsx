@@ -163,16 +163,16 @@ export default function Home() {
     }
 
     if (key === "sortBy") {
-  if (value === "createdAt") return "🆕 Plus récents";
+      if (value === "createdAt") return "🆕 Plus récents";
 
-  if (value === "pricePerDay" && activeFilters.direction === "ASC") {
-    return "💰 Prix croissant";
-  }
+      if (value === "pricePerDay" && activeFilters.direction === "ASC") {
+        return "💰 Prix croissant";
+      }
 
-  if (value === "pricePerDay" && activeFilters.direction === "DESC") {
-    return "💰 Prix décroissant";
-  }
-}
+      if (value === "pricePerDay" && activeFilters.direction === "DESC") {
+        return "💰 Prix décroissant";
+      }
+    }
 
     return value;
   };
@@ -218,38 +218,38 @@ export default function Home() {
       loadAuctions(res);
     }
   };
-const handleSearch = async (data: any) => {
+  const handleSearch = async (data: any) => {
 
-  const {
-    sortBy: newSortBy = "createdAt",
-    direction: newDirection = "DESC",
-    ...filters
-  } = data;
+    const {
+      sortBy: newSortBy = "createdAt",
+      direction: newDirection = "DESC",
+      ...filters
+    } = data;
 
-  setSortBy(newSortBy);
-  setDirection(newDirection);
+    setSortBy(newSortBy);
+    setDirection(newDirection);
 
-  const cleanedFilters = Object.fromEntries(
-    Object.entries(filters).filter(([_, v]) =>
-      v !== null && v !== "" && v !== undefined
-    )
-  );
+    const cleanedFilters = Object.fromEntries(
+      Object.entries(filters).filter(([_, v]) =>
+        v !== null && v !== "" && v !== undefined
+      )
+    );
 
-  setActiveFilters(cleanedFilters);
-  setActiveFiltersCount(Object.keys(cleanedFilters).length);
-  setPage(0);
-  setNearbyMode(false);
-  setShowFilters(false);
+    setActiveFilters(cleanedFilters);
+    setActiveFiltersCount(Object.keys(cleanedFilters).length);
+    setPage(0);
+    setNearbyMode(false);
+    setShowFilters(false);
 
-  updateUrl(0, newSortBy, newDirection, cleanedFilters);
+    updateUrl(0, newSortBy, newDirection, cleanedFilters);
 
-  await loadItems(
-    0,
-    newSortBy,
-    newDirection,
-    cleanedFilters
-  );
-};
+    await loadItems(
+      0,
+      newSortBy,
+      newDirection,
+      cleanedFilters
+    );
+  };
 
   const handleNearby = () => {
     setLoadingNearby(true);
@@ -454,7 +454,10 @@ const handleSearch = async (data: any) => {
                     router.push(`/items/${item.id}`);
                   }}
                 >
-                  <ItemCard item={item} />
+                  <ItemCard
+                    item={item}
+                    auction={auctionData[item.id]}
+                  />
                   {item.distanceLabel && (
                     <p className="text-green-600 text-sm font-semibold px-3 pb-2">
                       📍 à ~{item.distanceLabel}
