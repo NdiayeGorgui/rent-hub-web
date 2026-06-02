@@ -32,7 +32,7 @@ export default function ItemCard({ item }: Props) {
     <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden cursor-pointer flex flex-col h-full">
 
       {/* Image */}
-      <div className="w-full bg-gray-100 overflow-hidden" style={{ aspectRatio: "4/3" }}>
+      <div className="w-full bg-gray-100 overflow-hidden" style={{ aspectRatio: "5/4" }}>
         <img
           src={getImage()}
           alt={item.title}
@@ -44,7 +44,7 @@ export default function ItemCard({ item }: Props) {
       </div>
 
       {/* Contenu */}
-      <div className="p-4 flex flex-col flex-1">
+     <div className="p-3 flex flex-col flex-1">
 
         {/* Badge */}
         <div className="mb-2">
