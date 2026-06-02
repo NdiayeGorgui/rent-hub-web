@@ -331,7 +331,6 @@ export default function Header() {
                     {[
 
                         { href: "/disputes", label: "Litiges", icon: "⚖️" },
-                        { href: "/publicite", label: "Régie publicitaire", icon: "📢" },
                         { href: "/contact", label: "Contactez-nous", icon: "📬" },
                     ].map(({ href, label, icon }) => (
                         <Link key={href} href={href} onClick={() => setPlatformMenuOpen(false)}
