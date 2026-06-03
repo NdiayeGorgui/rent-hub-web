@@ -51,15 +51,15 @@ export default function DashboardPage() {
     {
       title: "Items",
       cards: [
-        { title: "Total items",    value: stats.totalItems,     icon: "📦", color: "#7c3aed" },
-        { title: "Items publiés",  value: stats.publishedItems, icon: "🟢", color: "#22c55e" },
+        { title: "Total items",    value: stats.itemStats.totalItems,     icon: "📦", color: "#7c3aed" },
+        { title: "Items publiés",  value: stats.itemStats.publishedItems, icon: "🟢", color: "#22c55e" },
       ]
     },
     {
       title: "Locations",
       cards: [
-        { title: "Total locations",  value: stats.totalRentals,  icon: "🔁", color: "#f59e0b" },
-        { title: "Locations actives", value: stats.activeRentals, icon: "⏳", color: "#ef4444" },
+        { title: "Total locations",  value: stats.rentalStats.totalRentals,  icon: "🔁", color: "#f59e0b" },
+        { title: "Locations actives", value: stats.rentalStats.activeRentals, icon: "⏳", color: "#ef4444" },
       ]
     },
     {
@@ -74,8 +74,8 @@ export default function DashboardPage() {
     {
       title: "Revenus & Notation",
       cards: [
-        { title: "Revenus totaux",      value: `${stats.totalRevenue?.toFixed(2)} $`,                      icon: "💰", color: "#10b981" },
-        { title: "Note moyenne",        value: stats.averagePlatformRating?.toFixed(2),         icon: "⭐", color: "#facc15" },
+        { title: "Revenus totaux",      value: `${stats.RentalStatsDto.totalRevenue?.toFixed(2)} $`,                      icon: "💰", color: "#10b981" },
+        { title: "Note moyenne",        value: stats.ReviewStatsDto.averagePlatformRating?.toFixed(2),         icon: "⭐", color: "#facc15" },
       ]
     },
     {
