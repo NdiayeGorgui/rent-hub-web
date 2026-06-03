@@ -44,47 +44,88 @@ export default function DashboardPage() {
     {
       title: "Utilisateurs",
       cards: [
-        { title: "Total utilisateurs", value: stats.totalUsers,  icon: "👥", color: "#2563eb" },
+        { title: "Total utilisateurs", value: stats.totalUsers, icon: "👥", color: "#2563eb" },
         { title: "Utilisateurs actifs", value: stats.activeUsers, icon: "✅", color: "#16a34a" },
       ]
     },
     {
       title: "Items",
       cards: [
-        { title: "Total items",    value: stats.itemStats.totalItems,     icon: "📦", color: "#7c3aed" },
-        { title: "Items publiés",  value: stats.itemStats.publishedItems, icon: "🟢", color: "#22c55e" },
+        { title: "Total items", value: stats.itemStats.totalItems, icon: "📦", color: "#7c3aed" },
+        { title: "Items publiés", value: stats.itemStats.publishedItems, icon: "🟢", color: "#22c55e" },
       ]
     },
     {
       title: "Locations",
       cards: [
-        { title: "Total locations",  value: stats.rentalStats.totalRentals,  icon: "🔁", color: "#f59e0b" },
+        { title: "Total locations", value: stats.rentalStats.totalRentals, icon: "🔁", color: "#f59e0b" },
         { title: "Locations actives", value: stats.rentalStats.activeRentals, icon: "⏳", color: "#ef4444" },
       ]
     },
     {
+      title: "Enchères",
+      cards: [
+        {
+          title: "Total enchères",
+          value: stats.auctionStats.totalAuctions,
+          icon: "🔨",
+          color: "#7c3aed",
+        },
+        {
+          title: "Enchères ouvertes",
+          value: stats.auctionStats.openAuctions,
+          icon: "🟢",
+          color: "#22c55e",
+        },
+        {
+          title: "Enchères fermées",
+          value: stats.auctionStats.closedAuctions,
+          icon: "🔒",
+          color: "#ef4444",
+        },
+        {
+          title: "Avec gagnant",
+          value: stats.auctionStats.auctionsWithWinner,
+          icon: "🏆",
+          color: "#f59e0b",
+        },
+        {
+          title: "Sans offre",
+          value: stats.auctionStats.auctionsWithoutBid,
+          icon: "🚫",
+          color: "#6b7280",
+        },
+        {
+          title: "Prix moyen gagnant",
+          value: `${stats.auctionStats.avgWinningPrice?.toFixed(2) ?? "0.00"} $`,
+          icon: "💰",
+          color: "#10b981",
+        },
+      ],
+    },
+    {
       title: "Paiements",
       cards: [
-        { title: "Total paiements",    value: stats.paymentStats.totalPayments,   icon: "💳", color: "#2563eb" },
-        { title: "Paiements réussis",  value: stats.paymentStats.successPayments, icon: "✅", color: "#16a34a" },
-        { title: "En attente",         value: stats.paymentStats.pendingPayments, icon: "⏳", color: "#f59e0b" },
-        { title: "Échoués",            value: stats.paymentStats.failedPayments,  icon: "❌", color: "#ef4444" },
+        { title: "Total paiements", value: stats.paymentStats.totalPayments, icon: "💳", color: "#2563eb" },
+        { title: "Paiements réussis", value: stats.paymentStats.successPayments, icon: "✅", color: "#16a34a" },
+        { title: "En attente", value: stats.paymentStats.pendingPayments, icon: "⏳", color: "#f59e0b" },
+        { title: "Échoués", value: stats.paymentStats.failedPayments, icon: "❌", color: "#ef4444" },
       ]
     },
     {
       title: "Revenus & Notation",
       cards: [
-        { title: "Revenus totaux",      value: `${stats.paymentStats.totalAmount?.toFixed(2)} $`,  icon: "💰", color: "#10b981" },
-        { title: "Note moyenne",        value: `${stats.reviewStats.averageRating?.toFixed(1)} $`,  icon: "⭐", color: "#facc15" },
+        { title: "Revenus totaux", value: `${stats.paymentStats.totalAmount?.toFixed(2)} $`, icon: "💰", color: "#10b981" },
+        { title: "Note moyenne", value: `${stats.reviewStats.averageRating?.toFixed(1)} $`, icon: "⭐", color: "#facc15" },
       ]
     },
     {
       title: "Litiges",
       cards: [
-        { title: "Total litiges",    value: stats.disputeStats.totalDisputes,    icon: "⚖️", color: "#f59e0b" },
-        { title: "Ouverts",          value: stats.disputeStats.openDisputes,     icon: "🔓", color: "#eab308" },
-        { title: "Résolus",          value: stats.disputeStats.resolvedDisputes, icon: "✅", color: "#22c55e" },
-        { title: "Rejetés",          value: stats.disputeStats.rejectedDisputes, icon: "❌", color: "#ef4444" },
+        { title: "Total litiges", value: stats.disputeStats.totalDisputes, icon: "⚖️", color: "#f59e0b" },
+        { title: "Ouverts", value: stats.disputeStats.openDisputes, icon: "🔓", color: "#eab308" },
+        { title: "Résolus", value: stats.disputeStats.resolvedDisputes, icon: "✅", color: "#22c55e" },
+        { title: "Rejetés", value: stats.disputeStats.rejectedDisputes, icon: "❌", color: "#ef4444" },
       ]
     },
   ];
