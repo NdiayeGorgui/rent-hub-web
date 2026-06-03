@@ -49,6 +49,35 @@ export default function DashboardPage() {
       ]
     },
     {
+  title: "Abonnements Premium",
+  cards: [
+    {
+      title: "Total abonnements",
+      value: stats.subscriptionStats.totalSubscriptions,
+      icon: "💎",
+      color: "#7c3aed",
+    },
+    {
+      title: "Abonnements actifs",
+      value: stats.subscriptionStats.activeSubscriptions,
+      icon: "✅",
+      color: "#22c55e",
+    },
+    {
+      title: "Abonnements expirés",
+      value: stats.subscriptionStats.expiredSubscriptions,
+      icon: "⌛",
+      color: "#ef4444",
+    },
+    {
+      title: "Renouvellement auto",
+      value: stats.subscriptionStats.autoRenewEnabled,
+      icon: "🔄",
+      color: "#2563eb",
+    },
+  ],
+},
+    {
       title: "Items",
       cards: [
         { title: "Total items", value: stats.itemStats.totalItems, icon: "📦", color: "#7c3aed" },
