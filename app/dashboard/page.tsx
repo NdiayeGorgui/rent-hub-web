@@ -112,6 +112,18 @@ export default function DashboardPage() {
           icon: "🔒",
           color: "#ef4444",
         },
+         {
+      title: "Annulées",
+      value: stats.auctionStats.cancelledAuctions,
+      icon: "🚫",
+      color: "#dc2626",
+    },
+    {
+      title: "Réserve non atteinte",
+      value: stats.auctionStats.reserveNotMetAuctions,
+      icon: "⚠️",
+      color: "#f59e0b",
+    },
         {
           title: "Avec gagnant",
           value: stats.auctionStats.auctionsWithWinner,
