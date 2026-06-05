@@ -15,7 +15,6 @@ import {
 import { getCurrentUser } from "@/services/authService";
 import {
     getReviewsByItem,
-    getReviewsByUser,
     getReviewsCountByItem,
     getAllReviewsForUser
 } from "@/services/reviewService";
@@ -54,10 +53,7 @@ export default function ItemDetailPage() {
     const [bidLoading, setBidLoading] = useState(false);
 
     // Auction creation
-    const [startPrice, setStartPrice] = useState("");
-    const [reservePrice, setReservePrice] = useState("");
-    const [endDateAuction, setEndDateAuction] = useState("");
-    const [activeImageIndex, setActiveImageIndex] = useState(0);
+ 
     const [activeIndex, setActiveIndex] = useState(0);
 
 

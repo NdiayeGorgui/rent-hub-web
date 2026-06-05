@@ -44,52 +44,118 @@ export default function DashboardPage() {
     {
       title: "Utilisateurs",
       cards: [
-        { title: "Total utilisateurs", value: stats.totalUsers, icon: "👥", color: "#2563eb" },
-        { title: "Utilisateurs actifs", value: stats.activeUsers, icon: "✅", color: "#16a34a" },
-      ]
+        {
+          title: "Total utilisateurs",
+          value: stats.totalUsers,
+          icon: "👥",
+          color: "#2563eb",
+        },
+        {
+          title: "Utilisateurs actifs",
+          value: stats.activeUsers,
+          icon: "✅",
+          color: "#16a34a",
+        },
+        {
+          title: "Utilisateurs inactifs",
+          value: stats.inactiveUsers,
+          icon: "❌",
+          color: "#ef4444",
+        },
+        {
+          title: "Nouveaux (30 jours)",
+          value: stats.newUsersLast30Days,
+          icon: "🆕",
+          color: "#7c3aed",
+        },
+      ],
     },
     {
-  title: "Abonnements Premium",
-  cards: [
-    {
-      title: "Total abonnements",
-      value: stats.subscriptionStats.totalSubscriptions,
-      icon: "💎",
-      color: "#7c3aed",
+      title: "Abonnements Premium",
+      cards: [
+        {
+          title: "Total abonnements",
+          value: stats.subscriptionStats.totalSubscriptions,
+          icon: "💎",
+          color: "#7c3aed",
+        },
+        {
+          title: "Abonnements actifs",
+          value: stats.subscriptionStats.activeSubscriptions,
+          icon: "✅",
+          color: "#22c55e",
+        },
+        {
+          title: "Abonnements expirés",
+          value: stats.subscriptionStats.expiredSubscriptions,
+          icon: "⌛",
+          color: "#ef4444",
+        },
+        {
+          title: "Renouvellement auto",
+          value: stats.subscriptionStats.autoRenewEnabled,
+          icon: "🔄",
+          color: "#2563eb",
+        },
+      ],
     },
-    {
-      title: "Abonnements actifs",
-      value: stats.subscriptionStats.activeSubscriptions,
-      icon: "✅",
-      color: "#22c55e",
-    },
-    {
-      title: "Abonnements expirés",
-      value: stats.subscriptionStats.expiredSubscriptions,
-      icon: "⌛",
-      color: "#ef4444",
-    },
-    {
-      title: "Renouvellement auto",
-      value: stats.subscriptionStats.autoRenewEnabled,
-      icon: "🔄",
-      color: "#2563eb",
-    },
-  ],
-},
     {
       title: "Items",
       cards: [
-        { title: "Total items", value: stats.itemStats.totalItems, icon: "📦", color: "#7c3aed" },
-        { title: "Items publiés", value: stats.itemStats.publishedItems, icon: "🟢", color: "#22c55e" },
-      ]
+        {
+          title: "Total items",
+          value: stats.itemStats.totalItems,
+          icon: "📦",
+          color: "#7c3aed",
+        },
+        {
+          title: "Items actifs",
+          value: stats.itemStats.publishedItems,
+          icon: "🟢",
+          color: "#22c55e",
+        },
+        {
+          title: "Items inactifs",
+          value: stats.itemStats.inactiveItems,
+          icon: "❌",
+          color: "#ef4444",
+        },
+        {
+          title: "Nouveaux (30 jours)",
+          value: stats.itemStats.newItems,
+          icon: "🆕",
+          color: "#2563eb",
+        },
+      ],
     },
     {
       title: "Locations",
       cards: [
-        { title: "Total locations", value: stats.rentalStats.totalRentals, icon: "🔁", color: "#f59e0b" },
-        { title: "Locations actives", value: stats.rentalStats.activeRentals, icon: "⏳", color: "#ef4444" },
-      ]
+        {
+          title: "Total locations",
+          value: stats.rentalStats.totalRentals,
+          icon: "🔁",
+          color: "#f59e0b",
+        },
+        {
+          title: "Locations actives",
+          value: stats.rentalStats.activeRentals,
+          icon: "⏳",
+          color: "#ef4444",
+        },
+        {
+          title: "Locations en attente",
+          value: stats.rentalStats.pendingRentals,
+          icon: "🕐",
+          color: "#facc15",
+        },
+        {
+          title: "Locations terminées",
+          value: stats.rentalStats.completedRentals,
+          icon: "✅",
+          color: "#22c55e",
+        },
+      ],
     },
     {
       title: "Enchères",
@@ -112,18 +178,18 @@ export default function DashboardPage() {
           icon: "🔒",
           color: "#ef4444",
         },
-         {
-      title: "Annulées",
-      value: stats.auctionStats.cancelledAuctions,
-      icon: "🚫",
-      color: "#dc2626",
-    },
-    {
-      title: "Réserve non atteinte",
-      value: stats.auctionStats.reserveNotMetAuctions,
-      icon: "⚠️",
-      color: "#f59e0b",
-    },
+        {
+          title: "Annulées",
+          value: stats.auctionStats.cancelledAuctions,
+          icon: "🚫",
+          color: "#dc2626",
+        },
+        {
+          title: "Réserve non atteinte",
+          value: stats.auctionStats.reserveNotMetAuctions,
+          icon: "⚠️",
+          color: "#f59e0b",
+        },
         {
           title: "Avec gagnant",
           value: stats.auctionStats.auctionsWithWinner,
@@ -156,9 +222,27 @@ export default function DashboardPage() {
     {
       title: "Revenus & Notation",
       cards: [
-        { title: "Revenus totaux", value: `${stats.paymentStats.totalAmount?.toFixed(2)} $`, icon: "💰", color: "#10b981" },
-        { title: "Note moyenne", value: `${stats.reviewStats.averageRating?.toFixed(1)} $`, icon: "⭐", color: "#facc15" },
-      ]
+        { title: "Revenus bruts", value: `${stats.paymentStats.totalAmount?.toFixed(2)} $`, icon: "💰", color: "#10b981" },
+
+        {
+          title: "Revenus nets",
+          value: `${stats.paymentStats.netRevenue?.toFixed(2)} $`,
+          icon: "💰",
+          color: "#10b981",
+        },
+        {
+          title: "Note moyenne",
+          value: `${stats.reviewStats.averageRating?.toFixed(1)} ⭐`,
+          icon: "⭐",
+          color: "#facc15",
+        },
+        {
+          title: "Total avis",
+          value: stats.reviewStats.totalReviews,
+          icon: "📝",
+          color: "#3b82f6",
+        },
+      ],
     },
     {
       title: "Litiges",
