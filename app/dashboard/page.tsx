@@ -223,13 +223,13 @@ export default function DashboardPage() {
       title: "Revenus & Notation",
       cards: [
         { title: "Revenus bruts", 
-          value: `${stats.paymentStats.totalAmount?.toFixed(2) ?? "0.00"} $`, icon: "💰", color: "#10b981" },
+          value: `${stats.paymentStats.totalAmount?.toFixed(2) ?? "0.00"} $`, icon: "💵", color: "#10b981" },
 
         {
           title: "Revenus nets",
           value: `${stats.paymentStats.netRevenue?.toFixed(2) ?? "0.00"} $`,
           icon: "💰",
-          color: "#10b981",
+          color: "#059669",
         },
         {
           title: "Note moyenne",
