@@ -226,8 +226,8 @@ export default function DashboardPage() {
           value: `${stats.paymentStats.totalAmount?.toFixed(2) ?? "0.00"} $`, icon: "💵", color: "#10b981" },
 
         {
-          title: "Revenus nets",
-          value: `${stats.paymentStats.netRevenue?.toFixed(2) ?? "0.00"} $`,
+          title: "Remboursements",
+          value: `${stats.paymentStats.refundPayments?.toFixed(2) ?? "0.00"} $`,
           icon: "💰",
           color: "#059669",
         },
