@@ -83,6 +83,11 @@ export default function ItemCard({
           📍 {item.city}
         </p>
 
+         {/* PROPRIETAIRE */}
+        <p className="text-xs text-gray-500">
+          👤 {item?.username}
+        </p>
+
         {/* DESCRIPTION */}
         <p className="text-xs text-gray-400 line-clamp-1">
           {item.description || " "}
