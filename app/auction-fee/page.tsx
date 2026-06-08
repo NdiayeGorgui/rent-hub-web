@@ -24,33 +24,22 @@ export default function AuctionFeePage() {
             setLoading(true);
             setStep("paying");
 
-            // 1. Crée le paiement Stripe
             const { clientSecret } = await createAuctionPayment(itemId);
 
-            // 2. Stripe confirme le paiement
             await handleWebPayment(clientSecret);
 
-            setStep("creating");
-
-            // 3. Attend que le consumer Kafka passe l'item en DRAFT
-            await new Promise(resolve => setTimeout(resolve, 2500));
-
-            // 4. Crée l'enchère
-            await createAuction({
-                itemId,
-                startPrice,
-                reservePrice,
-                endDate: auctionEndDate,
-            });
-
-            alert("✅ Enchère créée avec succès !");
-            router.push("/my-items");
+            alert("✅ Paiement réussi !");
+            router.push(`/my-items/${itemId}`);
 
         } catch (err: any) {
-            alert(err?.response?.data?.message ?? err?.message ?? "Erreur lors du paiement");
-            setStep("confirm");
+            alert(
+                err?.response?.data?.message ??
+                err?.message ??
+                "Erreur lors du paiement"
+            );
         } finally {
             setLoading(false);
+            setStep("confirm");
         }
     };
 
