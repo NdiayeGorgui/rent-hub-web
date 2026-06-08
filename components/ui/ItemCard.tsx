@@ -29,7 +29,7 @@ export default function ItemCard({
 
   const displayedPrice =
     item.type === "AUCTION"
-      ? auction?.currentPrice ?? 0
+      ? auction?.startPrice ?? 0
       : item.pricePerDay;
 
   return (
