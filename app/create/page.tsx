@@ -74,13 +74,37 @@ export default function CreatePage() {
       const { latitude, longitude } = pos.coords;
 
       const formData = new FormData();
-      formData.append("data", JSON.stringify({
-        title, description,
-        categoryId: Number(categoryId),
-        type,
-        pricePerDay: type === "RENTAL" ? Number(pricePerDay) : null,
-        city, address, latitude, longitude,
-      }));
+    formData.append("data", JSON.stringify({
+  title,
+  description,
+  categoryId: Number(categoryId),
+  type,
+
+  pricePerDay:
+    type === "RENTAL"
+      ? Number(pricePerDay)
+      : null,
+
+  startPrice:
+    type === "AUCTION"
+      ? Number(startPrice)
+      : null,
+
+  reservePrice:
+    type === "AUCTION"
+      ? (reservePrice ? Number(reservePrice) : Number(startPrice))
+      : null,
+
+  auctionEndDate:
+    type === "AUCTION"
+      ? auctionEndDate
+      : null,
+
+  city,
+  address,
+  latitude,
+  longitude,
+}));
       images.forEach(img => formData.append("images", img));
 
       const createdItem = await createItem(formData);
