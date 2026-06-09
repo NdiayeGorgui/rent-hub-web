@@ -13,7 +13,7 @@ import {
     getRentalStatsByItem,
 } from "@/services/rentalService";
 import {
-    createAuction,
+  
     getAuctionByItemId,
     placeBid,
 } from "@/services/auctionService";
@@ -73,10 +73,7 @@ export default function ItemDetailPage() {
     const [rentalStats, setRentalStats] = useState<any>(null);
 
     // Auction
-    const [startPrice, setStartPrice] = useState("");
-    const [reservePrice, setReservePrice] = useState("");
-    const [endDateAuction, setEndDateAuction] = useState("");
-    const [auctionLoading, setAuctionLoading] = useState(false);
+   
     const [bidAmount, setBidAmount] = useState("");
     const [bidLoading, setBidLoading] = useState(false);
 
@@ -272,22 +269,7 @@ export default function ItemDetailPage() {
         } catch { alert("Modification impossible"); }
     };
 
-    const handleCreateAuction = async () => {
-        if (!startPrice || !endDateAuction) { alert("Veuillez entrer le prix et la date"); return; }
-        if (!confirm("⚠️ L'annulation entraînera des frais de 50$. Continuer ?")) return;
-        try {
-            setAuctionLoading(true);
-            await createAuction({
-                itemId: Number(id), startPrice: Number(startPrice),
-                reservePrice: Number(reservePrice) || Number(startPrice),
-                endDate: endDateAuction,
-            });
-            alert("Enchère créée !");
-            router.push("/my-items");
-        } catch (err: any) {
-            alert(err?.response?.data?.message || "Erreur création");
-        } finally { setAuctionLoading(false); }
-    };
+
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files ?? []);
@@ -682,7 +664,7 @@ export default function ItemDetailPage() {
 
 
             {/* ── Bid (non-owner, premium, enchère ouverte) ── */}
-            {item.type === "AUCTION" && !isOwner && !isAuctionFinished && currentUser?.premium && (
+            {item.type === "AUCTION" && !isOwner  && auction?.status === "OPEN" && !isAuctionFinished && currentUser?.premium && (
                 <div className="bg-white rounded-xl shadow p-4 mb-4">
                     <h3 className="font-bold mb-3">💰 Placer une enchère</h3>
                     <p className="text-sm mb-2">
@@ -719,21 +701,7 @@ export default function ItemDetailPage() {
                 </div>
             )}
 
-            {/* ── Publier enchère (owner, pas encore d'enchère) ── */}
-            {item.type === "AUCTION" && isOwner && !auction && !isAuctionFinished && (
-                <div className="bg-white rounded-xl shadow p-4 mb-4">
-                    <h3 className="font-bold mb-3">🔥 Publier l'enchère</h3>
-                    <div className="flex flex-col gap-2">
-                        <input type="number" placeholder="Prix initial" value={startPrice} onChange={e => setStartPrice(e.target.value)} className="border rounded p-2" />
-                        <input type="number" placeholder="Prix de réserve" value={reservePrice} onChange={e => setReservePrice(e.target.value)} className="border rounded p-2" />
-                        <input type="datetime-local" value={endDateAuction} onChange={e => setEndDateAuction(e.target.value)} className="border rounded p-2" />
-                        <button onClick={handleCreateAuction} disabled={auctionLoading}
-                            className="bg-red-600 text-white py-2 rounded-lg font-semibold mt-1 cursor-pointer">
-                            {auctionLoading ? "Publication..." : "Publier l'enchère"}
-                        </button>
-                    </div>
-                </div>
-            )}
+         
 
             {/* ── Info enchère owner ── */}
             {item.type === "AUCTION" && isOwner && auction?.status === "OPEN" && (

@@ -73,38 +73,52 @@ export default function CreatePage() {
       );
       const { latitude, longitude } = pos.coords;
 
+      const start = Number(startPrice);
+
+      const reserve =
+        !reservePrice || Number(reservePrice) <= 0
+          ? start
+          : Number(reservePrice);
+
+      if (reserve < start) {
+        alert(
+          "Le prix de réserve doit être supérieur ou égal au prix de départ"
+        );
+        return;
+      }
+
       const formData = new FormData();
-    formData.append("data", JSON.stringify({
-  title,
-  description,
-  categoryId: Number(categoryId),
-  type,
+      formData.append("data", JSON.stringify({
+        title,
+        description,
+        categoryId: Number(categoryId),
+        type,
 
-  pricePerDay:
-    type === "RENTAL"
-      ? Number(pricePerDay)
-      : null,
+        pricePerDay:
+          type === "RENTAL"
+            ? Number(pricePerDay)
+            : null,
 
-  startPrice:
-    type === "AUCTION"
-      ? Number(startPrice)
-      : null,
+        startPrice:
+          type === "AUCTION"
+            ? start
+            : null,
 
-  reservePrice:
-    type === "AUCTION"
-      ? (reservePrice ? Number(reservePrice) : Number(startPrice))
-      : null,
+        reservePrice:
+          type === "AUCTION"
+            ? reserve
+            : null,
 
-  auctionEndDate:
-    type === "AUCTION"
-      ? auctionEndDate
-      : null,
+        auctionEndDate:
+          type === "AUCTION"
+            ? auctionEndDate
+            : null,
 
-  city,
-  address,
-  latitude,
-  longitude,
-}));
+        city,
+        address,
+        latitude,
+        longitude,
+      }));
       images.forEach(img => formData.append("images", img));
 
       const createdItem = await createItem(formData);
@@ -122,7 +136,7 @@ export default function CreatePage() {
       }
 
       alert("Item créé !");
-      router.push("/");
+      router.push("/my-items");
     } catch (err) {
       console.error(err);
       alert("Erreur création");

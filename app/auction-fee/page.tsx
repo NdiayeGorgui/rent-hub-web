@@ -29,7 +29,7 @@ export default function AuctionFeePage() {
             await handleWebPayment(clientSecret);
 
             alert("✅ Paiement réussi !");
-            router.push(`/my-items/${itemId}`);
+            router.push("/my-items");
 
         } catch (err: any) {
             alert(
