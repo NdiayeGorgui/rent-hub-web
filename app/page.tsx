@@ -485,9 +485,9 @@ export default function Home() {
                       {item.rentalsCount > 10
                         ? "🔥 Très populaire"
                         : item.rentalsCount > 5
-                          ? "⭐ En forte demande"
+                          ? "🚀 En forte demande"
                           : item.rentalsCount > 0
-                            ? "✅ Déjà testé"
+                            ? "💎 Apprécié par les utilisateurs"
                             : "🆕 Nouvelle annonce"}
                     </span>
                   </div>
