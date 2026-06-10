@@ -53,7 +53,7 @@ export default function ItemDetailPage() {
     const [bidLoading, setBidLoading] = useState(false);
 
     // Auction creation
- 
+
     const [activeIndex, setActiveIndex] = useState(0);
 
 
@@ -227,6 +227,15 @@ export default function ItemDetailPage() {
                                 ⛔ Indisponible
                             </span>
                         )}
+                        <span className="text-sm font-medium text-gray-500">
+                            {(item.rentalsCount ?? 0) > 10
+                                ? "🔥 Très populaire"
+                                : (item.rentalsCount ?? 0) > 5
+                                    ? "🚀 En forte demande"
+                                    : (item.rentalsCount ?? 0) > 0
+                                        ? "✅ Déjà testé"
+                                        : "🆕 Nouvelle annonce"}
+                        </span>
                     </div>
 
                 </div>
