@@ -206,18 +206,15 @@ export default function ItemDetailPage() {
                 </div>
             )}
             {/* ── Rental header ── */}
+            {/* ── Rental header ── */}
             {item.type === "RENTAL" && (
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6 text-center">
 
-                    <p className="text-sm text-gray-400 mb-1">
-                        📦 Prix de location
+                    <p className="text-2xl font-bold text-blue-600">
+                        📦 Prix de location : {item.pricePerDay} $ / jour
                     </p>
 
-                    <div className="flex items-center justify-center gap-3 mt-2">
-                        <span className="text-2xl font-bold text-blue-600">
-                            {item.pricePerDay} $ / j
-                        </span>
-
+                    <div className="mt-3">
                         {item.active ? (
                             <span className="bg-green-50 text-green-600 text-sm font-medium px-3 py-1 rounded-full">
                                 ✅ Disponible
@@ -227,16 +224,17 @@ export default function ItemDetailPage() {
                                 ⛔ Indisponible
                             </span>
                         )}
-                        <span className="text-sm font-medium text-gray-500">
-                            {(item.rentalsCount ?? 0) > 10
-                                ? "🔥 Très populaire"
-                                : (item.rentalsCount ?? 0) > 5
-                                    ? "🚀 En forte demande"
-                                    : (item.rentalsCount ?? 0) > 0
-                                        ? "✅ Déjà testé"
-                                        : "🆕 Nouvelle annonce"}
-                        </span>
                     </div>
+
+                    <p className="text-sm font-medium text-gray-500 mt-3">
+                        {(item.rentalsCount ?? 0) > 10
+                            ? "🔥 Très populaire"
+                            : (item.rentalsCount ?? 0) > 5
+                                ? "🚀 En forte demande"
+                                : (item.rentalsCount ?? 0) > 0
+                                    ? "✅ Déjà testé"
+                                    : "🆕 Nouvelle annonce"}
+                    </p>
 
                 </div>
             )}
