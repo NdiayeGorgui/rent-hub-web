@@ -204,6 +204,7 @@ export default function CreatePage() {
 
       {type === "RENTAL" && (
         <input
+          type="number"
           placeholder="Prix / jour"
           value={pricePerDay}
           onChange={e => setPricePerDay(e.target.value)}
