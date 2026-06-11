@@ -23,6 +23,7 @@ export default function CreatePage() {
   const [startPrice, setStartPrice] = useState("");
   const [reservePrice, setReservePrice] = useState("");
   const [auctionEndDate, setAuctionEndDate] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const categories = [
     { id: 1, name: "Électronique" },
@@ -54,17 +55,27 @@ export default function CreatePage() {
     setImages([...e.target.files]);
   };
 
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!title.trim()) newErrors.title = "Le titre est requis";
+    if (!description.trim()) newErrors.description = "La description est requise";
+    if (!categoryId) newErrors.categoryId = "La catégorie est requise";
+    if (!city.trim()) newErrors.city = "La ville est requise";
+    if (type === "RENTAL" && !pricePerDay) newErrors.pricePerDay = "Le prix est requis";
+    if (type === "AUCTION" && !startPrice) newErrors.startPrice = "Le prix de départ est requis";
+    if (type === "AUCTION" && !auctionEndDate) newErrors.auctionEndDate = "La date de fin est requise";
+    if (images.length === 0) newErrors.images = "Au moins une image est requise";
+    return newErrors;
+  };
+
   const handleCreate = async () => {
     try {
-      if (!title || !description || !categoryId || !city) {
-        alert("Champs obligatoires manquants"); return;
+      const newErrors = validate();
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
       }
-      if (type === "AUCTION" && (!startPrice || !auctionEndDate)) {
-        alert("Prix de départ et date de fin requis pour une enchère"); return;
-      }
-      if (images.length === 0) {
-        alert("Ajoute au moins une image"); return;
-      }
+      setErrors({});
 
       setCreating(true);
 
@@ -145,41 +156,28 @@ export default function CreatePage() {
     }
   };
 
-  return (
-    <div className="max-w-2xl mx-auto p-4 bg-white rounded-xl shadow">
+ return (
+    <div className="max-w-2xl mx-auto p-4 bg-white rounded-xl shadow mb-10">
       <h1 className="text-2xl font-bold mb-6">Poster un item</h1>
 
-
-
+      {/* Toggle RENTAL / AUCTION */}
       <div className="flex bg-gray-100 p-1 rounded-xl w-full mb-6">
-
-        {/* LOCATION */}
         <button
-          onClick={() => setType("RENTAL")}
-          className={`
-      flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
-      cursor-pointer
-      ${type === "RENTAL"
+          onClick={() => { setType("RENTAL"); setErrors({}); }}
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+            type === "RENTAL"
               ? "bg-blue-600 text-white shadow"
-              : "text-gray-500 hover:bg-white hover:shadow"}
-    `}
+              : "text-gray-500 hover:bg-white hover:shadow"
+          }`}
         >
           📦 Location
         </button>
-
-        {/* ENCHÈRE */}
         <button
           disabled={!isPremium}
-          onClick={() => isPremium && setType("AUCTION")}
-          className={`
-      flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
-      ${!isPremium
-              ? "opacity-50 cursor-not-allowed"
-              : "cursor-pointer"}
-      ${type === "AUCTION"
-              ? "bg-red-500 text-white shadow"
-              : "text-gray-500 hover:bg-white hover:shadow"}
-    `}
+          onClick={() => { if (isPremium) { setType("AUCTION"); setErrors({}); } }}
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            !isPremium ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+          } ${type === "AUCTION" ? "bg-red-500 text-white shadow" : "text-gray-500 hover:bg-white hover:shadow"}`}
         >
           🔥 Enchère
           {!isPremium && (
@@ -188,116 +186,231 @@ export default function CreatePage() {
             </span>
           )}
         </button>
-
       </div>
-       <div className="space-y-5">
 
-      <input placeholder="Titre" value={title} onChange={e => setTitle(e.target.value)} className="input" />
-      <textarea placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} className="input" />
+      <div className="space-y-4">
 
-      <select value={categoryId} onChange={e => setCategoryId(e.target.value)} className="input">
-        <option value="">Choisir catégorie</option>
-        {categories.map(c => (
-          <option key={c.id} value={c.id}>{c.name}</option>
-        ))}
-      </select>
-
-      {type === "RENTAL" && (
-        <input
-          type="number"
-          placeholder="Prix / jour"
-          value={pricePerDay}
-          onChange={e => setPricePerDay(e.target.value)}
-          className="input"
-        />
-      )}
-
-      {/* Champs auction — seulement si type AUCTION */}
-      {type === "AUCTION" && (
-        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-4 flex flex-col gap-3">
-          <h3 className="font-semibold text-sm text-orange-800 mb-1">🔥 Paramètres enchère</h3>
-
-          <div>
-            <label className="text-xs font-medium text-gray-600 mb-1 block">
-              Prix de départ ($) *
-            </label>
-            <input
-              type="number"
-              value={startPrice}
-              onChange={e => setStartPrice(e.target.value)}
-              placeholder="Ex: 50"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-medium text-gray-600 mb-1 block">
-              Prix de réserve ($) <span className="text-gray-400 font-normal">(optionnel)</span>
-            </label>
-            <input
-              type="number"
-              value={reservePrice}
-              onChange={e => setReservePrice(e.target.value)}
-              placeholder="Laissez vide si aucun"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-medium text-gray-600 mb-1 block">
-              Date de fin *
-            </label>
-            <input
-              type="datetime-local"
-              value={auctionEndDate}
-              min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
-              onChange={e => setAuctionEndDate(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
-            <p className="text-xs text-gray-400 mt-1">Minimum 24h à partir de maintenant</p>
-          </div>
+        {/* Titre */}
+        <div>
+          <label className="text-sm font-medium text-gray-700 mb-1 block">
+            Titre <span className="text-red-500">*</span>
+          </label>
+          <input
+            placeholder="Titre de l'annonce"
+            value={title}
+            onChange={e => { setTitle(e.target.value); setErrors(p => ({ ...p, title: "" })); }}
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
+              errors.title
+                ? "border-red-400 focus:ring-red-400 bg-red-50"
+                : "border-gray-200 focus:ring-blue-500"
+            }`}
+          />
+          {errors.title && <p className="text-red-500 text-xs mt-1">⚠ {errors.title}</p>}
         </div>
-      )}
 
-      <input placeholder="Ville" value={city} onChange={e => setCity(e.target.value)} className="input" />
-      <input placeholder="Adresse" value={address} onChange={e => setAddress(e.target.value)} className="input" />
-</div>
-      {/* Remplace <input type="file" multiple onChange={handleImages} /> par : */}
+        {/* Description */}
+        <div>
+          <label className="text-sm font-medium text-gray-700 mb-1 block">
+            Description <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            placeholder="Décrivez votre article en détail..."
+            value={description}
+            onChange={e => { setDescription(e.target.value); setErrors(p => ({ ...p, description: "" })); }}
+            rows={3}
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 resize-none ${
+              errors.description
+                ? "border-red-400 focus:ring-red-400 bg-red-50"
+                : "border-gray-200 focus:ring-blue-500"
+            }`}
+          />
+          {errors.description && <p className="text-red-500 text-xs mt-1">⚠ {errors.description}</p>}
+        </div>
 
-      <div className="mt-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Images
-        </label>
-        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors">
-          <svg className="w-8 h-8 text-gray-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.338-2.32 5.75 5.75 0 011.344 11.095" />
-          </svg>
-          <span className="text-sm text-gray-500">Cliquez pour ajouter des images</span>
-          <span className="text-xs text-gray-400 mt-1">{images.length > 0 ? `${images.length} fichier(s) sélectionné(s)` : "PNG, JPG acceptés"}</span>
-          <input type="file" multiple accept="image/*" onChange={handleImages} className="hidden" />
-        </label>
-
-        {/* Prévisualisation */}
-        {images.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-3">
-            {images.map((img, i) => (
-              <div key={i} className="relative">
-                <img
-                  src={URL.createObjectURL(img)}
-                  className="w-20 h-20 object-cover rounded-lg border border-gray-200"
-                />
-                <button
-                  onClick={() => setImages(images.filter((_, idx) => idx !== i))}
-                  className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center"
-                >
-                  ×
-                </button>
-              </div>
+        {/* Catégorie */}
+        <div>
+          <label className="text-sm font-medium text-gray-700 mb-1 block">
+            Catégorie <span className="text-red-500">*</span>
+          </label>
+          <select
+            value={categoryId}
+            onChange={e => { setCategoryId(e.target.value); setErrors(p => ({ ...p, categoryId: "" })); }}
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 ${
+              errors.categoryId
+                ? "border-red-400 focus:ring-red-400 bg-red-50"
+                : "border-gray-200 focus:ring-blue-500"
+            }`}
+          >
+            <option value="">Choisir une catégorie</option>
+            {categories.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
             ))}
+          </select>
+          {errors.categoryId && <p className="text-red-500 text-xs mt-1">⚠ {errors.categoryId}</p>}
+        </div>
+
+        {/* Prix location */}
+        {type === "RENTAL" && (
+          <div>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">
+              Prix / jour ($) <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              placeholder="Ex: 25"
+              value={pricePerDay}
+              onChange={e => { setPricePerDay(e.target.value); setErrors(p => ({ ...p, pricePerDay: "" })); }}
+              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
+                errors.pricePerDay
+                  ? "border-red-400 focus:ring-red-400 bg-red-50"
+                  : "border-gray-200 focus:ring-blue-500"
+              }`}
+            />
+            {errors.pricePerDay && <p className="text-red-500 text-xs mt-1">⚠ {errors.pricePerDay}</p>}
           </div>
         )}
+
+        {/* Champs enchère */}
+        {type === "AUCTION" && (
+          <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 flex flex-col gap-4">
+            <h3 className="font-semibold text-sm text-orange-800">🔥 Paramètres enchère</h3>
+
+            {/* Prix de départ */}
+            <div>
+              <label className="text-xs font-medium text-gray-600 mb-1 block">
+                Prix de départ ($) <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                value={startPrice}
+                onChange={e => { setStartPrice(e.target.value); setErrors(p => ({ ...p, startPrice: "" })); }}
+                placeholder="Ex: 50"
+                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
+                  errors.startPrice
+                    ? "border-red-400 focus:ring-red-400 bg-red-50"
+                    : "border-gray-200 focus:ring-orange-400"
+                }`}
+              />
+              {errors.startPrice && <p className="text-red-500 text-xs mt-1">⚠ {errors.startPrice}</p>}
+            </div>
+
+            {/* Prix de réserve */}
+            <div>
+              <label className="text-xs font-medium text-gray-600 mb-1 block">
+                Prix de réserve ($) <span className="text-gray-400 font-normal">(optionnel)</span>
+              </label>
+              <input
+                type="number"
+                value={reservePrice}
+                onChange={e => setReservePrice(e.target.value)}
+                placeholder="Laissez vide si aucun"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+              />
+            </div>
+
+            {/* Date de fin */}
+            <div>
+              <label className="text-xs font-medium text-gray-600 mb-1 block">
+                Date de fin <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="datetime-local"
+                value={auctionEndDate}
+                min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
+                onChange={e => { setAuctionEndDate(e.target.value); setErrors(p => ({ ...p, auctionEndDate: "" })); }}
+                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
+                  errors.auctionEndDate
+                    ? "border-red-400 focus:ring-red-400 bg-red-50"
+                    : "border-gray-200 focus:ring-orange-400"
+                }`}
+              />
+              {errors.auctionEndDate && <p className="text-red-500 text-xs mt-1">⚠ {errors.auctionEndDate}</p>}
+              <p className="text-xs text-gray-400 mt-1">Minimum 24h à partir de maintenant</p>
+            </div>
+          </div>
+        )}
+
+        {/* Ville */}
+        <div>
+          <label className="text-sm font-medium text-gray-700 mb-1 block">
+            Ville <span className="text-red-500">*</span>
+          </label>
+          <input
+            placeholder="Ex: Montréal"
+            value={city}
+            onChange={e => { setCity(e.target.value); setErrors(p => ({ ...p, city: "" })); }}
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
+              errors.city
+                ? "border-red-400 focus:ring-red-400 bg-red-50"
+                : "border-gray-200 focus:ring-blue-500"
+            }`}
+          />
+          {errors.city && <p className="text-red-500 text-xs mt-1">⚠ {errors.city}</p>}
+        </div>
+
+        {/* Adresse */}
+        <div>
+          <label className="text-sm font-medium text-gray-700 mb-1 block">
+            Adresse <span className="text-red-500">*</span>
+          </label>
+          <input
+            placeholder="Ex: 123 rue Sainte-Catherine"
+            value={address}
+            onChange={e => setAddress(e.target.value)}
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        {/* Images */}
+        <div>
+          <label className="text-sm font-medium text-gray-700 mb-2 block">
+            Images <span className="text-red-500">*</span>
+          </label>
+          <label className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
+            errors.images
+              ? "border-red-400 bg-red-50"
+              : "border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+          }`}>
+            <svg className="w-8 h-8 text-gray-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.338-2.32 5.75 5.75 0 011.344 11.095" />
+            </svg>
+            <span className="text-sm text-gray-500">Cliquez pour ajouter des images</span>
+            <span className="text-xs text-gray-400 mt-1">
+              {images.length > 0 ? `${images.length} fichier(s) sélectionné(s)` : "PNG, JPG acceptés"}
+            </span>
+            <input
+              type="file" multiple accept="image/*"
+              onChange={e => { handleImages(e); setErrors(p => ({ ...p, images: "" })); }}
+              className="hidden"
+            />
+          </label>
+          {errors.images && <p className="text-red-500 text-xs mt-1">⚠ {errors.images}</p>}
+
+          {/* Prévisualisation */}
+          {images.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-3">
+              {images.map((img, i) => (
+                <div key={i} className="relative">
+                  <img
+                    src={URL.createObjectURL(img)}
+                    className="w-20 h-20 object-cover rounded-lg border border-gray-200"
+                    alt=""
+                  />
+                  <button
+                    onClick={() => setImages(images.filter((_, idx) => idx !== i))}
+                    className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center cursor-pointer"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
       </div>
 
+      {/* Bouton publier */}
       <button
         onClick={handleCreate}
         disabled={creating}
