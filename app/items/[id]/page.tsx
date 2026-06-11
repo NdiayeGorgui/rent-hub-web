@@ -20,6 +20,7 @@ import {
 } from "@/services/reviewService";
 
 import { BASE_URL } from "@/lib/baseURL";
+import { formatPrice } from "@/lib/formatPrice";
 
 export default function ItemDetailPage() {
     const { id } = useParams();
@@ -181,7 +182,7 @@ export default function ItemDetailPage() {
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6 text-center">
                     <p className="text-sm text-gray-400 mb-1">💰 Prix actuel</p>
                     <p className="text-4xl font-bold text-blue-600 mb-2">
-                        {auction.currentPrice ?? auction.startPrice} $
+                        {formatPrice(auction.currentPrice ?? auction.startPrice)} 
                     </p>
                     {auction.reserveReached ? (
                         <p className="text-green-600 font-medium text-sm mb-2">✅ Prix de réserve atteint</p>
@@ -211,7 +212,7 @@ export default function ItemDetailPage() {
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6 text-center">
 
                     <p className="text-2xl font-bold text-blue-600">
-                        📦 Prix de location : {item.pricePerDay} $ / jour
+                        📦 Prix de location : {formatPrice(item.pricePerDay)} / jour
                     </p>
 
                     <div className="mt-3">
@@ -422,7 +423,7 @@ export default function ItemDetailPage() {
                 <div className="bg-white rounded-xl border border-gray-100 p-4 mb-4">
                     <h3 className="font-semibold mb-3">💰 Placer une enchère</h3>
                     <p className="text-sm text-gray-500 mb-2">
-                        Prix actuel : {auction?.currentPrice ?? auction?.startPrice ?? "Pas encore d'enchère"} $
+                        Prix actuel : {formatPrice(auction?.currentPrice ?? auction?.startPrice ?? "Pas encore d'enchère")} 
                     </p>
                     <input
                         type="number" placeholder="Votre offre" value={bidAmount}
@@ -512,7 +513,7 @@ export default function ItemDetailPage() {
                 <div className="bg-white rounded-xl border border-gray-100 p-4 mb-4">
                     <h3 className="font-semibold mb-2">📊 Votre enchère</h3>
                     <p className="text-sm text-gray-600">
-                        Prix actuel : {auction?.currentPrice ?? auction?.startPrice} $
+                        Prix actuel : {formatPrice(auction?.currentPrice ?? auction?.startPrice)} 
                     </p>
                     <p className="text-sm text-gray-400">Date de fin : {auction?.endDate}</p>
                 </div>

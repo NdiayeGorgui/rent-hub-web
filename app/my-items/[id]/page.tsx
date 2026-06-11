@@ -21,13 +21,13 @@ import { getCurrentUser } from "@/services/authService";
 import {
     getAllReviewsForUser,
     getReviewsByItem,
-    getReviewsByUser,
     getReviewsCountByItem,
 } from "@/services/reviewService";
 import { cancelAuctionPayment } from "@/services/paymentService";
 import { handleWebPayment } from "@/services/stripeWeb";
 import Link from "next/link";
 import { BASE_URL } from "@/lib/baseURL";
+import { formatPrice } from "@/lib/formatPrice";
 
 const categories = [
     { id: 1, name: "Électronique" },
@@ -362,8 +362,8 @@ export default function ItemDetailPage() {
                             <p>👀 Vues : {auction.views ?? 0}</p>
                             <p>⭐ Suivis : {auction.watchers ?? 0}</p>
                             <p>👥 {auction.participantsCount ?? 0} enchérisseur(s)</p>
-                            <p>💰 Prix initial : {auction.startPrice} $</p>
-                            <p>📈 Prix actuel : {auction.currentPrice ?? auction.startPrice} $</p>
+                            <p>💰 Prix initial : {formatPrice(auction.startPrice)} </p>
+                            <p>📈 Prix actuel : {formatPrice(auction.currentPrice ?? auction.startPrice)} </p>
                             <p className={auction.reserveReached ? "text-green-600" : "text-red-600"}>
                                 {auction.reserveReached ? "✅ Prix de réserve atteint" : "⛔ Prix de réserve non atteint"}
                             </p>
@@ -450,7 +450,7 @@ export default function ItemDetailPage() {
                 <div className="bg-white rounded-xl shadow p-6 mb-6 text-center">
                     <p className="text-gray-500">💰 Prix actuel</p>
                     <p className="text-4xl font-bold text-blue-600 my-2">
-                        {auction.currentPrice ?? auction.startPrice} $
+                        {formatPrice(auction.currentPrice ?? auction.startPrice)} 
                     </p>
                     <p className="text-red-600 font-semibold">⏳ Temps restant : {timeLeft}</p>
                 </div>
@@ -561,7 +561,7 @@ export default function ItemDetailPage() {
             </div>
 
             {item.type === "RENTAL" && (
-                <p className="text-xl font-semibold text-blue-600 mb-2">{item.pricePerDay} $ / jour</p>
+                <p className="text-xl font-semibold text-blue-600 mb-2">{formatPrice(item.pricePerDay)}  / jour</p>
             )}
             <p className="text-gray-700 mb-4">{item.description}</p>
 
@@ -668,7 +668,7 @@ export default function ItemDetailPage() {
                 <div className="bg-white rounded-xl shadow p-4 mb-4">
                     <h3 className="font-bold mb-3">💰 Placer une enchère</h3>
                     <p className="text-sm mb-2">
-                        Prix actuel : {auction?.currentPrice ?? auction?.startPrice ?? "Pas encore d'enchère"} $
+                        Prix actuel : {formatPrice(auction?.currentPrice ?? auction?.startPrice) ?? "Pas encore d'enchère"} 
                     </p>
                     <input
                         type="number" placeholder="Votre offre" value={bidAmount}
@@ -707,7 +707,7 @@ export default function ItemDetailPage() {
             {item.type === "AUCTION" && isOwner && auction?.status === "OPEN" && (
                 <div className="bg-white rounded-xl shadow p-4 mb-6">
                     <h3 className="font-bold mb-2">📊 Votre enchère</h3>
-                    <p className="text-sm">Prix actuel : {auction?.currentPrice ?? auction?.startPrice} $</p>
+                    <p className="text-sm">Prix actuel : {formatPrice(auction?.currentPrice ?? auction?.startPrice)} </p>
                     <p className="text-sm text-gray-500">Date de fin : {auction?.endDate}</p>
                 </div>
             )}

@@ -1,4 +1,5 @@
 import { BASE_URL } from "@/lib/baseURL";
+import { formatPrice } from "@/lib/formatPrice";
 
 type Props = {
   item: any;
@@ -64,7 +65,7 @@ export default function ItemCard({
 
         {/* PRIX */}
         <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
-          💰 {displayedPrice} $
+          💰 {formatPrice(displayedPrice)}
           {item.type === "RENTAL" && " / jour"}
         </div>
 

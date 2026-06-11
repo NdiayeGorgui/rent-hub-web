@@ -8,6 +8,7 @@ import { useAuth } from "@/components/contexts/AuthContext";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import ItemCard from "@/components/ui/ItemCard";
 import Filters from "@/components/ui/Filters";
+import { formatPrice } from "@/lib/formatPrice";
 
 
 
@@ -468,7 +469,7 @@ export default function Home() {
                 {item.type === "AUCTION" && auctionData[item.id] ? (
 
                   <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
-                    <span>💰 {auctionData[item.id].currentPrice} $</span>
+                    <span>💰 {formatPrice(auctionData[item.id].currentPrice)} </span>
                     <span>👀 {auctionData[item.id].views}</span>
                     <span>⭐ {auctionData[item.id].watchers}</span>
                     <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>

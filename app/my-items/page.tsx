@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchMyItems } from "@/services/itemService";
 import { BASE_URL } from "@/lib/baseURL";
+import { formatPrice } from "@/lib/formatPrice";
 
 
 export default function MyItemsPage() {
@@ -66,7 +67,7 @@ export default function MyItemsPage() {
 
               {item.type === "RENTAL" && (
                 <p className="text-blue-600 font-semibold mt-1">
-                  {item.pricePerDay} $ / jour
+                  {formatPrice(item.pricePerDay)}  / jour
                 </p>
               )}
 
