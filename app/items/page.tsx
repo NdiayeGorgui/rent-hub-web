@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getAllItemsAdmin, activateItemAdmin, deactivateItemAdmin } from "@/services/adminItemService";
+import { formatPrice } from "@/lib/formatPrice";
 
 interface Item {
   itemId: number;
@@ -94,8 +95,8 @@ export default function AdminItemsPage() {
                     <span className="text-gray-200">·</span>
                     <span className="text-xs font-semibold text-blue-600">
                       {item.type === "AUCTION"
-                        ? `🔥 ${item.currentPrice ?? "—"} $`
-                        : `${item.pricePerDay} $/j`}
+                        ? `🔥 ${formatPrice(item.currentPrice) ?? "—"} `
+                        : `${formatPrice(item.pricePerDay)} /j`}
                     </span>
                   </div>
                   <div className="flex gap-2 mt-2 flex-wrap">

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getAdminStats } from "@/services/adminService";
+import { formatPrice } from "@/lib/formatPrice";
 
 function StatCard({ title, value, color, icon }: { title: string; value: any; color: string; icon: string }) {
   return (
@@ -204,7 +205,7 @@ export default function DashboardPage() {
         },
         {
           title: "Prix moyen gagnant",
-          value: `${stats.auctionStats.avgWinningPrice?.toFixed(2) ?? "0.00"} $`,
+          value: `${formatPrice(stats.auctionStats.avgWinningPrice?.toFixed(2) ?? "0.00")} `,
           icon: "💰",
           color: "#10b981",
         },
@@ -223,11 +224,11 @@ export default function DashboardPage() {
       title: "Revenus & Notation",
       cards: [
         { title: "Revenus bruts", 
-          value: `${stats.paymentStats.totalAmount?.toFixed(2) ?? "0.00"} $`, icon: "💵", color: "#10b981" },
+          value: `${formatPrice(stats.paymentStats.totalAmount?.toFixed(2) ?? "0.00")}`, icon: "💵", color: "#10b981" },
 
         {
           title: "Remboursements",
-          value: `${stats.paymentStats.refundPayments?.toFixed(2) ?? "0.00"} $`,
+          value: `${formatPrice(stats.paymentStats.refundPayments?.toFixed(2) ?? "0.00")} `,
           icon: "💰",
           color: "#059669",
         },

@@ -10,6 +10,7 @@ import {
 
 import Link from "next/link";
 import { BASE_URL } from "@/lib/baseURL";
+import { formatPrice } from "@/lib/formatPrice";
 
 export default function AuctionsPage() {
     const router = useRouter();
@@ -205,7 +206,7 @@ export default function AuctionsPage() {
                                                 Prix actuel
                                             </p>
                                             <p className="text-sm font-bold text-blue-600">
-                                                {auction.currentPrice ?? auction.startPrice} $
+                                                {formatPrice(auction.currentPrice ?? auction.startPrice)} 
                                             </p>
                                         </div>
 
@@ -214,7 +215,7 @@ export default function AuctionsPage() {
                                             <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">
                                                 Prix départ
                                             </p>
-                                            <p className="text-sm font-medium text-gray-700">{auction.startPrice} $</p>
+                                            <p className="text-sm font-medium text-gray-700">{formatPrice(auction.startPrice)} </p>
                                         </div>
 
                                         {/* Participants */}
