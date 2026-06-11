@@ -61,6 +61,7 @@ export default function CreatePage() {
     if (!description.trim()) newErrors.description = "La description est requise";
     if (!categoryId) newErrors.categoryId = "La catégorie est requise";
     if (!city.trim()) newErrors.city = "La ville est requise";
+    if (!address.trim()) newErrors.address = "L'adresse est requise";
     if (type === "RENTAL" && !pricePerDay) newErrors.pricePerDay = "Le prix est requis";
     if (type === "AUCTION" && !startPrice) newErrors.startPrice = "Le prix de départ est requis";
     if (type === "AUCTION" && !auctionEndDate) newErrors.auctionEndDate = "La date de fin est requise";
@@ -156,7 +157,7 @@ export default function CreatePage() {
     }
   };
 
- return (
+  return (
     <div className="max-w-2xl mx-auto p-4 bg-white rounded-xl shadow mb-10">
       <h1 className="text-2xl font-bold mb-6">Poster un item</h1>
 
@@ -164,20 +165,18 @@ export default function CreatePage() {
       <div className="flex bg-gray-100 p-1 rounded-xl w-full mb-6">
         <button
           onClick={() => { setType("RENTAL"); setErrors({}); }}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
-            type === "RENTAL"
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${type === "RENTAL"
               ? "bg-blue-600 text-white shadow"
               : "text-gray-500 hover:bg-white hover:shadow"
-          }`}
+            }`}
         >
           📦 Location
         </button>
         <button
           disabled={!isPremium}
           onClick={() => { if (isPremium) { setType("AUCTION"); setErrors({}); } }}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-            !isPremium ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-          } ${type === "AUCTION" ? "bg-red-500 text-white shadow" : "text-gray-500 hover:bg-white hover:shadow"}`}
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${!isPremium ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+            } ${type === "AUCTION" ? "bg-red-500 text-white shadow" : "text-gray-500 hover:bg-white hover:shadow"}`}
         >
           🔥 Enchère
           {!isPremium && (
@@ -199,11 +198,10 @@ export default function CreatePage() {
             placeholder="Titre de l'annonce"
             value={title}
             onChange={e => { setTitle(e.target.value); setErrors(p => ({ ...p, title: "" })); }}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
-              errors.title
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${errors.title
                 ? "border-red-400 focus:ring-red-400 bg-red-50"
                 : "border-gray-200 focus:ring-blue-500"
-            }`}
+              }`}
           />
           {errors.title && <p className="text-red-500 text-xs mt-1">⚠ {errors.title}</p>}
         </div>
@@ -218,11 +216,10 @@ export default function CreatePage() {
             value={description}
             onChange={e => { setDescription(e.target.value); setErrors(p => ({ ...p, description: "" })); }}
             rows={3}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 resize-none ${
-              errors.description
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 resize-none ${errors.description
                 ? "border-red-400 focus:ring-red-400 bg-red-50"
                 : "border-gray-200 focus:ring-blue-500"
-            }`}
+              }`}
           />
           {errors.description && <p className="text-red-500 text-xs mt-1">⚠ {errors.description}</p>}
         </div>
@@ -235,11 +232,10 @@ export default function CreatePage() {
           <select
             value={categoryId}
             onChange={e => { setCategoryId(e.target.value); setErrors(p => ({ ...p, categoryId: "" })); }}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 ${
-              errors.categoryId
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 ${errors.categoryId
                 ? "border-red-400 focus:ring-red-400 bg-red-50"
                 : "border-gray-200 focus:ring-blue-500"
-            }`}
+              }`}
           >
             <option value="">Choisir une catégorie</option>
             {categories.map(c => (
@@ -260,11 +256,10 @@ export default function CreatePage() {
               placeholder="Ex: 25"
               value={pricePerDay}
               onChange={e => { setPricePerDay(e.target.value); setErrors(p => ({ ...p, pricePerDay: "" })); }}
-              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
-                errors.pricePerDay
+              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${errors.pricePerDay
                   ? "border-red-400 focus:ring-red-400 bg-red-50"
                   : "border-gray-200 focus:ring-blue-500"
-              }`}
+                }`}
             />
             {errors.pricePerDay && <p className="text-red-500 text-xs mt-1">⚠ {errors.pricePerDay}</p>}
           </div>
@@ -285,11 +280,10 @@ export default function CreatePage() {
                 value={startPrice}
                 onChange={e => { setStartPrice(e.target.value); setErrors(p => ({ ...p, startPrice: "" })); }}
                 placeholder="Ex: 50"
-                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
-                  errors.startPrice
+                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${errors.startPrice
                     ? "border-red-400 focus:ring-red-400 bg-red-50"
                     : "border-gray-200 focus:ring-orange-400"
-                }`}
+                  }`}
               />
               {errors.startPrice && <p className="text-red-500 text-xs mt-1">⚠ {errors.startPrice}</p>}
             </div>
@@ -318,11 +312,10 @@ export default function CreatePage() {
                 value={auctionEndDate}
                 min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
                 onChange={e => { setAuctionEndDate(e.target.value); setErrors(p => ({ ...p, auctionEndDate: "" })); }}
-                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
-                  errors.auctionEndDate
+                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${errors.auctionEndDate
                     ? "border-red-400 focus:ring-red-400 bg-red-50"
                     : "border-gray-200 focus:ring-orange-400"
-                }`}
+                  }`}
               />
               {errors.auctionEndDate && <p className="text-red-500 text-xs mt-1">⚠ {errors.auctionEndDate}</p>}
               <p className="text-xs text-gray-400 mt-1">Minimum 24h à partir de maintenant</p>
@@ -339,11 +332,10 @@ export default function CreatePage() {
             placeholder="Ex: Montréal"
             value={city}
             onChange={e => { setCity(e.target.value); setErrors(p => ({ ...p, city: "" })); }}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
-              errors.city
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${errors.city
                 ? "border-red-400 focus:ring-red-400 bg-red-50"
                 : "border-gray-200 focus:ring-blue-500"
-            }`}
+              }`}
           />
           {errors.city && <p className="text-red-500 text-xs mt-1">⚠ {errors.city}</p>}
         </div>
@@ -356,9 +348,13 @@ export default function CreatePage() {
           <input
             placeholder="Ex: 123 rue Sainte-Catherine"
             value={address}
-            onChange={e => setAddress(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={e => { setAddress(e.target.value); setErrors(p => ({ ...p, address: "" })); }}
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${errors.address
+                ? "border-red-400 focus:ring-red-400 bg-red-50"
+                : "border-gray-200 focus:ring-blue-500"
+              }`}
           />
+          {errors.address && <p className="text-red-500 text-xs mt-1">⚠ {errors.address}</p>}
         </div>
 
         {/* Images */}
@@ -366,11 +362,10 @@ export default function CreatePage() {
           <label className="text-sm font-medium text-gray-700 mb-2 block">
             Images <span className="text-red-500">*</span>
           </label>
-          <label className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
-            errors.images
+          <label className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${errors.images
               ? "border-red-400 bg-red-50"
               : "border-gray-300 hover:border-blue-400 hover:bg-blue-50"
-          }`}>
+            }`}>
             <svg className="w-8 h-8 text-gray-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.338-2.32 5.75 5.75 0 011.344 11.095" />
             </svg>
