@@ -234,7 +234,7 @@ export default function DashboardPage() {
         },
         {
           title: "Note moyenne",
-          value: `${stats.reviewStats.averageRating?.toFixed(1) ?? "0.0"} ⭐`,
+          value: `${stats.reviewStats.averageRating?.toFixed(1) ?? "0.0"}`,
           icon: "⭐",
           color: "#facc15",
         },
