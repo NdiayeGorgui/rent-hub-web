@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createItem } from "@/services/itemService";
 import { useRouter } from "next/navigation";
 import { fetchPremiumStatus } from "@/services/subscriptionService";
-import { generateDescription } from "@/services/aiService";
+import { generateDescription, suggestPrice } from "@/services/aiService";
 
 export default function CreatePage() {
   const router = useRouter();
@@ -28,6 +28,14 @@ export default function CreatePage() {
 
   const [generatingDesc, setGeneratingDesc] = useState(false);
 
+  const [suggestingPrice, setSuggestingPrice] = useState(false);
+  const [priceSuggestion, setPriceSuggestion] = useState<{
+    min_price: number;
+    max_price: number;
+    recommended_price: number;
+    reasoning: string;
+  } | null>(null);
+
   const categories = [
     { id: 1, name: "Électronique" },
     { id: 2, name: "Électroménager" },
@@ -41,6 +49,8 @@ export default function CreatePage() {
     { id: 10, name: "Autres" },
   ];
 
+
+
   useEffect(() => {
     const checkPremium = async () => {
       try {
@@ -53,6 +63,27 @@ export default function CreatePage() {
 
     checkPremium();
   }, []);
+
+  const handleSuggestPrice = async () => {
+    if (!title || !categoryId) {
+      alert("Entrez d'abord le titre et la catégorie");
+      return;
+    }
+    try {
+      setSuggestingPrice(true);
+      setPriceSuggestion(null);
+      const suggestion = await suggestPrice({
+        title,
+        category_id: Number(categoryId),
+        item_type: type,
+      });
+      setPriceSuggestion(suggestion);
+    } catch {
+      alert("Impossible d'obtenir une suggestion de prix");
+    } finally {
+      setSuggestingPrice(false);
+    }
+  };
 
 
   const handleGenerateDescription = async () => {
@@ -232,7 +263,7 @@ export default function CreatePage() {
           {errors.title && <p className="text-red-500 text-xs mt-1">⚠ {errors.title}</p>}
         </div>
 
-         {/* Catégorie */}
+        {/* Catégorie */}
         <div>
           <label className="text-sm font-medium text-gray-700 mb-1 block">
             Catégorie <span className="text-red-500">*</span>
@@ -281,8 +312,8 @@ export default function CreatePage() {
             onChange={e => { setDescription(e.target.value); setErrors(p => ({ ...p, description: "" })); }}
             rows={4}
             className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 resize-none ${errors.description
-                ? "border-red-400 focus:ring-red-400 bg-red-50"
-                : "border-gray-200 focus:ring-blue-500"
+              ? "border-red-400 focus:ring-red-400 bg-red-50"
+              : "border-gray-200 focus:ring-blue-500"
               }`}
           />
           {generatingDesc && (
@@ -293,13 +324,70 @@ export default function CreatePage() {
           {errors.description && <p className="text-red-500 text-xs mt-1">⚠ {errors.description}</p>}
         </div>
 
-       
+
         {/* Prix location */}
         {type === "RENTAL" && (
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
-              Prix / jour ($) <span className="text-red-500">*</span>
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-sm font-medium text-gray-700">
+                Prix / jour ($) <span className="text-red-500">*</span>
+              </label>
+              <button
+                type="button"
+                onClick={handleSuggestPrice}
+                disabled={suggestingPrice || !title || !categoryId}
+                className="flex items-center gap-1.5 text-xs px-3 py-1.5 bg-violet-600 text-white rounded-lg hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              >
+                {suggestingPrice ? (
+                  <>
+                    <span className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
+                    Analyse...
+                  </>
+                ) : "✨ Suggérer un prix"}
+              </button>
+            </div>
+
+            {/* Suggestion IA */}
+            {priceSuggestion && (
+              <div className="bg-violet-50 border border-violet-200 rounded-xl p-3 mb-2">
+                <p className="text-xs font-semibold text-violet-700 mb-2">💡 Suggestion IA</p>
+                <div className="flex gap-2 mb-2">
+                  <button
+                    type="button"
+                    onClick={() => { setPricePerDay(String(priceSuggestion.min_price)); setErrors(p => ({ ...p, pricePerDay: "" })); setPriceSuggestion(null); }}
+                    className="flex-1 text-center text-xs py-1.5 bg-white border border-violet-200 rounded-lg hover:bg-violet-100 cursor-pointer transition-colors"
+                  >
+                    <span className="block text-gray-500">Min</span>
+                    <span className="font-bold text-violet-700">{priceSuggestion.min_price} $</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setPricePerDay(String(priceSuggestion.recommended_price)); setErrors(p => ({ ...p, pricePerDay: "" })); setPriceSuggestion(null); }}
+                    className="flex-1 text-center text-xs py-1.5 bg-violet-600 text-white rounded-lg hover:bg-violet-700 cursor-pointer transition-colors border-2 border-violet-600"
+                  >
+                    <span className="block opacity-80">Recommandé ⭐</span>
+                    <span className="font-bold">{priceSuggestion.recommended_price} $</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setPricePerDay(String(priceSuggestion.max_price)); setErrors(p => ({ ...p, pricePerDay: "" })); setPriceSuggestion(null); }}
+                    className="flex-1 text-center text-xs py-1.5 bg-white border border-violet-200 rounded-lg hover:bg-violet-100 cursor-pointer transition-colors"
+                  >
+                    <span className="block text-gray-500">Max</span>
+                    <span className="font-bold text-violet-700">{priceSuggestion.max_price} $</span>
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 italic">{priceSuggestion.reasoning}</p>
+                <button
+                  type="button"
+                  onClick={() => setPriceSuggestion(null)}
+                  className="text-xs text-gray-400 hover:text-gray-600 mt-1 cursor-pointer"
+                >
+                  ✕ Fermer
+                </button>
+              </div>
+            )}
+
             <input
               type="number"
               placeholder="Ex: 25"
@@ -321,17 +409,74 @@ export default function CreatePage() {
 
             {/* Prix de départ */}
             <div>
-              <label className="text-xs font-medium text-gray-600 mb-1 block">
-                Prix de départ ($) <span className="text-red-500">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-medium text-gray-600">
+                  Prix de départ ($) <span className="text-red-500">*</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={handleSuggestPrice}
+                  disabled={suggestingPrice || !title || !categoryId}
+                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 bg-violet-600 text-white rounded-lg hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                >
+                  {suggestingPrice ? (
+                    <>
+                      <span className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
+                      Analyse...
+                    </>
+                  ) : "✨ Suggérer"}
+                </button>
+              </div>
+
+              {/* Suggestion IA pour enchère */}
+              {priceSuggestion && (
+                <div className="bg-violet-50 border border-violet-200 rounded-xl p-3 mb-2">
+                  <p className="text-xs font-semibold text-violet-700 mb-2">💡 Suggestion IA — Prix de départ</p>
+                  <div className="flex gap-2 mb-2">
+                    <button
+                      type="button"
+                      onClick={() => { setStartPrice(String(priceSuggestion.min_price)); setErrors(p => ({ ...p, startPrice: "" })); setPriceSuggestion(null); }}
+                      className="flex-1 text-center text-xs py-1.5 bg-white border border-violet-200 rounded-lg hover:bg-violet-100 cursor-pointer transition-colors"
+                    >
+                      <span className="block text-gray-500">Min</span>
+                      <span className="font-bold text-violet-700">{priceSuggestion.min_price} $</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setStartPrice(String(priceSuggestion.recommended_price)); setErrors(p => ({ ...p, startPrice: "" })); setPriceSuggestion(null); }}
+                      className="flex-1 text-center text-xs py-1.5 bg-violet-600 text-white rounded-lg hover:bg-violet-700 cursor-pointer transition-colors"
+                    >
+                      <span className="block opacity-80">Recommandé ⭐</span>
+                      <span className="font-bold">{priceSuggestion.recommended_price} $</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setStartPrice(String(priceSuggestion.max_price)); setErrors(p => ({ ...p, startPrice: "" })); setPriceSuggestion(null); }}
+                      className="flex-1 text-center text-xs py-1.5 bg-white border border-violet-200 rounded-lg hover:bg-violet-100 cursor-pointer transition-colors"
+                    >
+                      <span className="block text-gray-500">Max</span>
+                      <span className="font-bold text-violet-700">{priceSuggestion.max_price} $</span>
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-500 italic">{priceSuggestion.reasoning}</p>
+                  <button
+                    type="button"
+                    onClick={() => setPriceSuggestion(null)}
+                    className="text-xs text-gray-400 hover:text-gray-600 mt-1 cursor-pointer"
+                  >
+                    ✕ Fermer
+                  </button>
+                </div>
+              )}
+
               <input
                 type="number"
                 value={startPrice}
                 onChange={e => { setStartPrice(e.target.value); setErrors(p => ({ ...p, startPrice: "" })); }}
                 placeholder="Ex: 50"
                 className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${errors.startPrice
-                  ? "border-red-400 focus:ring-red-400 bg-red-50"
-                  : "border-gray-200 focus:ring-orange-400"
+                    ? "border-red-400 focus:ring-red-400 bg-red-50"
+                    : "border-gray-200 focus:ring-orange-400"
                   }`}
               />
               {errors.startPrice && <p className="text-red-500 text-xs mt-1">⚠ {errors.startPrice}</p>}
@@ -362,8 +507,8 @@ export default function CreatePage() {
                 min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
                 onChange={e => { setAuctionEndDate(e.target.value); setErrors(p => ({ ...p, auctionEndDate: "" })); }}
                 className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${errors.auctionEndDate
-                  ? "border-red-400 focus:ring-red-400 bg-red-50"
-                  : "border-gray-200 focus:ring-orange-400"
+                    ? "border-red-400 focus:ring-red-400 bg-red-50"
+                    : "border-gray-200 focus:ring-orange-400"
                   }`}
               />
               {errors.auctionEndDate && <p className="text-red-500 text-xs mt-1">⚠ {errors.auctionEndDate}</p>}
