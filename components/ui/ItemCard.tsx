@@ -10,7 +10,7 @@ export default function ItemCard({
   item,
   auction,
 }: Props) {
-
+ console.log(item);
   const getImage = () => {
     if (item.imageUrls && item.imageUrls.length > 0) {
       const url = item.imageUrls[0];
