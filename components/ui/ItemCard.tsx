@@ -34,68 +34,42 @@ export default function ItemCard({
       : item.pricePerDay;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition overflow-hidden cursor-pointer group">
+  <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden cursor-pointer group">
 
-      {/* IMAGE */}
-      <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
+    {/* IMAGE — plus petite */}
+    <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
+      <img
+        src={getImage()}
+        alt={item.title}
+        className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+        onError={(e) => { (e.target as HTMLImageElement).src = "/no-image.png"; }}
+      />
 
-        <img
-          src={getImage()}
-          alt={item.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = "/no-image.png";
-          }}
-        />
-
-        {/* BADGE */}
-        <div className="absolute top-2 left-2">
-          <span
-            className={`text-[10px] px-2 py-1 rounded-full text-white font-semibold ${
-              item.type === "AUCTION"
-                ? "bg-red-500"
-                : "bg-blue-600"
-            }`}
-          >
-            {item.type === "AUCTION"
-              ? "🔥 ENCHÈRE"
-              : "📦 LOCATION"}
-          </span>
-        </div>
-
-        {/* PRIX */}
-        <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
-          💰 {formatPrice(displayedPrice)}
-          {item.type === "RENTAL" && " / jour"}
-        </div>
-
+      {/* BADGE */}
+      <div className="absolute top-1.5 left-1.5">
+        <span className={`text-[9px] px-1.5 py-0.5 rounded-full text-white font-semibold ${
+          item.type === "AUCTION" ? "bg-red-500" : "bg-blue-600"
+        }`}>
+          {item.type === "AUCTION" ? "🔥 ENCHÈRE" : "📦 LOCATION"}
+        </span>
       </div>
 
-      {/* CONTENT */}
-      <div className="p-3 flex flex-col gap-1">
-
-        {/* TITRE */}
-        <h2 className="font-semibold text-sm line-clamp-2 leading-snug min-h-[38px]">
-          {item.title}
-        </h2>
-
-        {/* VILLE */}
-        <p className="text-xs text-gray-500">
-          📍 {item.city}
-        </p>
-
-         {/* PROPRIETAIRE */}
-        <p className="text-xs text-gray-500">
-          👤 {item?.username}
-        </p>
-
-        {/* DESCRIPTION */}
-        <p className="text-xs text-gray-400 line-clamp-1">
-          {item.description || " "}
-        </p>
-
+      {/* PRIX */}
+      <div className="absolute bottom-1.5 right-1.5 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">
+        💰 {formatPrice(displayedPrice)}{item.type === "RENTAL" && " / j"}
       </div>
-
     </div>
-  );
+
+    {/* CONTENT */}
+    <div className="p-2 flex flex-col gap-0.5">
+      <h2 className="font-semibold text-xs line-clamp-2 leading-snug min-h-[32px]">
+        {item.title}
+      </h2>
+      <p className="text-[11px] text-gray-500">📍 {item.city}</p>
+      <p className="text-[11px] text-gray-400">👤 {item?.username}</p>
+      <p className="text-[10px] text-gray-400 line-clamp-1">{item.description || " "}</p>
+    </div>
+
+  </div>
+);
 }

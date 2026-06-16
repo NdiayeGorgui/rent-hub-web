@@ -16,7 +16,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-100">
       {user && <Header />}
-      <div className="flex gap-6 max-w-7xl mx-auto px-4 py-6">
+      <div className="flex gap-4 py-6">
         <SidebarLeft />
         <main className="flex-1 min-w-0">{children}</main>
         <SidebarRight />
