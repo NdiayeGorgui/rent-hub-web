@@ -473,7 +473,7 @@ export default function Home() {
                     {/* Mobile */}
                     <div className="flex flex-wrap justify-between gap-2 md:hidden">
                       <span>💰 {formatPrice(auctionData[item.id]?.currentPrice)}</span>
-                      <span>👥 {auctionData[item.id]?.participants ?? 0}</span>
+                      <span>👥 {auctionData[item.id]?.participantsCount ?? 0}</span>
                       <span>👀 {auctionData[item.id]?.views ?? 0}</span>
                       <span>⭐ {auctionData[item.id]?.watchers ?? 0}</span>
                       <span>⏳ {getTimeLeft(auctionData[item.id]?.endDate)}</span>
@@ -482,7 +482,7 @@ export default function Home() {
                     {/* Desktop */}
                     <div className="hidden md:flex md:flex-col md:gap-1">
                       <div className="flex gap-6">
-                        <span>👥 {auctionData[item.id]?.participants ?? 0}</span>
+                        <span>👥 {auctionData[item.id]?.participantsCount ?? 0}</span>
                         <span>👀 {auctionData[item.id]?.views ?? 0}</span>
                         <span>⭐ {auctionData[item.id]?.watchers ?? 0}</span>
                       </div>
