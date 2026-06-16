@@ -468,18 +468,34 @@ export default function Home() {
 
                 {item.type === "AUCTION" && auctionData[item.id] ? (
 
-                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
-                    <span>💰 {formatPrice(auctionData[item.id].currentPrice)} </span>
-                    <span>👀 {auctionData[item.id].views}</span>
-                    <span>⭐ {auctionData[item.id].watchers}</span>
-                    <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>
+                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm text-gray-600 border-t border-gray-100">
+
+                    {/* Mobile : ligne actuelle | Desktop : 2 lignes */}
+                    <div className="flex justify-between md:hidden">
+                      <span>💰 {formatPrice(auctionData[item.id].currentPrice)}</span>
+                      <span>👀 {auctionData[item.id].views}</span>
+                      <span>⭐ {auctionData[item.id].watchers}</span>
+                      <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>
+                    </div>
+
+                    <div className="hidden md:flex md:flex-col md:gap-2">
+                      <div className="flex justify-between">
+                        <span>👥 {auctionData[item.id].participants}</span>
+                        <span>👀 {auctionData[item.id].views}</span>
+                        <span>⭐ {auctionData[item.id].watchers}</span>
+                      </div>
+
+                      <div className="flex justify-between">
+                        <span>💰 {formatPrice(auctionData[item.id].currentPrice)}</span>
+                        <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>
+                      </div>
+                    </div>
+
                   </div>
 
                 ) : (
 
-                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm flex justify-between text-gray-600 border-t border-gray-100">
-                    
-
+                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm text-gray-600 border-t border-gray-100 flex flex-col items-center gap-1 md:flex-row md:justify-between">
                     <span>📅 Disponible</span>
 
                     <span>
@@ -492,7 +508,6 @@ export default function Home() {
                             : "🆕 Nouvelle annonce"}
                     </span>
                   </div>
-
                 )}
               </div>
             ))}
