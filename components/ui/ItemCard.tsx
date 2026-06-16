@@ -55,7 +55,7 @@ export default function ItemCard({
 
         {/* PRIX */}
         <div className="absolute bottom-1.5 right-1.5 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">
-          💰 {formatPrice(displayedPrice)}{item.type === "RENTAL" && " / j"}
+          💰 {formatPrice(displayedPrice)}{item.type === "RENTAL" && " / jour"}
         </div>
       </div>
 
