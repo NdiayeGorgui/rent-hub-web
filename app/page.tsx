@@ -470,24 +470,26 @@ export default function Home() {
 
                   <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm text-gray-600 border-t border-gray-100">
 
-                    {/* Mobile : ligne actuelle | Desktop : 2 lignes */}
-                    <div className="flex justify-between md:hidden">
-                      <span>💰 {formatPrice(auctionData[item.id].currentPrice)}</span>
-                      <span>👀 {auctionData[item.id].views}</span>
-                      <span>⭐ {auctionData[item.id].watchers}</span>
-                      <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>
+                    {/* Mobile */}
+                    <div className="flex flex-wrap justify-between gap-2 md:hidden">
+                      <span>💰 {formatPrice(auctionData[item.id]?.currentPrice)}</span>
+                      <span>👥 {auctionData[item.id]?.participants ?? 0}</span>
+                      <span>👀 {auctionData[item.id]?.views ?? 0}</span>
+                      <span>⭐ {auctionData[item.id]?.watchers ?? 0}</span>
+                      <span>⏳ {getTimeLeft(auctionData[item.id]?.endDate)}</span>
                     </div>
 
-                    <div className="hidden md:flex md:flex-col md:gap-2">
-                      <div className="flex justify-between">
-  
-                        <span>👀 {auctionData[item.id].views}</span>
-                        <span>⭐ {auctionData[item.id].watchers}</span>
+                    {/* Desktop */}
+                    <div className="hidden md:flex md:flex-col md:gap-1">
+                      <div className="flex gap-6">
+                        <span>👥 {auctionData[item.id]?.participants ?? 0}</span>
+                        <span>👀 {auctionData[item.id]?.views ?? 0}</span>
+                        <span>⭐ {auctionData[item.id]?.watchers ?? 0}</span>
                       </div>
 
-                      <div className="flex justify-between">
-                        <span>💰 {formatPrice(auctionData[item.id].currentPrice)}</span>
-                        <span>⏳ {getTimeLeft(auctionData[item.id].endDate)}</span>
+                      <div className="flex gap-6">
+                        <span>💰 {formatPrice(auctionData[item.id]?.currentPrice)}</span>
+                        <span>⏳ {getTimeLeft(auctionData[item.id]?.endDate)}</span>
                       </div>
                     </div>
 
