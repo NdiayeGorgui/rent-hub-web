@@ -444,7 +444,7 @@ export default function Home() {
         <>
 
           {/* GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-3">
             {items.map((item) => (
               <div key={item.id}>
 
