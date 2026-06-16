@@ -495,18 +495,38 @@ export default function Home() {
 
                 ) : (
 
-                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm text-gray-600 border-t border-gray-100 flex flex-col items-center gap-1 md:flex-row md:justify-between">
-                    <span>📅 Disponible</span>
+                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm text-gray-600 border-t border-gray-100">
 
-                    <span>
-                      {item.rentalsCount > 10
-                        ? "🔥 Très populaire"
-                        : item.rentalsCount > 5
-                          ? "🚀 En forte demande"
-                          : item.rentalsCount > 0
-                            ? "✅ Déjà testé"
-                            : "🆕 Nouvelle annonce"}
-                    </span>
+                    {/* Mobile */}
+                    <div className="flex justify-between md:hidden">
+                      <span>📅 Disponible</span>
+
+                      <span>
+                        {item.rentalsCount > 10
+                          ? "🔥 Très populaire"
+                          : item.rentalsCount > 5
+                            ? "🚀 En forte demande"
+                            : item.rentalsCount > 0
+                              ? "✅ Déjà testé"
+                              : "🆕 Nouvelle annonce"}
+                      </span>
+                    </div>
+
+                    {/* Desktop */}
+                    <div className="hidden md:flex md:flex-col md:items-start md:gap-1">
+                      <span>📅 Disponible</span>
+
+                      <span>
+                        {item.rentalsCount > 10
+                          ? "🔥 Très populaire"
+                          : item.rentalsCount > 5
+                            ? "🚀 En forte demande"
+                            : item.rentalsCount > 0
+                              ? "✅ Déjà testé"
+                              : "🆕 Nouvelle annonce"}
+                      </span>
+                    </div>
+
                   </div>
                 )}
               </div>
