@@ -8,6 +8,7 @@ interface Item {
   itemId: number;
   title: string;
   city: string;
+  postalCode:string;
   pricePerDay: number;
   active: boolean;
   type: "RENTAL" | "AUCTION";
@@ -91,7 +92,7 @@ export default function AdminItemsPage() {
                   <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                     <span className="text-xs text-gray-400">@{item.username ?? "..."}</span>
                     <span className="text-gray-200">·</span>
-                    <span className="text-xs text-gray-400">📍 {item.city}</span>
+                    <span className="text-xs text-gray-400">📍 {item.city}, {item.postalCode}</span>
                     <span className="text-gray-200">·</span>
                     <span className="text-xs font-semibold text-blue-600">
                       {item.type === "AUCTION"

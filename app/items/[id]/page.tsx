@@ -318,7 +318,7 @@ export default function ItemDetailPage() {
             <div className="bg-white rounded-xl border border-gray-100 p-4 mb-4">
                 <h3 className="font-semibold mb-1">📍 Localisation</h3>
                 <p className="text-gray-700">{item.city}</p>
-                <p className="text-gray-400 text-sm">{item.address}</p>
+                <p className="text-gray-400 text-sm"> {item.postalCode}</p>
             </div>
 
 
@@ -423,7 +423,7 @@ export default function ItemDetailPage() {
                 <div className="bg-white rounded-xl border border-gray-100 p-4 mb-4">
                     <h3 className="font-semibold mb-3">💰 Placer une enchère</h3>
                     <p className="text-sm text-gray-500 mb-2">
-                        Prix actuel : {formatPrice(auction?.currentPrice ?? auction?.startPrice ?? "Pas encore d'enchère")} 
+                        Prix actuel : {formatPrice(auction?.currentPrice ?? auction?.startPrice) ?? "Pas encore d'enchère"} 
                     </p>
                     <input
                         type="number" placeholder="Votre offre" value={bidAmount}

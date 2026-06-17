@@ -572,8 +572,7 @@ export default function ItemDetailPage() {
             <div className="bg-white rounded-xl shadow p-4 mb-4">
                 <h3 className="font-bold mb-1">📍 Localisation</h3>
                 <p>{item.city}</p>
-                <p className="text-gray-500 text-sm">{item.address}</p>
-                <p className="text-gray-500 text-sm">{item.postalCode}</p>
+                <p className="text-gray-500 text-sm">{item.address}, {item.postalCode}</p>
             </div>
 
             {/* ── Propriétaire ── */}
