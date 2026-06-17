@@ -64,7 +64,7 @@ export default function ItemCard({
         <h2 className="font-semibold text-[11px] line-clamp-2 leading-snug min-h-[28px]">
           {item.title}
         </h2>
-        <p className="text-[10px] text-gray-500">📍 {item.city}, {item.address} </p>
+        <p className="text-[10px] text-gray-500">📍 {item.city}, {item.postalCode && `, ${item.postalCode}`} </p>
         <p className="text-[10px] text-gray-400">👤 {item?.username}</p>
         <p className="text-[10px] text-gray-400 line-clamp-1">{item.description || " "}</p>
       </div>

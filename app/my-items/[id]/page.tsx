@@ -91,6 +91,7 @@ export default function ItemDetailPage() {
     const [editCategoryId, setEditCategoryId] = useState("");
     const [editCity, setEditCity] = useState("");
     const [editAddress, setEditAddress] = useState("");
+    const [editPostalCode, setEditPostalCode] = useState("");
     const [editImages, setEditImages] = useState<File[]>([]);
     const [editImagePreviews, setEditImagePreviews] = useState<string[]>([]);
     const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
@@ -150,6 +151,7 @@ export default function ItemDetailPage() {
                 setEditCategoryId(data.categoryId?.toString() ?? "");
                 setEditCity(data.city ?? "");
                 setEditAddress(data.address ?? "");
+                setEditPostalCode(data.postalCode ?? "");
 
                 setExistingImageUrls(data.imageUrls ?? []);
                 setEditImagePreviews(
@@ -249,7 +251,7 @@ export default function ItemDetailPage() {
             formData.append("data", JSON.stringify({
                 title: editTitle, description: editDescription,
                 categoryId: Number(editCategoryId), city: editCity,
-                address: editAddress, type: item.type,
+                address: editAddress,  postalCode: editPostalCode, type: item.type,
                 pricePerDay: item.type === "RENTAL" ? Number(editPrice) : null,
             }));
             // Nouvelles images
@@ -404,6 +406,7 @@ export default function ItemDetailPage() {
                         )}
                         <input className="border rounded p-2" placeholder="Ville" value={editCity} onChange={e => setEditCity(e.target.value)} />
                         <input className="border rounded p-2" placeholder="Adresse" value={editAddress} onChange={e => setEditAddress(e.target.value)} />
+                        <input className="border rounded p-2" placeholder="Code postal" value={editPostalCode} onChange={e => setEditPostalCode(e.target.value)} />
 
                         {/* ── Images ── */}
                         <div>
@@ -570,6 +573,7 @@ export default function ItemDetailPage() {
                 <h3 className="font-bold mb-1">📍 Localisation</h3>
                 <p>{item.city}</p>
                 <p className="text-gray-500 text-sm">{item.address}</p>
+                <p className="text-gray-500 text-sm">{item.postalCode}</p>
             </div>
 
             {/* ── Propriétaire ── */}

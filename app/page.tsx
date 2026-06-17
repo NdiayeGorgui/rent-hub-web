@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
-import Link from "next/link";
-import { fetchItems, getNearbyItems, searchItems } from "@/services/itemService";
+import { useEffect, useState, useCallback } from "react";
+import { getNearbyItems, searchItems } from "@/services/itemService";
 import { getAuctionPublicByItemId } from "@/services/auctionService";
 import { useAuth } from "@/components/contexts/AuthContext";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";

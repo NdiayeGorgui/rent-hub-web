@@ -25,6 +25,7 @@ export default function CreatePage() {
   const [reservePrice, setReservePrice] = useState("");
   const [auctionEndDate, setAuctionEndDate] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [postalCode, setPostalCode] = useState("");
 
   const [generatingDesc, setGeneratingDesc] = useState(false);
 
@@ -119,6 +120,7 @@ export default function CreatePage() {
     if (!categoryId) newErrors.categoryId = "La catégorie est requise";
     if (!city.trim()) newErrors.city = "La ville est requise";
     if (!address.trim()) newErrors.address = "L'adresse est requise";
+    if (!postalCode.trim()) newErrors.postalCode = "Le code postal est requis";
     if (type === "RENTAL" && !pricePerDay) newErrors.pricePerDay = "Le prix est requis";
     if (type === "AUCTION" && !startPrice) newErrors.startPrice = "Le prix de départ est requis";
     if (type === "AUCTION" && !auctionEndDate) newErrors.auctionEndDate = "La date de fin est requise";
@@ -185,6 +187,7 @@ export default function CreatePage() {
 
         city,
         address,
+        postalCode,
         latitude,
         longitude,
       }));
@@ -475,8 +478,8 @@ export default function CreatePage() {
                 onChange={e => { setStartPrice(e.target.value); setErrors(p => ({ ...p, startPrice: "" })); }}
                 placeholder="Ex: 50"
                 className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${errors.startPrice
-                    ? "border-red-400 focus:ring-red-400 bg-red-50"
-                    : "border-gray-200 focus:ring-orange-400"
+                  ? "border-red-400 focus:ring-red-400 bg-red-50"
+                  : "border-gray-200 focus:ring-orange-400"
                   }`}
               />
               {errors.startPrice && <p className="text-red-500 text-xs mt-1">⚠ {errors.startPrice}</p>}
@@ -507,8 +510,8 @@ export default function CreatePage() {
                 min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
                 onChange={e => { setAuctionEndDate(e.target.value); setErrors(p => ({ ...p, auctionEndDate: "" })); }}
                 className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${errors.auctionEndDate
-                    ? "border-red-400 focus:ring-red-400 bg-red-50"
-                    : "border-gray-200 focus:ring-orange-400"
+                  ? "border-red-400 focus:ring-red-400 bg-red-50"
+                  : "border-gray-200 focus:ring-orange-400"
                   }`}
               />
               {errors.auctionEndDate && <p className="text-red-500 text-xs mt-1">⚠ {errors.auctionEndDate}</p>}
@@ -549,6 +552,32 @@ export default function CreatePage() {
               }`}
           />
           {errors.address && <p className="text-red-500 text-xs mt-1">⚠ {errors.address}</p>}
+        </div>
+        
+        {/* Code postal */}
+        <div>
+          <label className="text-sm font-medium text-gray-700 mb-1 block">
+            Code postal <span className="text-red-500">*</span>
+          </label>
+
+          <input
+            placeholder="Ex: H2X 1Y4"
+            value={postalCode}
+            onChange={e => {
+              setPostalCode(e.target.value.toUpperCase());
+              setErrors(p => ({ ...p, postalCode: "" }));
+            }}
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${errors.postalCode
+                ? "border-red-400 focus:ring-red-400 bg-red-50"
+                : "border-gray-200 focus:ring-blue-500"
+              }`}
+          />
+
+          {errors.postalCode && (
+            <p className="text-red-500 text-xs mt-1">
+              ⚠ {errors.postalCode}
+            </p>
+          )}
         </div>
 
         {/* Images */}
