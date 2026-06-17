@@ -49,6 +49,21 @@ export default function ItemCard({ item, auction }: Props) {
     return { label: "Nouveau", bg: "#E6F1FB", text: "#185FA5" };
   };
 
+  const getTimeLeft = (endDate: string) => {
+    const diff = new Date(endDate).getTime() - Date.now();
+    if (diff <= 0) return "terminée";
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+    if (days > 0) return `${days}j ${hours}h`; // clean
+    if (hours > 0) return `${hours}h ${minutes}m`; // précis
+    if (minutes > 0) return `${minutes}m`;
+
+    return "< 1 min";
+  };
+
   const pop = popularityBadge();
 
   return (
@@ -98,7 +113,7 @@ export default function ItemCard({ item, auction }: Props) {
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
             <circle cx="12" cy="9" r="2.5" />
           </svg>
-          {item.city}{item.address ? `, ${item.address}` : ""}
+          {item.city}{item.postalCode ? `, ${item.postalCode}` : ""}
         </p>
 
         {/* Description */}
@@ -132,18 +147,55 @@ export default function ItemCard({ item, auction }: Props) {
         {item.type === "AUCTION" && auction ? (
           <>
             <span className="text-gray-500 flex items-center gap-0.5">
-              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
-              {auction.views ?? 0}
+              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 1v22M17 5H9a3 3 0 0 0 0 6h6a3 3 0 0 1 0 6H7" />
+              </svg>
+              {formatPrice(
+                auction.currentPrice ??
+                auction.startPrice ??
+                0
+              )}
             </span>
+
             <span className="text-gray-500 flex items-center gap-0.5">
-              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-              {auction.watchers ?? 0}
-            </span>
-            <span className="text-gray-500 flex items-center gap-0.5">
-              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
               {auction.participantsCount ?? 0}
             </span>
-            {/* Timer — géré côté page.tsx via getTimeLeft */}
+
+            <span className="text-gray-500 flex items-center gap-0.5">
+              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              {auction.views ?? 0}
+            </span>
+
+            <span className="text-gray-500 flex items-center gap-0.5">
+              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              {auction.watchers ?? 0}
+            </span>
+
+            <span
+              className={`ml-auto flex items-center gap-0.5 ${auction.endDate &&
+                  new Date(auction.endDate).getTime() < Date.now()
+                  ? "text-red-500"
+                  : "text-orange-600"
+                }`}
+            >
+              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+
+              {getTimeLeft(auction.endDate)}
+            </span>
           </>
         ) : (
           <>

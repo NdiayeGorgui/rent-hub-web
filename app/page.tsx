@@ -310,20 +310,6 @@ export default function Home() {
     }
   };
 
-  const getTimeLeft = (endDate: string) => {
-    const diff = new Date(endDate).getTime() - Date.now();
-    if (diff <= 0) return "terminée";
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-
-    if (days > 0) return `${days}j ${hours}h`; // clean
-    if (hours > 0) return `${hours}h ${minutes}m`; // précis
-    if (minutes > 0) return `${minutes}m`;
-
-    return "< 1 min";
-  };
 
   if (loading || loadingItems) return (
     <div className="min-h-screen flex items-center justify-center">
@@ -465,81 +451,7 @@ export default function Home() {
                   )}
                 </div>
 
-                {item.type === "AUCTION" && auctionData[item.id] ? (
-
-                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm text-gray-600 border-t border-gray-100">
-
-                    {/* Mobile */}
-                    <div className="flex flex-wrap justify-between gap-2 md:hidden">
-                      <span>💰 {formatPrice(auctionData[item.id]?.currentPrice)}</span>
-                      <span>👥 {auctionData[item.id]?.participantsCount ?? 0}</span>
-                      <span>👀 {auctionData[item.id]?.views ?? 0}</span>
-                      <span>⭐ {auctionData[item.id]?.watchers ?? 0}</span>
-                      <span className={auctionData[item.id]?.endDate && new Date(auctionData[item.id].endDate).getTime() < Date.now()
-                        ? "text-red-500 font-semibold"
-                        : ""
-                      }>
-                        ⏳ {getTimeLeft(auctionData[item.id]?.endDate)}
-                      </span>
-                    </div>
-
-                    {/* Desktop */}
-                    <div className="hidden md:flex md:flex-col md:gap-1">
-                      <div className="flex gap-6">
-                        <span>👥 {auctionData[item.id]?.participantsCount ?? 0}</span>
-                        <span>👀 {auctionData[item.id]?.views ?? 0}</span>
-                        <span>⭐ {auctionData[item.id]?.watchers ?? 0}</span>
-                      </div>
-
-                      <div className="flex gap-6">
-                        <span>💰 {formatPrice(auctionData[item.id]?.currentPrice)}</span>
-                        <span className={auctionData[item.id]?.endDate && new Date(auctionData[item.id].endDate).getTime() < Date.now()
-                          ? "text-red-500 font-semibold"
-                          : ""
-                        }>
-                          ⏳ {getTimeLeft(auctionData[item.id]?.endDate)}
-                        </span>
-                      </div>
-                    </div>
-
-                  </div>
-
-                ) : (
-
-                  <div className="bg-white px-4 py-3 rounded-b-xl shadow text-sm text-gray-600 border-t border-gray-100">
-
-                    {/* Mobile */}
-                    <div className="flex justify-between md:hidden">
-                      <span>📅 Disponible</span>
-
-                      <span>
-                        {item.rentalsCount > 10
-                          ? "🔥 Très populaire"
-                          : item.rentalsCount > 5
-                            ? "🚀 En forte demande"
-                            : item.rentalsCount > 0
-                              ? "✅ Déjà testé"
-                              : "🆕 Nouvelle annonce"}
-                      </span>
-                    </div>
-
-                    {/* Desktop */}
-                    <div className="hidden md:flex md:flex-col md:items-start md:gap-1">
-                      <span>📅 Disponible</span>
-
-                      <span>
-                        {item.rentalsCount > 10
-                          ? "🔥 Très populaire"
-                          : item.rentalsCount > 5
-                            ? "🚀 En forte demande"
-                            : item.rentalsCount > 0
-                              ? "✅ Déjà testé"
-                              : "🆕 Nouvelle annonce"}
-                      </span>
-                    </div>
-
-                  </div>
-                )}
+                
               </div>
             ))}
           </div>
