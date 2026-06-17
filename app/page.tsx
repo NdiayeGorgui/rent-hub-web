@@ -475,7 +475,12 @@ export default function Home() {
                       <span>👥 {auctionData[item.id]?.participantsCount ?? 0}</span>
                       <span>👀 {auctionData[item.id]?.views ?? 0}</span>
                       <span>⭐ {auctionData[item.id]?.watchers ?? 0}</span>
-                      <span>⏳ {getTimeLeft(auctionData[item.id]?.endDate)}</span>
+                      <span className={auctionData[item.id]?.endDate && new Date(auctionData[item.id].endDate).getTime() < Date.now()
+                        ? "text-red-500 font-semibold"
+                        : ""
+                      }>
+                        ⏳ {getTimeLeft(auctionData[item.id]?.endDate)}
+                      </span>
                     </div>
 
                     {/* Desktop */}
@@ -488,7 +493,12 @@ export default function Home() {
 
                       <div className="flex gap-6">
                         <span>💰 {formatPrice(auctionData[item.id]?.currentPrice)}</span>
-                        <span>⏳ {getTimeLeft(auctionData[item.id]?.endDate)}</span>
+                        <span className={auctionData[item.id]?.endDate && new Date(auctionData[item.id].endDate).getTime() < Date.now()
+                          ? "text-red-500 font-semibold"
+                          : ""
+                        }>
+                          ⏳ {getTimeLeft(auctionData[item.id]?.endDate)}
+                        </span>
                       </div>
                     </div>
 
