@@ -20,9 +20,9 @@ export default function ItemCard({ item, auction }: Props) {
   };
 
   const displayedPrice =
-    item.type === "AUCTION"
-      ? auction?.currentPrice ?? auction?.startPrice ?? 0
-      : item.pricePerDay;
+  item.type === "AUCTION"
+    ? auction?.startPrice ?? 0
+    : item.pricePerDay;
 
   const initials = item?.publisher?.username
     ? item.publisher.username.slice(0, 1).toUpperCase()
