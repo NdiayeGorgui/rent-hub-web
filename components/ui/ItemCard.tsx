@@ -20,9 +20,9 @@ export default function ItemCard({ item, auction }: Props) {
   };
 
   const displayedPrice =
-  item.type === "AUCTION"
-    ? auction?.startPrice ?? 0
-    : item.pricePerDay;
+    item.type === "AUCTION"
+      ? auction?.startPrice ?? 0
+      : item.pricePerDay;
 
   const initials = item?.publisher?.username
     ? item.publisher.username.slice(0, 1).toUpperCase()
@@ -147,8 +147,17 @@ export default function ItemCard({ item, auction }: Props) {
         {item.type === "AUCTION" && auction ? (
           <>
             <span className="text-gray-500 flex items-center gap-0.5">
-              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 1v22M17 5H9a3 3 0 0 0 0 6h6a3 3 0 0 1 0 6H7" />
+              <svg
+                className="w-2.5 h-2.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 17l6-6 4 4 8-8" />
+                <path d="M14 7h7v7" />
               </svg>
               {formatPrice(
                 auction.currentPrice ??
@@ -184,9 +193,9 @@ export default function ItemCard({ item, auction }: Props) {
 
             <span
               className={`ml-auto flex items-center gap-0.5 ${auction.endDate &&
-                  new Date(auction.endDate).getTime() < Date.now()
-                  ? "text-red-500"
-                  : "text-orange-600"
+                new Date(auction.endDate).getTime() < Date.now()
+                ? "text-red-500"
+                : "text-orange-600"
                 }`}
             >
               <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
