@@ -45,7 +45,7 @@ export default function ItemCard({ item, auction }: Props) {
     const count = item.rentalsCount ?? 0;
     if (count > 10) return { label: "Populaire 🔥", bg: "#FAECE7", text: "#993C1D" };
     if (count > 5) return { label: "En demande", bg: "#FAEEDA", text: "#854F0B" };
-    if (count > 0) return { label: "Déjà loué", bg: "#EAF3DE", text: "#3B6D11" };
+    if (count > 0) return { label: "Déjà testé", bg: "#EAF3DE", text: "#3B6D11" };
     return { label: "Nouveau", bg: "#E6F1FB", text: "#185FA5" };
   };
 
