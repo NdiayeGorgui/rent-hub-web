@@ -13,7 +13,27 @@ export default function RegisterForm() {
     fullName: "", phone: "", city: "",
   });
 
+  const formatPhone = (value: string) => {
+    const digits = value.replace(/\D/g, "").slice(0, 10);
+
+    if (digits.length <= 3) {
+      return digits;
+    }
+
+    if (digits.length <= 6) {
+      return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    }
+
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  };
+
   const handleRegister = async () => {
+    const phoneRegex = /^\(\d{3}\)\s\d{3}-\d{4}$/;
+
+    if (form.phone && !phoneRegex.test(form.phone)) {
+      alert("Veuillez entrer un numéro valide");
+      return;
+    }
     if (!form.email || !form.password || !form.username) {
       alert("Veuillez remplir les champs obligatoires");
       return;
@@ -60,9 +80,16 @@ export default function RegisterForm() {
         className={inputClass}
       />
 
-      <input type="tel" placeholder="Téléphone"
+      <input
+        type="tel"
+        placeholder="Téléphone"
         value={form.phone}
-        onChange={e => setForm({ ...form, phone: e.target.value })}
+        onChange={e =>
+          setForm({
+            ...form,
+            phone: formatPhone(e.target.value),
+          })
+        }
         className={inputClass}
       />
 
