@@ -216,7 +216,7 @@ export default function ItemCard({ item, auction }: Props) {
               className="ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
               style={{ background: pop.bg, color: pop.text }}
             >
-              {pop.label}
+             {pop.icon} {pop.label}
             </span>
           </>
         )}
