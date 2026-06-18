@@ -43,10 +43,10 @@ export default function ItemCard({ item, auction }: Props) {
 
   const popularityBadge = () => {
     const count = item.rentalsCount ?? 0;
-    if (count > 10) return { label: "Populaire 🔥", bg: "#FAECE7", text: "#993C1D" };
-    if (count > 5) return { label: "En demande", bg: "#FAEEDA", text: "#854F0B" };
-    if (count > 0) return { label: "Déjà testé", bg: "#EAF3DE", text: "#3B6D11" };
-    return { label: "Nouveau", bg: "#E6F1FB", text: "#185FA5" };
+    if (count > 10) return { label: "Populaire", icon: "🔥", bg: "#FAECE7", text: "#993C1D" };
+    if (count > 5) return { label: "En demande", icon: "🚀", bg: "#FAEEDA", text: "#854F0B" };
+    if (count > 0) return { label: "Déjà testé", icon: "✅", bg: "#EAF3DE", text: "#3B6D11" };
+    return { label: "Nouveau", bg: "#E6F1FB", icon: "🆕", text: "#185FA5" };
   };
 
   const getTimeLeft = (endDate: string) => {
@@ -108,7 +108,7 @@ export default function ItemCard({ item, auction }: Props) {
         </h2>
 
         {/* Ville + adresse */}
-        <p className="text-[10px] text-gray-400 flex items-center gap-1 mb-0.5 truncate">
+        <p className="text-[10px] text-gray-500 flex items-center gap-1 mb-0.5 truncate">
           <svg className="w-2.5 h-2.5 flex-shrink-0 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
             <circle cx="12" cy="9" r="2.5" />
