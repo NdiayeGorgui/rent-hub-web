@@ -86,7 +86,7 @@ export default function ItemCard({ item, auction }: Props) {
               🔥 Enchère
             </span>
           ) : (
-           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide"
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide"
               style={{ background: "#E6F1FB", color: "#185FA5" }}>
               📦 Location
             </span>
@@ -122,19 +122,30 @@ export default function ItemCard({ item, auction }: Props) {
         </p>
 
         {/* Propriétaire */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 flex-wrap">
           <div
             className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-medium flex-shrink-0"
             style={{ background: avatarColor.bg, color: avatarColor.text }}
           >
             {initials}
           </div>
+
           <span
             className="text-[10px] font-bold px-2 py-0.5 rounded-full"
             style={{ background: "#f5f5f4", color: "#78716c" }}
           >
             {username}
           </span>
+
+          <div className="flex items-center gap-1">
+            <span className="text-yellow-500 text-[10px]">
+              {"★".repeat(Math.round(item.ownerRating || 0))}
+            </span>
+
+            <span className="text-[10px] text-gray-500">
+              ({item.ownerReviewsCount ?? 0})
+            </span>
+          </div>
         </div>
 
       </div>
@@ -176,7 +187,7 @@ export default function ItemCard({ item, auction }: Props) {
               {auction.participantsCount ?? 0}
             </span>
 
-           <span className="font-semibold text-gray-700 flex items-center gap-0.5">
+            <span className="font-semibold text-gray-700 flex items-center gap-0.5">
               <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                 <circle cx="12" cy="12" r="3" />
@@ -184,7 +195,7 @@ export default function ItemCard({ item, auction }: Props) {
               {auction.views ?? 0}
             </span>
 
-           <span className="font-semibold text-gray-700 flex items-center gap-0.5">
+            <span className="font-semibold text-gray-700 flex items-center gap-0.5">
               <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
               </svg>
@@ -216,7 +227,7 @@ export default function ItemCard({ item, auction }: Props) {
               className="ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
               style={{ background: pop.bg, color: pop.text }}
             >
-             {pop.icon} {pop.label}
+              {pop.icon} {pop.label}
             </span>
           </>
         )}
