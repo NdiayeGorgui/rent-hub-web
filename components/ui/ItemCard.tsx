@@ -129,7 +129,6 @@ export default function ItemCard({ item, auction }: Props) {
           >
             {initials}
           </div>
-
           <div className="flex flex-col">
             <span
               className="text-[10px] font-bold px-2 py-0.5 rounded-full"
@@ -138,11 +137,14 @@ export default function ItemCard({ item, auction }: Props) {
               {username}
             </span>
 
-            <span className="text-[10px] text-yellow-500 font-semibold mt-0.5">
-              {"★".repeat(Math.round(item.userAverageRating ?? 0))}
-              {"☆".repeat(5 - Math.round(item.userAverageRating ?? 0))}
+            <span className="text-[9px] text-yellow-500 font-semibold">
+              {"★".repeat(Math.round(item.ownerRating ?? 0))}
+              {"☆".repeat(5 - Math.round(item.ownerRating ?? 0))}
               {" "}
-              {Number(item.userAverageRating ?? 0).toFixed(1)}
+              {(item.ownerRating ?? 0).toFixed(1)}
+              <span className="text-gray-500 ml-1">
+                ({item.ownerReviewsCount ?? 0} avis)
+              </span>
             </span>
           </div>
         </div>
