@@ -95,7 +95,7 @@ export default function ItemCard({ item, auction }: Props) {
 
         {/* Prix */}
         <div className="absolute bottom-2 right-2 bg-white border border-gray-300 rounded-lg text-[12px] font-bold px-2 py-0.5 text-black shadow-sm">
-          {formatPrice(displayedPrice)}{item.type === "RENTAL" && " / j"}
+          {formatPrice(displayedPrice)}{item.type === "RENTAL" && " / jour"}
         </div>
       </div>
 
