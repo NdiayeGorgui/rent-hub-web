@@ -122,7 +122,7 @@ export default function ItemCard({ item, auction }: Props) {
         </p>
 
         {/* Propriétaire */}
-        <div className="flex items-center gap-1.5 flex-wrap">
+        <div className="flex items-center gap-1.5">
           <div
             className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-medium flex-shrink-0"
             style={{ background: avatarColor.bg, color: avatarColor.text }}
@@ -130,24 +130,22 @@ export default function ItemCard({ item, auction }: Props) {
             {initials}
           </div>
 
-          <span
-            className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-            style={{ background: "#f5f5f4", color: "#78716c" }}
-          >
-            {username}
-          </span>
-
-          <div className="flex items-center gap-1">
-            <span className="text-yellow-500 text-[10px]">
-              {"★".repeat(Math.round(item.ownerRating || 0))}
+          <div className="flex flex-col">
+            <span
+              className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+              style={{ background: "#f5f5f4", color: "#78716c" }}
+            >
+              {username}
             </span>
 
-            <span className="text-[10px] text-gray-500">
-              ({item.ownerReviewsCount ?? 0})
+            <span className="text-[10px] text-yellow-500 font-semibold mt-0.5">
+              {"★".repeat(Math.round(item.userAverageRating ?? 0))}
+              {"☆".repeat(5 - Math.round(item.userAverageRating ?? 0))}
+              {" "}
+              {Number(item.userAverageRating ?? 0).toFixed(1)}
             </span>
           </div>
         </div>
-
       </div>
 
       {/* ── Barre bas ── */}
