@@ -143,7 +143,7 @@ export default function ItemCard({ item, auction }: Props) {
               {"   "}
               <span className="text-gray-500 ml-1">
                 {(item.ownerRating ?? 0).toFixed(1)}
-                 {" "}
+                 {" "}  
                 ({item.ownerReviewsCount ?? 0} avis)
               </span>
             </span>
