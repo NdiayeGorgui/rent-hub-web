@@ -84,7 +84,7 @@ export default function FaqPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("Tous");
-  const themes = ["Tous", "Paiement", "Location", "Enchères", "Compte", "Remboursement", "Sécurité", "Abonnement", "Autre",];
+  const themes = ["Tous", "Paiement", "Location", "Enchère", "Compte", "Remboursement", "Sécurité", "Abonnement", "Autre",];
 
   useEffect(() => {
     const load = async () => {
