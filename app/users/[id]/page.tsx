@@ -21,7 +21,7 @@ export default function UserProfilePage() {
             data.publishedItems.map(async (item: any) => {
               if (item.type === "AUCTION") {
                 try {
-                 const auction = await getAuctionAllByItemId(item.id);
+                  const auction = await getAuctionAllByItemId(item.id);
 
                   return {
                     ...item,
@@ -83,9 +83,35 @@ export default function UserProfilePage() {
           <span className="bg-gray-50 px-3 py-1 rounded-full text-gray-600">
             📍 {user.city}
           </span>
-          <span className="bg-gray-50 px-3 py-1 rounded-full text-gray-600">
-            ⭐ {user.averageRating?.toFixed(1)} ({user.reviewsCount} avis)
-          </span>
+          <div className="flex flex-col gap-2 mt-4">
+
+            <div className="flex items-center gap-2">
+              <span>📦</span>
+              <span className="font-medium">
+                Propriétaire
+              </span>
+              <span className="text-yellow-500">
+                ⭐ {(user.ownerRating ?? 0).toFixed(1)}
+              </span>
+              <span className="text-gray-500">
+                ({user.ownerReviewsCount ?? 0} avis)
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span>🤝</span>
+              <span className="font-medium">
+                Locataire
+              </span>
+              <span className="text-yellow-500">
+                ⭐ {(user.averageRating ?? 0).toFixed(1)}
+              </span>
+              <span className="text-gray-500">
+                ({user.reviewsCount ?? 0} avis)
+              </span>
+            </div>
+
+          </div>
           {user.premium && (
             <span className="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full font-medium">
               💎 Premium
