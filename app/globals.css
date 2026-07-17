@@ -12,17 +12,37 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* ← SUPPRIME ou commente ce bloc dark mode
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
+*/
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  /* ← Force couleurs explicites */
+  background-color: #ffffff;
+  color: #171717;
+}
+
+/* ← Force tous les inputs à être lisibles */
+input, textarea, select {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+  -webkit-text-fill-color: #111827 !important; /* ← crucial pour iOS Safari */
+}
+
+/* ← Fix placeholder iOS — souvent trop clair */
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af !important;
+  -webkit-text-fill-color: #9ca3af !important;
+  opacity: 1 !important; /* ← Firefox réduit l'opacité par défaut */
 }
 
 .input {
@@ -32,6 +52,8 @@ body {
   border-radius: 12px;
   font-size: 14px;
   background: #fff;
+  color: #111827;
+  -webkit-text-fill-color: #111827; /* ← iOS Safari */
   transition: all 0.2s ease;
 }
 
@@ -48,4 +70,3 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
-
