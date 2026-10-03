@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  color-scheme: light; /* ← empêche le dark mode navigateur */
 }
 
 @theme inline {
@@ -12,37 +13,30 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* ← SUPPRIME ou commente ce bloc dark mode
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: light;
 }
-*/
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  /* ← Force couleurs explicites */
   background-color: #ffffff;
   color: #171717;
+  font-family: Arial, Helvetica, sans-serif;
+  color-scheme: light;
 }
 
-/* ← Force tous les inputs à être lisibles */
+/* Force inputs lisibles sur tous les navigateurs mobiles */
 input, textarea, select {
   color: #111827 !important;
   background-color: #ffffff !important;
-  -webkit-text-fill-color: #111827 !important; /* ← crucial pour iOS Safari */
+  -webkit-text-fill-color: #111827 !important;
+  color-scheme: light; /* ← crucial pour Chrome Android en mode sombre */
 }
 
-/* ← Fix placeholder iOS — souvent trop clair */
 input::placeholder,
 textarea::placeholder {
   color: #9ca3af !important;
   -webkit-text-fill-color: #9ca3af !important;
-  opacity: 1 !important; /* ← Firefox réduit l'opacité par défaut */
+  opacity: 1 !important;
 }
 
 .input {
@@ -53,13 +47,12 @@ textarea::placeholder {
   font-size: 14px;
   background: #fff;
   color: #111827;
-  -webkit-text-fill-color: #111827; /* ← iOS Safari */
+  -webkit-text-fill-color: #111827;
+  color-scheme: light;
   transition: all 0.2s ease;
 }
 
-.input:hover {
-  border-color: #cbd5e1;
-}
+.input:hover { border-color: #cbd5e1; }
 
 .input:focus {
   outline: none;
@@ -67,6 +60,4 @@ textarea::placeholder {
   box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
