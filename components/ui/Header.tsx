@@ -58,7 +58,7 @@ export default function Header() {
                         )}
                     </div>
                     <span className="text-[17px] font-medium text-gray-900">
-                        Rent<span className={isAdmin ? "text-violet-600" : "text-blue-600"}>Hub</span>
+                        <span className={isAdmin ? "text-violet-600" : "text-blue-600"}>Gonifty</span>
                     </span>
                     {isAdmin && (
                         <span className="text-[11px] bg-violet-50 text-violet-700 px-2 py-0.5 rounded font-medium ml-1">
