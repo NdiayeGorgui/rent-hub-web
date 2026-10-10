@@ -170,8 +170,11 @@ export function SidebarRight() {
                         </Link>
                     ) : (
                         <Link href="/subscription">
-                            <div className="block text-center bg-blue-600 text-white text-xs font-semibold py-2.5 rounded-xl hover:bg-blue-700 transition-colors cursor-pointer">
+                            {/* <div className="block text-center bg-blue-600 text-white text-xs font-semibold py-2.5 rounded-xl hover:bg-blue-700 transition-colors cursor-pointer">
                                 Passer Premium — 9,99 $ / 6 mois
+                            </div> */}
+                            <div className="block text-center bg-blue-600 text-white text-xs font-semibold py-2.5 rounded-xl hover:bg-blue-700 transition-colors cursor-pointer">
+                                Passer Premium — Gratuitement
                             </div>
                         </Link>
                     )

@@ -31,7 +31,7 @@ export default function SubscriptionPage() {
       setLoading(true);
       const payment = await subscribeToPremium(9.99);
       await handleWebPayment(payment.clientSecret);
-      alert("Paiement effectué 🎉");
+      alert("Abonnement effectué 🎉");
       await loadStatus();
       setStep("home");
     } catch (err: any) {
@@ -148,8 +148,9 @@ export default function SubscriptionPage() {
               </div>
 
               <div className="bg-blue-50 rounded-xl p-4 text-center">
-                <p className="text-3xl font-bold text-blue-600">9.99 $</p>
-                <p className="text-sm text-blue-400 mt-0.5">pour 6 mois</p>
+                {/* <p className="text-3xl font-bold text-blue-600">9.99 $</p> */}
+                {/* <p className="text-sm text-blue-400 mt-0.5">pour 6 mois</p> */}
+                <p className="text-3xl font-bold text-blue-600">Gratuitement</p>
               </div>
 
               <button
@@ -170,12 +171,12 @@ export default function SubscriptionPage() {
 
               <div className="bg-gray-50 rounded-xl p-4 text-center mb-2">
                 <p className="text-sm text-gray-500">Total à payer</p>
-                <p className="text-2xl font-bold text-gray-900">9.99 $</p>
+                <p className="text-2xl font-bold text-gray-900">0.0 $</p>
               </div>
 
-              <p className="text-xs text-gray-400 text-center">
+              {/* <p className="text-xs text-gray-400 text-center">
                 🔒 Paiement sécurisé via Stripe
-              </p>
+              </p> */}
 
               <button
                 onClick={handleConfirmPayment}
@@ -187,7 +188,7 @@ export default function SubscriptionPage() {
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     Traitement...
                   </span>
-                ) : "Confirmer le paiement"}
+                ) : "Confirmer"}
               </button>
             </div>
           )}
