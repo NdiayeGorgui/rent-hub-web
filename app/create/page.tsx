@@ -642,7 +642,7 @@ export default function CreatePage() {
 
       </div>
       {/* ── Avertissement responsabilité ── */}
-      <div className="rounded-2xl border border-red-200 bg-red-50 p-4 mb-4">
+      <div className="rounded-2xl border border-red-200 bg-red-50 p-4 mt-6 mb-4">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
             <span className="text-red-600 text-sm font-bold">⚠️</span>
