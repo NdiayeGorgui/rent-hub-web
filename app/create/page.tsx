@@ -50,7 +50,7 @@ export default function CreatePage() {
     { id: 10, name: "Autres" },
   ];
 
-
+ const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   useEffect(() => {
     const checkPremium = async () => {
@@ -641,7 +641,52 @@ export default function CreatePage() {
         </div>
 
       </div>
+      {/* ── Avertissement responsabilité ── */}
+      <div className="rounded-2xl border border-red-200 bg-red-50 p-4 mb-4">
+        <div className="flex items-start gap-3">
+          <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span className="text-red-600 text-sm font-bold">⚠️</span>
+          </div>
+          <div className="flex-1">
+            <p className="text-red-700 font-bold text-sm mb-1">
+              Avis de non-responsabilité
+            </p>
+            <p className="text-red-600 text-xs leading-relaxed">
+              GoNifty agit uniquement comme intermédiaire pour faciliter la mise en relation entre l'offre et la demande.
+              GoNifty <span className="font-bold">n'est pas responsable</span> des transactions, échanges ou ententes
+              conclus entre les utilisateurs. Toute transaction s'effectue sous la responsabilité exclusive des parties concernées.
+            </p>
+          </div>
+        </div>
 
+        {/* Case à cocher */}
+        <label className="flex items-start gap-3 mt-4 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={acceptedTerms}
+            onChange={e => setAcceptedTerms(e.target.checked)}
+            className="w-4 h-4 mt-0.5 accent-red-600 cursor-pointer flex-shrink-0"
+          />
+          <span className="text-xs text-red-700 font-medium leading-relaxed">
+            J'ai lu et j'accepte les conditions — je comprends que GoNifty n'est pas responsable
+            des transactions entre utilisateurs.
+          </span>
+        </label>
+      </div>
+
+      {/* Bouton publier — désactivé si case non cochée */}
+      <button
+        onClick={handleCreate}
+        disabled={creating || !acceptedTerms}
+        className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors mb-6 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+      >
+        {creating ? (
+          <>
+            <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            Publication en cours...
+          </>
+        ) : "Publier"}
+      </button>
       {/* Bouton publier */}
       <button
         onClick={handleCreate}
