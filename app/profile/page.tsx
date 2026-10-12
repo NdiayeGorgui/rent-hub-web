@@ -9,11 +9,12 @@ import { handleWebPayment } from "@/services/stripeWeb";
 export default function ProfilePage() {
     const [profile, setProfile] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-   
+
     const [payments, setPayments] = useState<any[]>([]);
     const [pendingPenalty, setPendingPenalty] = useState<any>(null);
     const [penaltyStep, setPenaltyStep] = useState<"idle" | "payment">("idle");
     const [payingPenalty, setPayingPenalty] = useState(false);
+    const PREMIUM_FREE = true;
 
     const formatDate = (d: string) => {
         if (!d) return "-";
@@ -33,8 +34,8 @@ export default function ProfilePage() {
             );
             setPendingPenalty(penalty ?? null);
 
-           
-            
+
+
         } catch (err) {
             console.log(err);
         } finally {
@@ -81,7 +82,7 @@ export default function ProfilePage() {
                     label: "Remboursement enchère"
                 };
 
-                 case "AUCTION_CANCELLATION_FEE":
+            case "AUCTION_CANCELLATION_FEE":
                 return {
                     icon: "💳",
                     label: "Frais d'annulation enchère"
@@ -245,7 +246,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Items publiés */}
-           
+
 
             {/* Paiements */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
@@ -254,31 +255,42 @@ export default function ProfilePage() {
                     <p className="text-gray-400 text-sm">Aucun paiement</p>
                 ) : (
                     <div className="flex flex-col gap-3">
-                        {payments.map((p) => (
-                            <div key={p.id} className="border-b border-gray-50 pb-3 last:border-0">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm font-medium text-gray-800">
-                                        {getPaymentTypeConfig(p.paymentType).icon}{" "}
-                                        {getPaymentTypeConfig(p.paymentType).label}
+                        {/* {payments.map((p) => ( */}
+                        {payments
+                            .filter(p =>
+                                p.paymentType !== "SUBSCRIPTION" &&
+                                p.paymentType !== "SUBSCRIPTION_RENEWAL"
+                            )
+                            .map((p) => (
+                                <div key={p.id} className="border-b border-gray-50 pb-3 last:border-0">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm font-medium text-gray-800">
+                                            {getPaymentTypeConfig(p.paymentType).icon}{" "}
+                                            {getPaymentTypeConfig(p.paymentType).label}
+                                        </p>
+                                        <span className={`text-xs font-bold ${getPaymentStatusStyle(p.status)}`}>
+                                            {getPaymentStatusLabel(p.status)}
+                                        </span>
+                                    </div>
+                                    {/* <p className="text-blue-600 font-semibold text-sm">{p.amount} $</p> */}
+                                    <p className="text-blue-600 font-semibold text-sm">
+                                        {p.paymentType === "SUBSCRIPTION" || p.paymentType === "SUBSCRIPTION_RENEWAL"
+                                            ? "0 $"
+                                            : `${p.amount} $`}
                                     </p>
-                                    <span className={`text-xs font-bold ${getPaymentStatusStyle(p.status)}`}>
-                                        {getPaymentStatusLabel(p.status)}
-                                    </span>
+                                    <p className="text-xs text-gray-400">
+                                        {getPaymentTypeConfig(p.paymentType).label} — {formatDate(p.createdAt)}
+                                    </p>
+                                    {p.paymentType === "AUCTION_PENALTY" && p.status === "PENDING" && (
+                                        <button
+                                            onClick={() => setPenaltyStep("payment")}
+                                            className="mt-2 px-3 py-1.5 bg-red-500 text-white rounded-lg text-xs font-medium hover:bg-red-600 cursor-pointer"
+                                        >
+                                            💳 Payer maintenant
+                                        </button>
+                                    )}
                                 </div>
-                                <p className="text-blue-600 font-semibold text-sm">{p.amount} $</p>
-                                <p className="text-xs text-gray-400">
-                                    {getPaymentTypeConfig(p.paymentType).label} — {formatDate(p.createdAt)}
-                                </p>
-                                {p.paymentType === "AUCTION_PENALTY" && p.status === "PENDING" && (
-                                    <button
-                                        onClick={() => setPenaltyStep("payment")}
-                                        className="mt-2 px-3 py-1.5 bg-red-500 text-white rounded-lg text-xs font-medium hover:bg-red-600 cursor-pointer"
-                                    >
-                                        💳 Payer maintenant
-                                    </button>
-                                )}
-                            </div>
-                        ))}
+                            ))}
                     </div>
                 )}
             </div>

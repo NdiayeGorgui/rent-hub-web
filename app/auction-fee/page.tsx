@@ -28,14 +28,14 @@ export default function AuctionFeePage() {
 
             await handleWebPayment(clientSecret);
 
-            alert("✅ Publication réussie !");
+            alert("✅ Paiement réussi !");
             router.push("/my-items");
 
         } catch (err: any) {
             alert(
                 err?.response?.data?.message ??
                 err?.message ??
-                "Erreur lors de la publication"
+                "Erreur lors du paiement"
             );
         } finally {
             setLoading(false);
@@ -44,9 +44,9 @@ export default function AuctionFeePage() {
     };
 
     const stepLabel = () => {
-        if (step === "paying") return "Publication en cours...";
+        if (step === "paying") return "Paiement en cours...";
         if (step === "creating") return "Création de l'enchère...";
-        return "💳 Publier l'enchère";
+        return "💳 Payer 10$ et publier l'enchère";
     };
 
     return (
@@ -57,9 +57,9 @@ export default function AuctionFeePage() {
                     <span className="text-3xl">🔥</span>
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900">Activer votre enchère</h1>
-                {/* <p className="text-gray-400 text-sm mt-2">
+                <p className="text-gray-400 text-sm mt-2">
                     Un frais unique de 10$ est requis pour publier votre enchère
-                </p> */}
+                </p>
             </div>
 
             {/* Récap */}
@@ -89,15 +89,15 @@ export default function AuctionFeePage() {
                             : "—"}
                     </span>
                 </div>
-                {/* <div className="border-t border-gray-200 pt-3 flex justify-between">
+                <div className="border-t border-gray-200 pt-3 flex justify-between">
                     <span className="font-semibold text-gray-700">Frais de publication</span>
                     <span className="font-bold text-lg">10 $</span>
-                </div> */}
+                </div>
             </div>
 
-            {/* <p className="text-xs text-gray-400 text-center mb-6">
+            <p className="text-xs text-gray-400 text-center mb-6">
                 🔒 Paiement sécurisé via Stripe
-            </p> */}
+            </p>
 
             <button
                 onClick={handlePay}
